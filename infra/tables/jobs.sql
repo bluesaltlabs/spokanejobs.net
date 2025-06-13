@@ -1,13 +1,4 @@
 
-create type employment_type as enum (
-  'other',
-  'full_time',
-  'part_time',
-  'contract',
-  'internship',
-  'temporary'
-);
-
 create table jobs (
   id uuid not null default uuid_generate_v4(),
   title text not null,
