@@ -2,7 +2,7 @@ create table locations (
   id uuid not null primary key,
   name varchar(255) not null,
   identifier varchar(255) not null,
-  company_id uuid not null references companies(id),
+  company_id bigint not null references companies(id),
   address varchar(255),
   city varchar(255),
   state us_state,

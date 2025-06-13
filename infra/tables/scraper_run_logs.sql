@@ -4,8 +4,8 @@ create table scraper_run_logs (
   status scraper_status not null default 'Pending',
   error_message text,
   output_message text,
-  run_at timestamp not null default now(),
-  completed_at timestamp
+  run_at timestamp with time zone not null default now(),
+  completed_at timestamp with time zone
 );
 alter table scraper_run_logs enable row level security;
 
