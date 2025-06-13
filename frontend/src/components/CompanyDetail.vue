@@ -1,9 +1,7 @@
 <script setup>
-
+// todo
 </script>
 
 <template>
-  <main>
-    <span>Hi There!!!</span>
-  </main>
+<!-- todo -->
 </template>
