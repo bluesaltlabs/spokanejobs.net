@@ -1,5 +1,5 @@
 create table search_logs (
-  id uuid not null default uuid_generate_v4(),
+  id uuid not null primary key default uuid_generate_v4(),
   search_term varchar(255) not null,
   filters jsonb not null default '{}',
   searched_at timestamp with time zone not null default now(),

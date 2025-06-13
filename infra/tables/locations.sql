@@ -1,5 +1,5 @@
 create table locations (
-  id uuid not null primary key,
+  id bigint not null primary key,
   name varchar(255) not null,
   identifier varchar(255) not null,
   company_id bigint not null references companies(id),

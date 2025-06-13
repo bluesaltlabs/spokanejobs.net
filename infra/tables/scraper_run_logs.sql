@@ -1,5 +1,5 @@
 create table scraper_run_logs (
-  id uuid not null default uuid_generate_v4(),
+  id uuid not null primary key default uuid_generate_v4(),
   job_count int not null default 0,
   status scraper_status not null default 'Pending',
   error_message text,

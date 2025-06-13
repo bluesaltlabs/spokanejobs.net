@@ -1,5 +1,5 @@
 create table jobs (
-  id uuid not null default uuid_generate_v4(),
+  id uuid not null primary key default uuid_generate_v4(),
   title varchar(255) not null,
   slug varchar(255) not null,
   description text not null,
@@ -8,7 +8,7 @@ create table jobs (
   salary_max integer not null,
   url text,
   company_id bigint not null references companies(id),
-  location_id bigint references locations(id),
+  location_id uuid references locations(id),
   category_id bigint references categories(id),
   scraped_at timestamp with time zone default now(),
   posted_at timestamp with time zone not null default now(),

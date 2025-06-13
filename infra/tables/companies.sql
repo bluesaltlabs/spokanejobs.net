@@ -1,6 +1,6 @@
 -- Create the table
 create table companies (
-  id bigint primary key generated always as identity,
+  id uuid not null primary key default uuid_generate_v4(),
   name varchar(255) not null,
   slug varchar(255) not null,
   description text,

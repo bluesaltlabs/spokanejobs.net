@@ -1,5 +1,5 @@
 create table categories (
-  id int primary key,
+  id bigint not null primary key,
   name varchar(255) not null unique,
   slug varchar(255) not null unique,
   description text,

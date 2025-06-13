@@ -1,5 +1,5 @@
 create table job_details (
-  job_id uuid not null references jobs(id),
+  job_id uuid primary key not null references jobs(id),
   full_description text not null,
   applicant_count integer not null default 0,
   view_count integer not null default 0,
