@@ -5,6 +5,7 @@ import CompaniesListView from '@/views/CompaniesListView.vue'
 import CompanyDetailView from '@/views/CompanyDetailView.vue'
 import JobsListView from '@/views/JobsListView.vue'
 import JobDetailView from '@/views/JobDetailView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,11 @@ const router = createRouter({
       name: 'job-detail',
       component: JobDetailView,
     },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView,
+    }
   ],
 })
 

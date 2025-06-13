@@ -4,6 +4,11 @@
 
 <template>
   <main>
-    <span>Hi There!!!</span>
+    <h1>Bedrock</h1>
+    <span>spokanejobs.net frontend app prototype.</span>
+
+    <p>
+
+    </p>
   </main>
 </template>
