@@ -15,7 +15,7 @@ onMounted(() => {
 <div>
   <h1>Companies</h1>
   <ul>
-    <li v-for="company in companiesStore.companies" :key="company.id">
+    <li v-for="company in companiesStore.sortedCompanies" :key="company.id">
 
       {{ company.name }}
 

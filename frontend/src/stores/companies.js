@@ -12,6 +12,10 @@ export const useCompanies = defineStore('companies', {
     countCompanies(state) {
       return state.companies?.length ?? 0
     },
+    sortedCompanies(state) {
+      // return the companies sorted by name
+      return state.companies?.sort((a, b) => a.name.localeCompare(b.name))
+    }
   },
   actions: {
     async fetchCompanies() {
