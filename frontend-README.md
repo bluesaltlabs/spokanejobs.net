@@ -1,5 +1,0 @@
-# Frontend
-
-Vue application.
-
----
