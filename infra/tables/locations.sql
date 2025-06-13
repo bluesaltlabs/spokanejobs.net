@@ -1,16 +1,16 @@
 create table locations (
   id uuid not null primary key,
-  name text not null,
-  identifier text not null,
+  name varchar(255) not null,
+  identifier varchar(255) not null,
   company_id uuid not null references companies(id),
-  address text,
-  city text,
+  address varchar(255),
+  city varchar(255),
   state us_state,
-  postal_code text,
+  postal_code varchar(32),
   latitude float,
   longitude float,
-  created_at timestamp not null default now(),
-  updated_at timestamp not null default now()
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp with time zone not null default now()
 );
 alter table locations enable row level security;
 

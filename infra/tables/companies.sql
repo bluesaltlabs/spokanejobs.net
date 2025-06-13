@@ -1,8 +1,8 @@
 -- Create the table
 create table companies (
   id bigint primary key generated always as identity,
-  name text not null,
-  slug text not null,
+  name varchar(255) not null,
+  slug varchar(255) not null,
   description text,
   website text,
   job_board_url text,
