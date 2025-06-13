@@ -8,7 +8,7 @@ create type employment_type as enum (
   'temporary'
 );
 
-create us_state as enum (
+create type us_state as enum (
   'AL',
   'AK',
   'AZ',
