@@ -1,11 +1,11 @@
-
+-- job.employment_type
 create type employment_type as enum (
-  'other',
-  'full_time',
-  'part_time',
-  'contract',
-  'internship',
-  'temporary'
+  'Other',
+  'Full Time',
+  'Part Time',
+  'Contract',
+  'Internship',
+  'Temporary'
 );
 
 -- address.state
