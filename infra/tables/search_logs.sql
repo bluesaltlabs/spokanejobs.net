@@ -3,8 +3,8 @@ create table search_logs (
   search_term varchar(255) not null,
   filters jsonb not null default '{}',
   searched_at timestamp with time zone not null default now(),
-  user_ip inet not null default '0.0.0.0',
-  -- user_id uuid not null,
+  user_ip inet not null default '0.0.0.0'
+  -- user_id uuid not null
 );
 alter table search_logs enable row level security;
 
