@@ -8,6 +8,7 @@ create type employment_type as enum (
   'temporary'
 );
 
+-- address.state
 create type us_state as enum (
   'AL',
   'AK',
@@ -59,4 +60,12 @@ create type us_state as enum (
   'WV',
   'WI',
   'WY'
+);
+
+-- scraper_run_logs.status
+create type scraper_status as enum (
+  'Pending',
+  'Success',
+  'Partial',
+  'Failed'
 );

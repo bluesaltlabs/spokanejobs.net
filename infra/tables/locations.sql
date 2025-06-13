@@ -12,6 +12,10 @@ create table locations (
   created_at timestamp not null default now(),
   updated_at timestamp not null default now()
 );
+alter table locations enable row level security;
 
--- todo: cascade delete when job is deleted
---
+-- make the locations table data publicly readable
+create policy "public can read locations"
+on public.locations
+for select to anon
+using (true);
