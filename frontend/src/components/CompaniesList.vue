@@ -1,25 +1,21 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { supabase } from '../lib/supabaseClient'
+import { onMounted } from 'vue'
+//import {storeToRefs } from 'pinia'
+import { useCompanies } from '@/stores/companies'
 
-const companies = ref([])
-
-async function getCompanies() {
-  const { data, error } = await supabase.from('companies').select('*')
-  if (error) throw error
-  companies.value = data
-}
+const companiesStore = useCompanies()
 
 onMounted(() => {
-  getCompanies()
+  companiesStore.fetchCompanies()
 })
+
 </script>
 
 <template>
 <div>
   <h1>Companies</h1>
   <ul>
-    <li v-for="company in companies" :key="company.id">
+    <li v-for="company in companiesStore.companies" :key="company.id">
 
       {{ company.name }}
 
