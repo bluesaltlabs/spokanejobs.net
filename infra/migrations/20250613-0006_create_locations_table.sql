@@ -2,7 +2,6 @@ create table locations (
   id bigint not null primary key,
   name varchar(255) not null,
   identifier varchar(255) not null,
-  company_id bigint not null references companies(id),
   address varchar(255),
   city varchar(255),
   state us_state,
@@ -19,3 +18,5 @@ create policy "public can read locations"
 on public.locations
 for select to anon
 using (true);
+
+-- todo: set up a relationship for locations, organizations, events, etc to reference a location.
