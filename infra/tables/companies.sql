@@ -11,12 +11,6 @@ create table companies (
   created_at timestamp with time zone not null default now(),
   updated_at timestamp with time zone not null default now()
 );
--- Insert some sample data into the table
-insert into companies (name, slug)
-values
-  ('Limelyte', 'limelyte'),
-  ('CDL Powersuite', 'cdl-powersuite'),
-  ('OpenEye', 'openeye');
 alter table companies enable row level security;
 
 -- make the companies table data publicly readable
