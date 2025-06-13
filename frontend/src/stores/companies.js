@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabaseClient'
 
 export const useCompanies = defineStore('companies', {
