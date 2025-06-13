@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
 //import {storeToRefs } from 'pinia'
 import { useJobs } from '@/stores/jobs'
 
@@ -16,8 +17,11 @@ onMounted(() => {
   <h1>Jobs</h1>
   <ul>
     <li v-for="job in jobsStore.sortedJobs" :key="job.id">
+      <RouterLink :to="{ name: 'job-detail', params: { id: job.id } }">
+        {{ job.title }}
+      </RouterLink>
 
-      {{ job.title }}
+
 
     </li>
     <!-- <li v-for="job in jobsStore.sortedJobs" :key="job.id">
