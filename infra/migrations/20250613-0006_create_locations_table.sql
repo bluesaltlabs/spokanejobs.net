@@ -1,5 +1,5 @@
 create table locations (
-  id bigint not null primary key,
+  id uuid not null primary key default uuid_generate_v4(),
   name varchar(255) not null,
   identifier varchar(255) not null,
   address varchar(255),
