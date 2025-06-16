@@ -12,10 +12,17 @@ import (
 func Scrape() {
 
 	// Set the base URL to scrape
-	scrapeUrl := "https://job-boards.greenhouse.io/openeye"
+	//scrapeUrl := "https://job-boards.greenhouse.io/openeye"
+	scrapeUrl := "https://linkding.bluesaltlabs.com/assets/284"
+	//jobSscrapeUrl := "https://job-boards.greenhouse.io/openeye/jobs/7997742002"
+	//jobSscrapeUrl := "https://linkding.bluesaltlabs.com/assets/285"
+
+	// Create the Job IDs collector
+  //jobIDs := []string{}
 
 	// Create a new collector
-	c := colly.NewCollector(colly.AllowedDomains("job-boards.greenhouse.io"))
+	//c := colly.NewCollector(colly.AllowedDomains("job-boards.greenhouse.io"))
+	c := colly.NewCollector(colly.AllowedDomains("linkding.bluesaltlabs.com", "bluesaltlabs.com", "job-boards.greenhouse.io"))
 
 
   // A simple check to prove the library was imported correctly
@@ -35,6 +42,7 @@ func Scrape() {
   // Process Job Line
   c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
 
+  	// todo: consider making a map of jobs here.
     // Create the scraped_job struct instance
     job := models.ScrapedJob{}
     selection := h.DOM
@@ -69,6 +77,11 @@ func Scrape() {
 
   fmt.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
 }
+
+// todo: Go through and write out specific steps this scraper needs to take.
+
+
+
 
 func trimSpaces(s string) string {
   return strings.TrimSpace(s)
