@@ -28,9 +28,9 @@ func Main() {
 
 
   // Example selector
-  c.OnHTML("div.job-posts--table tr.job-post", func(h *colly.HTMLElement) {
+  c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
     selection := h.DOM
-    url, _ := selection.Find("td.cell a").Attr("href")
+    url, _ := selection.Attr("href")
     title := selection.Find("p.body.body--medium").Text() // Job Title
     location := selection.Find("p.body.body__secondary.body--metadata").Text() // Location (City, State)
 
