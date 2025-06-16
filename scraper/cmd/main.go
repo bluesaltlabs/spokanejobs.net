@@ -5,8 +5,5 @@ import (
 )
 
 func main() {
-
 	scrapers.RunAll()
-
-	//scrapers.registry.RunAll()
 }

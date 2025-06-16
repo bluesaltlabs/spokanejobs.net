@@ -13,9 +13,9 @@ func RunAll() {
 
 func RunScraper(name string) {
 	switch name {
-	case "openeye":
-		openeye.ScrapeJobs()
-	default:
-		fmt.Errorf("Scraper %s not found\n", name)
+		case "openeye":
+			openeye.ScrapeJobs()
+		default:
+			fmt.Errorf("Scraper %s not found\n", name)
 	}
 }
