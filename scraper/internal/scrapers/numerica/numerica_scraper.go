@@ -10,12 +10,12 @@ import (
 
 func ScrapeJobs() []models.ScrapedJob {
 	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
-	scrapeUrl := ""
+	scrapeUrl := "https://recruiting.paylocity.com/recruiting/jobs/All/3e0b08f9-66f1-4617-9a26-159571b53dc2/Numerica-Credit-Union"
 
 
 	// Create the new collector
 	c := colly.NewCollector(
-		colly.AllowedDomains("linkding.bluesaltlabs.com", "bluesaltlabs.com", ""),
+		colly.AllowedDomains("linkding.bluesaltlabs.com", "bluesaltlabs.com", "recruiting.paylocity.com"),
 		colly.CacheDir("./scraper_cache"),
 	)
 
