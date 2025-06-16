@@ -1,4 +1,4 @@
-package scrapers
+package openeye
 
 import (
 	"fmt"
@@ -9,7 +9,13 @@ import (
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
 
-func Scrape() {
+// type OpeneyeScraper struct{}
+
+// func (o OpenEyeScraper) GetName() string {
+// 	return "OpenEye"
+//}
+
+func ScrapeJobs() []models.ScrapedJob {
 
 	// Set the base URL to scrape
 	//scrapeUrl := "https://job-boards.greenhouse.io/openeye"
@@ -76,6 +82,8 @@ func Scrape() {
 
 
   fmt.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+
+  return []models.ScrapedJob{}
 }
 
 // todo: Go through and write out specific steps this scraper needs to take.

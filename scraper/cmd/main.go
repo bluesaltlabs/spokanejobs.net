@@ -1,10 +1,12 @@
 package main
 
 import (
-  "gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/openeye"
+  "gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers"
 )
 
 func main() {
 
-	scrapers.Scrape()
+	scrapers.RunAll()
+
+	//scrapers.registry.RunAll()
 }
