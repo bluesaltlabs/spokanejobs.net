@@ -1,7 +1,7 @@
 package scrapers
 
 import (
-	"fmt"
+	"log"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/avista"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/city_of_spokane"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/codespeed"
@@ -135,6 +135,7 @@ func RunScraper(name string) {
 		case "winco":
 			winco.ScrapeJobs()
 		default:
-			fmt.Errorf("Scraper %s not found\n", name)
+			//log.Errorf("Scraper %s not found\n", name)
+			log.Printf("Scraper %s not found\n", name)
 	}
 }

@@ -77,7 +77,7 @@ func ScrapeJobs() []models.ScrapedJob {
 		enc.Encode(job)
 
 		// print the job attributes.
-    //fmt.Printf("%s (%s) | %s\n", job.Title, location, url)
+    //log.Printf("%s (%s) | %s\n", job.Title, location, url)
   })
 
 
