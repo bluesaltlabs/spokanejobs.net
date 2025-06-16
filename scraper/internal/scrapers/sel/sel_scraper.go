@@ -8,7 +8,7 @@ import (
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
 
-func ScrapeJobs() []models.ScrapedJob {
+func ScrapeJobs() []*models.ScrapedJob {
 	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
 	scrapeUrl := "https://selinc.wd1.myworkdayjobs.com/SEL/20/refreshFacet/318c8bb6f553100021d223d9780d30be"
 

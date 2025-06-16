@@ -8,7 +8,7 @@ import (
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
 
-func ScrapeJobs() []models.ScrapedJob {
+func ScrapeJobs() []*models.ScrapedJob {
 	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
 	scrapeUrl := "https://www1.jobdiva.com/portal/?a=ygjdnwl6apzmff6t82vdutfvbydrtq07d9es5jck4la1ce7huuaom4zlm4i0c94q&compid=0#/"
 

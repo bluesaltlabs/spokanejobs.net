@@ -58,7 +58,6 @@ func ScrapeJobs() []*models.ScrapedJob {
 	return jobs
 }
 
-
 func getCollector() colly.Collector {
 	c := colly.NewCollector(
 		colly.AllowedDomains("recruiting2.ultipro.com"),
