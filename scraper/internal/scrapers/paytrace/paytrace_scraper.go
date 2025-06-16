@@ -1,5 +1,5 @@
 // Paytrace
-package Paytrace
+package paytrace
 
 import (
 	"log"
