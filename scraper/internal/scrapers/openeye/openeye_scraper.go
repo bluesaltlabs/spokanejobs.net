@@ -28,7 +28,10 @@ func ScrapeJobs() []models.ScrapedJob {
 
 	// Create a new collector
 	//c := colly.NewCollector(colly.AllowedDomains("job-boards.greenhouse.io"))
-	c := colly.NewCollector(colly.AllowedDomains("linkding.bluesaltlabs.com", "bluesaltlabs.com", "job-boards.greenhouse.io"))
+	c := colly.NewCollector(
+		colly.AllowedDomains("linkding.bluesaltlabs.com", "bluesaltlabs.com", "job-boards.greenhouse.io"),
+		colly.CacheDir("./cache"),
+	)
 
 
   // A simple check to prove the library was imported correctly
