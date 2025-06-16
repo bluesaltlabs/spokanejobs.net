@@ -7,14 +7,16 @@ import (
 
 func main() {
 
-	scrapeUrl := "https://memos.bluesaltlabs.com/"
+	scrapeUrl := "https://job-boards.greenhouse.io/openeye"
 
 	// Create a new collector
-	c := colly.NewCollector(colly.AllowedDomains("memos.bluesaltlabs.com", "bluesaltlabs.com"))
+	c := colly.NewCollector(colly.AllowedDomains("job-boards.greenhouse.io"))
 
 
   // A simple check to prove the library was imported correctly
   c.OnRequest(func(r *colly.Request) {
+    r.Headers.Set("Accept-Language", "en-US")
+    r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.10 Safari/605.1.1")
     fmt.Printf("Colly is visiting: %s\n", r.URL)
   })
 
@@ -25,17 +27,15 @@ func main() {
   })
 
 
-
   // Example selector
-  c.OnHTML("h1", func(h *colly.HTMLElement) {
-		fmt.Printf("%s\n", h.Text)
-  })
+  c.OnHTML("div.job-posts--table tr.job-post", func(h *colly.HTMLElement) {
+    selection := h.DOM
+    url, _ := selection.Find("td.cell a").Attr("href")
+    title := selection.Find("p.body.body--medium").Text() // Job Title
+    location := selection.Find("p.body.body__secondary.body--metadata").Text() // Location (City, State)
 
-  // Example selector 2
-  c.OnHTML("div.w-full.grid div.group", func(h *colly.HTMLElement) {
- 		fmt.Printf("%s\n", h.Text)
+    fmt.Printf("%s (%s) | %s\n", title, location, url)
   })
-
 
 
   fmt.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
