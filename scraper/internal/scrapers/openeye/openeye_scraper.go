@@ -1,7 +1,6 @@
 package openeye
 
 import (
-	"fmt"
 	"log"
 	"encoding/json"
 	"os"
@@ -27,6 +26,7 @@ func ScrapeJobs() []models.ScrapedJob {
 	// Create the Job IDs collector
   //jobIDs := []string{}
 
+  // todo: move this to a generic class.
 	// Create a new collector
 	//c := colly.NewCollector(colly.AllowedDomains("job-boards.greenhouse.io"))
 	c := colly.NewCollector(
@@ -34,7 +34,7 @@ func ScrapeJobs() []models.ScrapedJob {
 		colly.CacheDir("./scraper_cache"),
 	)
 
-
+	// todo: move this to a generic class.
   // A simple check to prove the library was imported correctly
   c.OnRequest(func(r *colly.Request) {
     r.Headers.Set("Accept-Language", "en-US")
@@ -43,6 +43,7 @@ func ScrapeJobs() []models.ScrapedJob {
   })
 
 
+  // todo: move this to a generic class.
   // Error handling
   c.OnError(func(r *colly.Response, e error) {
     log.Printf("Error while scraping: %s\n", e.Error())
@@ -68,6 +69,7 @@ func ScrapeJobs() []models.ScrapedJob {
     job.Title = title
     job.Description = location
 
+    // todo: may want to remove this.
     // create the json encoder
 	  enc := json.NewEncoder(os.Stdout)
 	  enc.SetIndent("", " ")
@@ -79,22 +81,22 @@ func ScrapeJobs() []models.ScrapedJob {
 
 
 
-  fmt.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
+  log.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
 
   // Visit the scrapeUrl site (initate the script. )
   c.Visit(scrapeUrl)
 
 
-  fmt.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+  log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
 
-  return []models.ScrapedJob{}
+  return []models.ScrapedJob{} // todo
 }
 
 // todo: Go through and write out specific steps this scraper needs to take.
 
 
 
-
+// todo: move this to a helper function
 func trimSpaces(s string) string {
   return strings.TrimSpace(s)
 }
