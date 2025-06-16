@@ -17,10 +17,8 @@ var JobUrlPrefix string = ScrapeUrl + "/jobs/"
 func ScrapeJobs() []*models.ScrapedJob {
 
 	// Create the Jobs collector
-	// todo: this would be part of the parent class
 	jobs := make([]*models.ScrapedJob, 0)
 
-  // todo: move this to a generic class.
 	// Create a new collector
 	c := getCollector()
 
@@ -68,10 +66,33 @@ func getJobDetails(j *models.ScrapedJob) {
 	// Create a new collector
 	c := getCollector()
 
-	c.OnHTML("", func(h *colly.HTMLElement) {
-
-		j.Description = "" // todo
+	// Check Job Title
+	c.OnHTML("h1.section-header", func(h *colly.HTMLElement) {
+		// ensure title matches passed-in job title (optional)
+		if j.Title == "" || strings.EqualFold(j.Title, h.Text) {
+			j.Title = h.Text
+		}
 	})
+
+	// Check Job Location
+	c.OnHTML("div.job__location", func(h *colly.HTMLElement) {
+		// todo: retrieve the value
+		location := h.DOM.Text()
+
+		j.City, j.State, _ = strings.Cut(location, ", ")
+		j.City = trimSpaces(j.City)
+		j.State = trimSpaces(j.State)
+
+	})
+
+	// Get Job Description
+	c.OnHTML("div.job__description", func(h *colly.HTMLElement) {
+		j.Description = h.DOM.Text() // todo: formatting?
+	})
+
+
+	// todo: get job pay min / max values (need to add to struct)
+	// todo: get apply url, form values?
 
 	// Visit the job detail URL
 	c.Visit(j.Url)
