@@ -2,26 +2,70 @@
 package avista
 
 import (
+	"os"
+	"encoding/json"
 	"log"
 	"strings"
 	"github.com/gocolly/colly"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
 
-func ScrapeJobs() []models.ScrapedJob {
-	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
-	scrapeUrl := "https://recruiting2.ultipro.com/AVI1000AMAST/JobBoard/362abf68-95c3-4b17-a39d-76a6efe5ff18/?q=&o=postedDateDesc"
+// Set the base URL to scrape
+var scrapeUrlPrefix string 	= "https://recruiting2.ultipro.com/AVI1000AMAST/JobBoard/362abf68-95c3-4b17-a39d-76a6efe5ff18"
+var scrapeUrl string 				= scrapeUrlPrefix + "?o=postedDateDesc&f4=ITpN1FEJvlWudZe0AayqWA"
+var JobUrlPrefix string 		= scrapeUrlPrefix + "/OpportunityDetail?opportunityId="
+
+func ScrapeJobs() []*models.ScrapedJob {
+
+	// Create the Jobs collector
+	jobs := make([]*models.ScrapedJob, 0)
+
+	// Create a new collector
+	c := getCollector()
 
 
-	// Create the new collector
+	// Display all jobs after scraping completes as json to the standard output
+  c.OnScraped(func(r *colly.Response) {
+      enc := json.NewEncoder(os.Stdout)
+      enc.SetIndent("", "  ")
+      enc.Encode(jobs)
+  })
+
+  // Process Job Line
+  c.OnHTML("div.opportunity", func(h *colly.HTMLElement) {
+ 	  j := &models.ScrapedJob{}
+    selection := h.DOM
+
+    // Retrieve attributes available
+    url, _ := selection.Find("h3 a.opportunity-link").Attr("href")
+    title  := selection.Find("h3 a.opportunity-link").Text()
+    job_id := strings.TrimPrefix(url, JobUrlPrefix)
+
+    // Set the attribute values
+    j.JobId = job_id
+    j.Url 	= url
+    j.Title = title
+
+    // Append it to the parent array
+    jobs = append(jobs, j)
+  })
+
+  // Visit the scrapeUrl site (initate the script. )
+  c.Visit(scrapeUrl)
+
+  log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+
+	return jobs
+}
+
+
+func getCollector() colly.Collector {
 	c := colly.NewCollector(
 		colly.AllowedDomains("recruiting2.ultipro.com"),
 		colly.CacheDir("./scraper_cache"),
 	)
 
-
-	// Set the language and User Agent headers,
-	// and log each page visit.
+	// Set headers and log the link visited on each request
   c.OnRequest(func(r *colly.Request) {
     r.Headers.Set("Accept-Language", "en-US")
     r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.10 Safari/605.1.1")
@@ -33,20 +77,7 @@ func ScrapeJobs() []models.ScrapedJob {
     log.Printf("Error while scraping: %s\n", e.Error())
   })
 
-  // Process Job Line
-  c.OnHTML("", func(h *colly.HTMLElement) {
-  	// todo
-  })
-
-
-  // log the beginning of the script.
-  log.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
-
-  // Visit the scrapeUrl site (initate the script. )
-  c.Visit(scrapeUrl)
-
-
-	return jobs
+	return *c
 }
 
 func trimSpaces(s string) string {

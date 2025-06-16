@@ -29,8 +29,6 @@ func ScrapeJobs() []*models.ScrapedJob {
       enc.Encode(jobs)
   })
 
-  log.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
-
   // Process Job Line
   c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
     // Create the scraped_job struct instance
@@ -75,6 +73,7 @@ func getJobDetails(j *models.ScrapedJob) {
 	})
 
 	// Check Job Location
+	// todo: make this more robust for international, remote locations (or exclude before getting to this point?)
 	c.OnHTML("div.job__location", func(h *colly.HTMLElement) {
 		// todo: retrieve the value
 		location := h.DOM.Text()
