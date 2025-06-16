@@ -2,26 +2,53 @@
 package codespeed
 
 import (
+	"os"
+	"encoding/json"
 	"log"
 	"strings"
 	"github.com/gocolly/colly"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
 
+// Set the base URL to scrape
+var scrapeUrl string 				= "https://www.codespeed.com/careers"
+var JobUrlPrefix string 		= scrapeUrl + ""
+
 func ScrapeJobs() []*models.ScrapedJob {
-	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
-	scrapeUrl := "https://www.codespeed.com/careers"
 
+	// Create the Jobs collector
+	jobs := make([]*models.ScrapedJob, 0)
 
-	// Create the new collector
+	// Create a new collector
+	c := getCollector()
+
+	// Display all jobs after scraping completes as json to the standard output
+  c.OnScraped(func(r *colly.Response) {
+      enc := json.NewEncoder(os.Stdout)
+      enc.SetIndent("", "  ")
+      enc.Encode(jobs)
+  })
+
+  // Process Job Line
+  c.OnHTML("", func(h *colly.HTMLElement) {
+  	// todo
+  })
+
+  // Visit the scrapeUrl site (initate the script. )
+  c.Visit(scrapeUrl)
+
+  log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+
+	return jobs
+}
+
+func getCollector() colly.Collector {
 	c := colly.NewCollector(
 		colly.AllowedDomains("www.codespeed.com", "codespeed.com"),
 		colly.CacheDir("./scraper_cache"),
 	)
 
-
-	// Set the language and User Agent headers,
-	// and log each page visit.
+	// Set headers and log the link visited on each request
   c.OnRequest(func(r *colly.Request) {
     r.Headers.Set("Accept-Language", "en-US")
     r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.10 Safari/605.1.1")
@@ -33,20 +60,7 @@ func ScrapeJobs() []*models.ScrapedJob {
     log.Printf("Error while scraping: %s\n", e.Error())
   })
 
-  // Process Job Line
-  c.OnHTML("", func(h *colly.HTMLElement) {
-  	// todo
-  })
-
-
-  // log the beginning of the script.
-  log.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
-
-  // Visit the scrapeUrl site (initate the script. )
-  c.Visit(scrapeUrl)
-
-
-	return jobs
+	return *c
 }
 
 func trimSpaces(s string) string {
