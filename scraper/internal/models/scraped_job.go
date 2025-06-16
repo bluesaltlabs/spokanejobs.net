@@ -1,6 +1,7 @@
 package models
 
 type ScrapedJob struct {
+	JobId string
 	Title string
 	Description string
 	City string

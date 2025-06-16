@@ -2,11 +2,16 @@ package scrapers
 
 import (
 	"fmt"
+	"encoding/json"
+	"os"
+	//"strings"
 	"github.com/gocolly/colly"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
 
 func Scrape() {
 
+	// Set the base URL to scrape
 	scrapeUrl := "https://job-boards.greenhouse.io/openeye"
 
 	// Create a new collector
@@ -27,15 +32,34 @@ func Scrape() {
   })
 
 
-  // Example selector
+  // Process Job Line
   c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
+
+    // Create the scraped_job struct instance
+    job := models.ScrapedJob{}
     selection := h.DOM
+
+    // job detail url prefix (todo: extract JobId from the url)
+    // https://job-boards.greenhouse.io/openeye/jobs/<JobId>
+
+    // Retrieve attributes available
     url, _ := selection.Attr("href")
     title := selection.Find("p.body.body--medium").Text() // Job Title
     location := selection.Find("p.body.body__secondary.body--metadata").Text() // Location (City, State)
+    job.Url = url
+    job.Title = title
+    job.Description = location
 
-    fmt.Printf("%s (%s) | %s\n", title, location, url)
+
+    // create the json encoder
+	  enc := json.NewEncoder(os.Stdout)
+	  enc.SetIndent("", " ")
+		enc.Encode(job)
+
+    //fmt.Printf("%s (%s) | %s\n", job.Title, location, url)
   })
+
+
 
 
   fmt.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
