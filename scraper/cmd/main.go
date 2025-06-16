@@ -6,5 +6,5 @@ import (
 
 func main() {
 
-	openeye_scraper.Main()
+	scrapers.Scrape()
 }

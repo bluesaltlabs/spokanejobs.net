@@ -1,11 +1,11 @@
-package openeye_scraper
+package scrapers
 
 import (
 	"fmt"
 	"github.com/gocolly/colly"
 )
 
-func Main() {
+func Scrape() {
 
 	scrapeUrl := "https://job-boards.greenhouse.io/openeye"
 
