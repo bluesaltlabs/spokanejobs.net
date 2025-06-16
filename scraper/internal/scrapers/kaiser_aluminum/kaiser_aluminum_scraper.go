@@ -10,7 +10,7 @@ import (
 
 func ScrapeJobs() []models.ScrapedJob {
 	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
-	scrapeUrl := "https://myjobs.adp.com/kaisercareers/cx/job-listing"
+	scrapeUrl := "https://myjobs.adp.com/kaisercareers/cx/job-listing?FIELD1=Washington&FIELD2=Spokane"
 
 
 	// Create the new collector
