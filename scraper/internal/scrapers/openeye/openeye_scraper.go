@@ -2,98 +2,101 @@
 package openeye
 
 import (
-	"log"
-	"encoding/json"
 	"os"
+	"encoding/json"
+	"log"
 	"strings"
 	"github.com/gocolly/colly"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
 
-// type OpeneyeScraper struct{}
+// Set the base URL to scrape
+var ScrapeUrl string = "https://job-boards.greenhouse.io/openeye"
+var JobUrlPrefix string = ScrapeUrl + "/jobs/"
 
-// func (o OpenEyeScraper) GetName() string {
-// 	return "OpenEye"
-//}
+func ScrapeJobs() []*models.ScrapedJob {
 
-func ScrapeJobs() []models.ScrapedJob {
-
-	// Set the base URL to scrape
-	scrapeUrl := "https://job-boards.greenhouse.io/openeye"
-	// jobSscrapeUrl := "https://job-boards.greenhouse.io/openeye/jobs/7997742002"
-
-	// Create the Job IDs collector
-  //jobIDs := []string{}
+	// Create the Jobs collector
+	// todo: this would be part of the parent class
+	jobs := make([]*models.ScrapedJob, 0)
 
   // todo: move this to a generic class.
 	// Create a new collector
-	//c := colly.NewCollector(colly.AllowedDomains("job-boards.greenhouse.io"))
+	c := getCollector()
+
+	// Display all jobs after scraping completes as json to the standard output
+  c.OnScraped(func(r *colly.Response) {
+      enc := json.NewEncoder(os.Stdout)
+      enc.SetIndent("", "  ")
+      enc.Encode(jobs)
+  })
+
+  log.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
+
+  // Process Job Line
+  c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
+    // Create the scraped_job struct instance
+    j := &models.ScrapedJob{}
+    url := h.Attr("href")
+    selection := h.DOM
+
+    // Retrieve attributes available
+    job_id := strings.TrimPrefix(url, JobUrlPrefix)
+    title := trimSpaces(selection.Find("p.body.body--medium").Text())
+
+    // Set the attribute values
+    j.JobId = job_id
+    j.Url = url
+    j.Title = title
+
+    // Visit the specified job to retrieve further details
+    getJobDetails(j)
+
+    // Append it to the parent array
+    jobs = append(jobs, j)
+  })
+
+  // Visit the scrapeUrl site (initate the script. )
+  c.Visit(ScrapeUrl)
+
+  log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+
+  return jobs
+}
+
+func getJobDetails(j *models.ScrapedJob) {
+	// Create a new collector
+	c := getCollector()
+
+	c.OnHTML("", func(h *colly.HTMLElement) {
+
+		j.Description = "" // todo
+	})
+
+	// Visit the job detail URL
+	c.Visit(j.Url)
+}
+
+func getCollector() colly.Collector {
 	c := colly.NewCollector(
 		colly.AllowedDomains("job-boards.greenhouse.io"),
 		colly.CacheDir("./scraper_cache"),
 	)
 
-	// todo: move this to a generic class.
-  // A simple check to prove the library was imported correctly
+	// Set headers and log the link visited on each request
   c.OnRequest(func(r *colly.Request) {
     r.Headers.Set("Accept-Language", "en-US")
     r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.10 Safari/605.1.1")
-    log.Printf("visiting: %s\n", r.URL.String()) // ?
+    log.Printf("visiting: %s\n", r.URL.String())
   })
 
-
-  // todo: move this to a generic class.
   // Error handling
   c.OnError(func(r *colly.Response, e error) {
     log.Printf("Error while scraping: %s\n", e.Error())
   })
 
-
-  // Process Job Line
-  c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
-
-  	// todo: consider making a map of jobs here.
-    // Create the scraped_job struct instance
-    job := models.ScrapedJob{}
-    url := h.Attr("href")
-    selection := h.DOM
-
-    // job detail url prefix (todo: extract JobId from the url)
-    // https://job-boards.greenhouse.io/openeye/jobs/<JobId>
-
-    // Retrieve attributes available
-    title := trimSpaces(selection.Find("p.body.body--medium").Text())
-    location := trimSpaces(selection.Find("p.body.body__secondary.body--metadata").Text())
-    job.Url = url
-    job.Title = title
-    job.Description = location
-
-    // todo: may want to remove this.
-    // create the json encoder
-	  enc := json.NewEncoder(os.Stdout)
-	  enc.SetIndent("", " ")
-		enc.Encode(job)
-
-		// print the job attributes.
-    //log.Printf("%s (%s) | %s\n", job.Title, location, url)
-  })
-
-
-
-  log.Printf("\n-----\n\nColly instance created: %+v\n\n", c)
-
-  // Visit the scrapeUrl site (initate the script. )
-  c.Visit(scrapeUrl)
-
-
-  log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
-
-  return []models.ScrapedJob{} // todo
+	return *c
 }
-
-// todo: Go through and write out specific steps this scraper needs to take.
-
-
 
 // todo: move this to a helper function
 func trimSpaces(s string) string {
