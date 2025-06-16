@@ -15,7 +15,7 @@ func ScrapeJobs() []models.ScrapedJob {
 
 	// Create the new collector
 	c := colly.NewCollector(
-		colly.AllowedDomains("linkding.bluesaltlabs.com", "bluesaltlabs.com", "intellitect.com"),
+		colly.AllowedDomains("intellitect.com"),
 		colly.CacheDir("./scraper_cache"),
 	)
 

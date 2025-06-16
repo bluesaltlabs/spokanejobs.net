@@ -19,10 +19,8 @@ import (
 func ScrapeJobs() []models.ScrapedJob {
 
 	// Set the base URL to scrape
-	//scrapeUrl := "https://job-boards.greenhouse.io/openeye"
-	scrapeUrl := "https://linkding.bluesaltlabs.com/assets/284"
-	//jobSscrapeUrl := "https://job-boards.greenhouse.io/openeye/jobs/7997742002"
-	//jobSscrapeUrl := "https://linkding.bluesaltlabs.com/assets/285"
+	scrapeUrl := "https://job-boards.greenhouse.io/openeye"
+	// jobSscrapeUrl := "https://job-boards.greenhouse.io/openeye/jobs/7997742002"
 
 	// Create the Job IDs collector
   //jobIDs := []string{}
@@ -31,7 +29,7 @@ func ScrapeJobs() []models.ScrapedJob {
 	// Create a new collector
 	//c := colly.NewCollector(colly.AllowedDomains("job-boards.greenhouse.io"))
 	c := colly.NewCollector(
-		colly.AllowedDomains("linkding.bluesaltlabs.com", "bluesaltlabs.com", "job-boards.greenhouse.io"),
+		colly.AllowedDomains("job-boards.greenhouse.io"),
 		colly.CacheDir("./scraper_cache"),
 	)
 
