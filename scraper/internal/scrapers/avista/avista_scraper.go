@@ -1,5 +1,5 @@
-// City Of Spokane
-package city_of_spokane
+// Avista
+package avista
 
 import (
 	"log"
