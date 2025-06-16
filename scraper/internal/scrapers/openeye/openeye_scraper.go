@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"encoding/json"
 	"os"
-	//"strings"
+	"strings"
 	"github.com/gocolly/colly"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
 )
@@ -44,21 +44,20 @@ func Scrape() {
 
     // Retrieve attributes available
     url, _ := selection.Attr("href")
-    title := selection.Find("p.body.body--medium").Text() // Job Title
-    location := selection.Find("p.body.body__secondary.body--metadata").Text() // Location (City, State)
+    title := trimSpaces(selection.Find("p.body.body--medium").Text())
+    location := trimSpaces(selection.Find("p.body.body__secondary.body--metadata").Text())
     job.Url = url
     job.Title = title
     job.Description = location
-
 
     // create the json encoder
 	  enc := json.NewEncoder(os.Stdout)
 	  enc.SetIndent("", " ")
 		enc.Encode(job)
 
+		// print the job attributes.
     //fmt.Printf("%s (%s) | %s\n", job.Title, location, url)
   })
-
 
 
 
@@ -69,4 +68,8 @@ func Scrape() {
 
 
   fmt.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+}
+
+func trimSpaces(s string) string {
+  return strings.TrimSpace(s)
 }
