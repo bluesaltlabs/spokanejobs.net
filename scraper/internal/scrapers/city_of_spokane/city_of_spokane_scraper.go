@@ -11,9 +11,9 @@ import (
 )
 
 // Set the base URL to scrape
-var scrapeUrl string 				= "https://www.governmentjobs.com/careers/spokanecity"
-var JobUrlPrefix string 		= scrapeUrl + "/jobs/"
-// /jobs/4970084/cash-accounting-clerk-i
+var scrapeUrlPrefix string 	= "https://www.governmentjobs.com/careers/spokanecity"
+var scrapeUrl string 				= scrapeUrlPrefix + "?sort=PostingDate%7CDescendingz"
+var JobUrlPrefix string 		= scrapeUrlPrefix + "/jobs/"
 
 func ScrapeJobs() []*models.ScrapedJob {
 
@@ -31,8 +31,30 @@ func ScrapeJobs() []*models.ScrapedJob {
   })
 
   // Process Job Line
-  c.OnHTML("", func(h *colly.HTMLElement) {
-  	// todo
+  c.OnHTML("li.list-item a", func(h *colly.HTMLElement) {
+  log.Printf("\n-----\n\ncity_of_spokane-pass: %+v\n-----\n", h)  // debug
+
+ 		// Create the scraped_job struct instance
+    j := &models.ScrapedJob{}
+    url := h.Attr("href")
+    selection := h.DOM
+
+    // Retrieve attributes available
+    job_id := strings.TrimPrefix(url, JobUrlPrefix)
+    title := selection.Text()
+
+    // Set the attribute values
+    j.JobId = job_id
+    j.Url = url
+    j.Title = title
+
+    // Visit the specified job to retrieve further details
+    //getJobDetails(j)
+
+    // Append it to the parent array
+    jobs = append(jobs, j)
+
+
   })
 
   // Visit the scrapeUrl site (initate the script. )

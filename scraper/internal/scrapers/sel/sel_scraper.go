@@ -9,7 +9,9 @@ import (
 )
 
 func ScrapeJobs() []*models.ScrapedJob {
-	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
+	// Create the Jobs collector
+	jobs := make([]*models.ScrapedJob, 0)
+
 	scrapeUrl := "https://selinc.wd1.myworkdayjobs.com/SEL/20/refreshFacet/318c8bb6f553100021d223d9780d30be"
 
 

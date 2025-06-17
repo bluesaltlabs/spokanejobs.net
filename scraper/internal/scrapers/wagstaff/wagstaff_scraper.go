@@ -9,7 +9,9 @@ import (
 )
 
 func ScrapeJobs() []*models.ScrapedJob {
-	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
+	// Create the Jobs collector
+	jobs := make([]*models.ScrapedJob, 0)
+
 	scrapeUrl := "https://recruiting.paylocity.com/Recruiting/Jobs/All/922a365c-e2f9-4a44-a008-88fdfcd0f0ac/Wagstaff-Inc"
 
 

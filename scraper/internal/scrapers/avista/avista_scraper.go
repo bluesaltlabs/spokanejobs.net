@@ -23,7 +23,6 @@ func ScrapeJobs() []*models.ScrapedJob {
 	// Create a new collector
 	c := getCollector()
 
-
 	// Display all jobs after scraping completes as json to the standard output
   c.OnScraped(func(r *colly.Response) {
       enc := json.NewEncoder(os.Stdout)

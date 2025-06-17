@@ -2,20 +2,6 @@
 package f5
 
 import (
-	"log"
-	"strings"
-	"github.com/gocolly/colly"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
-)
-
-func ScrapeJobs() []*models.ScrapedJob {
-	jobs := []models.ScrapedJob{} // todo: initialize this when number of jobs is known
-	scrapeUrl := "https://www.f5.com/company/careers/locations/spokane"
-
-	// Enhanced Software Products
-package enhanced_software_products
-
-import (
   "os"
   "encoding/json"
   "log"
@@ -25,18 +11,18 @@ import (
 )
 
 // Set the base URL to scrape
-var scrapeUrl string 				= "https://www.espsolution.net/careers"
-var JobUrlPrefix string 		= scrapeUrl + ""
+var scrapeUrl string		= "https://www.f5.com/company/careers/locations/spokane"
+var JobUrlPrefix string = scrapeUrl + ""
 
 func ScrapeJobs() []*models.ScrapedJob {
 
-		// Create the Jobs collector
-		jobs := make([]*models.ScrapedJob, 0)
+  // Create the Jobs collector
+  jobs := make([]*models.ScrapedJob, 0)
 
-		// Create a new collector
-		c := getCollector()
+  // Create a new collector
+  c := getCollector()
 
-		// Display all jobs after scraping completes as json to the standard output
+    // Display all jobs after scraping completes as json to the standard output
   c.OnScraped(func(r *colly.Response) {
     enc := json.NewEncoder(os.Stdout)
     enc.SetIndent("", "  ")
@@ -45,7 +31,7 @@ func ScrapeJobs() []*models.ScrapedJob {
 
   // Process Job Line
   c.OnHTML("", func(h *colly.HTMLElement) {
-  	// todo
+    // todo
   })
 
   // Visit the scrapeUrl site (initate the script. )
@@ -53,16 +39,16 @@ func ScrapeJobs() []*models.ScrapedJob {
 
   log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
 
-		return jobs
+    return jobs
 }
 
 func getCollector() colly.Collector {
-	c := colly.NewCollector(
-		colly.AllowedDomains("www.espsolution.net", "espsolution.net"),
-		colly.CacheDir("./scraper_cache"),
-	)
+  c := colly.NewCollector(
+    colly.AllowedDomains("www.espsolution.net", "espsolution.net"),
+    colly.CacheDir("./scraper_cache"),
+  )
 
-	// Set headers and log the link visited on each request
+          // Set headers and log the link visited on each request
   c.OnRequest(func(r *colly.Request) {
     r.Headers.Set("Accept-Language", "en-US")
     r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.10 Safari/605.1.1")
@@ -74,7 +60,7 @@ func getCollector() colly.Collector {
     log.Printf("Error while scraping: %s\n", e.Error())
   })
 
-	return *c
+  return *c
 }
 
 func trimSpaces(s string) string {

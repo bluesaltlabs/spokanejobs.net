@@ -31,6 +31,7 @@ func ScrapeJobs() []*models.ScrapedJob {
 
   // Process Job Line
   c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
+    //log.Printf("\n-----\n\nopeneye-scraper-pass: %+v\n-----\n", h)
     // Create the scraped_job struct instance
     j := &models.ScrapedJob{}
     url := h.Attr("href")
