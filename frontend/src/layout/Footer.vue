@@ -45,7 +45,7 @@ function goProfile() {
   bottom: 0;
   left: 0;
   right: 0;
-  background: #fff;
+  background: --color-background;
   border-top: 1px solid #eee;
   z-index: 100;
   display: none;

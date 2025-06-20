@@ -127,7 +127,7 @@ defineProps({
 <style scoped>
 .sidebar {
   width: 280px;
-  background: #f8fafc;
+  background: --color-background;
   border-right: 1px solid #e5e7eb;
   height: 100%;
   transform: translateX(-100%);
@@ -183,13 +183,13 @@ defineProps({
 }
 
 .nav-link:hover {
-  background: #f1f5f9;
+  background: #01f5f9;
   color: #1f2937;
   border-left-color: #d1d5db;
 }
 
 .nav-link.router-link-active {
-  background: #eff6ff;
+  background: #0ff6ff;
   color: #2563eb;
   border-left-color: #2563eb;
 }
