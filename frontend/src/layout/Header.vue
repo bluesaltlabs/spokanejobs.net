@@ -1,50 +1,58 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 
+// oh so fancy!
+// todo: but this should be in the store and not here.
 defineEmits(['toggle-sidebar'])
 </script>
 
 <template>
   <header class="header">
     <div class="header-content">
-      <!-- Logo -->
-      <div class="logo">
-        <RouterLink to="/" class="logo-link">
-          <div class="logo-placeholder">
-            <span>BR</span>
-          </div>
-          <span class="logo-text">Bedrock</span>
-        </RouterLink>
-      </div>
+      <div class="header-content__left">
 
-      <!-- Sidebar Toggle Button -->
-      <button 
-        class="sidebar-toggle" 
-        @click="$emit('toggle-sidebar')"
-        aria-label="Toggle sidebar"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+        <!-- Logo -->
+        <div class="logo">
+          <RouterLink to="/" class="logo-link">
+            <div class="logo-placeholder">
+              <span>BR</span>
+            </div>
+            <span class="logo-text">Bedrock</span>
+          </RouterLink>
+        </div>
 
-      <!-- User Account Menu -->
-      <div class="user-menu">
-        <button class="user-menu-button" aria-label="User menu">
-          <div class="user-avatar">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </div>
-          <span class="user-name">User</span>
-          <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6,9 12,15 18,9"></polyline>
+        <!-- Sidebar Toggle Button -->
+        <button
+          class="sidebar-toggle"
+          @click="$emit('toggle-sidebar')"
+          aria-label="Toggle sidebar"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
       </div>
+
+      <div class="header-content__right">
+        <!-- User Account Menu -->
+        <div class="user-menu">
+          <button class="user-menu-button" aria-label="User menu">
+            <div class="user-avatar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <span class="user-name">User</span>
+            <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
     </div>
   </header>
 </template>
@@ -67,6 +75,17 @@ defineEmits(['toggle-sidebar'])
   height: 100%;
   padding: 0 1.5rem;
   max-width: 100%;
+
+  .header-content__left {
+    whitespace: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    flex: grow;
+  }
+
+  .header-content__right {
+
+  }
 }
 
 .logo {
@@ -170,11 +189,11 @@ defineEmits(['toggle-sidebar'])
   .logo-text {
     display: none;
   }
-  
+
   .user-name {
     display: none;
   }
-  
+
   .header-content {
     padding: 0 1rem;
   }

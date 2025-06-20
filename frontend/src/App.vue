@@ -14,8 +14,9 @@ const toggleSidebar = () => {
 
 <template>
   <div class="app-layout">
+    <!-- todo: update this so it uses state pinia app state store instead of this inline thing  -->
     <Header @toggle-sidebar="toggleSidebar" />
-    
+
     <div class="main-content">
       <Sidebar :is-open="isSidebarOpen" />
       <main class="content-area">
