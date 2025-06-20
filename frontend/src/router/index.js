@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
-import CompaniesListView from '@/views/CompaniesListView.vue'
+//import CompaniesListView from '@/views/CompaniesListView.vue'
+import CompaniesGridView from '@/views/CompaniesGridView.vue'
 import CompanyDetailView from '@/views/CompanyDetailView.vue'
 import CompanyCreateView from '@/views/CompanyCreateView.vue'
 import CompanyEditView from '@/views/CompanyEditView.vue'
@@ -24,8 +25,8 @@ const router = createRouter({
     },
     {
       path: '/companies',
-      name: 'companies-list',
-      component: CompaniesListView,
+      name: 'companies-grid',
+      component: CompaniesGridView,
     },
     {
       path: '/companies/create',
