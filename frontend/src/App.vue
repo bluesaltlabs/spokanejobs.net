@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { RouterView } from 'vue-router'
 import Header from '@/layout/Header.vue'
 import Sidebar from '@/layout/Sidebar.vue'
+import Footer from '@/layout/Footer.vue'
 
 const isSidebarOpen = ref(false)
 
@@ -22,6 +23,8 @@ const toggleSidebar = () => {
       </main>
     </div>
   </div>
+
+  <Footer />
 </template>
 
 <style scoped>
