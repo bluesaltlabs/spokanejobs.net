@@ -106,7 +106,11 @@
 
   --section-gap: 160px;
 
+  /* todo: add a series of border-radius variables for different layers of components */
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
   --border-radius: 12px;
+  --border-radius-large: 16px;
 }
 
 /* Dark Theme Colors */

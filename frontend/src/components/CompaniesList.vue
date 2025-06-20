@@ -60,7 +60,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   background: var(--color-surface);
-  border-radius: 8px;
+  border-radius: var(--border-radius-medium);
   overflow: hidden;
   box-shadow: 0 1px 3px var(--color-shadow);
 }
@@ -91,7 +91,7 @@ button {
   border: 1px solid var(--color-border);
   background: var(--color-button-secondary);
   color: var(--color-button-secondary-text);
-  border-radius: 6px;
+  border-radius: var(--border-radius-small);
   cursor: pointer;
   transition: all 0.2s ease;
 }

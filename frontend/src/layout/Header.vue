@@ -39,7 +39,7 @@ defineEmits(['toggle-sidebar'])
       <div class="header-content__right">
         <!-- Dark Mode Toggle -->
         <DarkModeToggle />
-        
+
         <!-- User Account Menu -->
         <div class="user-menu">
           <button class="user-menu-button" aria-label="User menu">
@@ -80,15 +80,12 @@ defineEmits(['toggle-sidebar'])
   padding: 0 1.5rem;
   max-width: 100%;
 
-  .header-content__left {
+  .header-content__left,
+  .header-content__right {
     white-space: nowrap;
     display: flex;
     flex-wrap: nowrap;
     flex: grow;
-  }
-
-  .header-content__right {
-
   }
 }
 
@@ -109,7 +106,7 @@ defineEmits(['toggle-sidebar'])
   width: 40px;
   height: 40px;
   background: var(--gradient-primary);
-  border-radius: 8px;
+  border-radius: var(--border-radius-medium);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,7 +125,7 @@ defineEmits(['toggle-sidebar'])
   background: none;
   border: none;
   padding: 0.5rem;
-  border-radius: 6px;
+  border-radius: var(--border-radius-medium);
   cursor: pointer;
   color: var(--color-text-subtle);
   transition: all 0.2s ease;
@@ -154,7 +151,7 @@ defineEmits(['toggle-sidebar'])
   background: none;
   border: none;
   padding: 0.5rem 0.75rem;
-  border-radius: 6px;
+  border-radius: var(--border-radius-medium);
   cursor: pointer;
   color: var(--color-text-subtle);
   transition: all 0.2s ease;
@@ -169,7 +166,6 @@ defineEmits(['toggle-sidebar'])
   width: 32px;
   height: 32px;
   background: var(--color-surface-hover);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,11 +189,11 @@ defineEmits(['toggle-sidebar'])
   .logo-text {
     display: none;
   }
-  
+
   .user-name {
     display: none;
   }
-  
+
   .header-content {
     padding: 0 1rem;
   }

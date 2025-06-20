@@ -18,7 +18,7 @@ onMounted(() => {
   // Check for saved theme preference or default to system preference
   const savedTheme = localStorage.getItem('theme')
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  
+
   if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
     isDark.value = true
     document.documentElement.classList.add('dark')
@@ -27,8 +27,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <button 
-    @click="toggleDarkMode" 
+  <button
+    @click="toggleDarkMode"
     class="dark-mode-toggle"
     :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
   >
@@ -54,7 +54,7 @@ onMounted(() => {
   background: none;
   border: none;
   padding: 0.5rem;
-  border-radius: 6px;
+  border-radius: var(--border-radius-medium);
   cursor: pointer;
   color: var(--color-text-subtle);
   transition: all 0.2s ease;
@@ -67,4 +67,4 @@ onMounted(() => {
   background: var(--color-surface-hover);
   color: var(--color-text);
 }
-</style> 
+</style>

@@ -94,7 +94,7 @@ hr {
 .company-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--border-radius-medium);
   overflow: hidden;
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px var(--color-shadow);
@@ -125,7 +125,7 @@ hr {
   width: 48px;
   height: 48px;
   background: var(--color-primary-50);
-  border-radius: 8px;
+  border-radius: var(--border-radius-medium);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,7 +186,7 @@ hr {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   background: var(--color-background-soft);
   padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
