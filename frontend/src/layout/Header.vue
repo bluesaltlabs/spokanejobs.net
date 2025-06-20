@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
 
 // oh so fancy!
 // todo: but this should be in the store and not here.
@@ -36,6 +37,9 @@ defineEmits(['toggle-sidebar'])
       </div>
 
       <div class="header-content__right">
+        <!-- Dark Mode Toggle -->
+        <DarkModeToggle />
+        
         <!-- User Account Menu -->
         <div class="user-menu">
           <button class="user-menu-button" aria-label="User menu">
@@ -59,9 +63,9 @@ defineEmits(['toggle-sidebar'])
 
 <style scoped>
 .header {
-  background: --color-background;
-  border-bottom: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  background: var(--color-background-elevated);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px 0 var(--color-shadow);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -77,7 +81,7 @@ defineEmits(['toggle-sidebar'])
   max-width: 100%;
 
   .header-content__left {
-    whitespace: nowrap;
+    white-space: nowrap;
     display: flex;
     flex-wrap: nowrap;
     flex: grow;
@@ -104,12 +108,12 @@ defineEmits(['toggle-sidebar'])
 .logo-placeholder {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-primary);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--color-text-inverse);
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -117,7 +121,7 @@ defineEmits(['toggle-sidebar'])
 .logo-text {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--color-heading);
 }
 
 .sidebar-toggle {
@@ -126,7 +130,7 @@ defineEmits(['toggle-sidebar'])
   padding: 0.5rem;
   border-radius: 6px;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-text-subtle);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -134,8 +138,8 @@ defineEmits(['toggle-sidebar'])
 }
 
 .sidebar-toggle:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--color-surface-hover);
+  color: var(--color-text);
 }
 
 .user-menu {
@@ -152,29 +156,29 @@ defineEmits(['toggle-sidebar'])
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-text-subtle);
   transition: all 0.2s ease;
 }
 
 .user-menu-button:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--color-surface-hover);
+  color: var(--color-text);
 }
 
 .user-avatar {
   width: 32px;
   height: 32px;
-  background: #f3f4f6;
+  background: var(--color-surface-hover);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
+  color: var(--color-text-subtle);
 }
 
 .user-name {
   font-weight: 500;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .dropdown-arrow {
@@ -189,11 +193,11 @@ defineEmits(['toggle-sidebar'])
   .logo-text {
     display: none;
   }
-
+  
   .user-name {
     display: none;
   }
-
+  
   .header-content {
     padding: 0 1rem;
   }

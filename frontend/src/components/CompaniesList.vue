@@ -59,16 +59,55 @@ async function deleteCompany(id) {
 table {
   width: 100%;
   border-collapse: collapse;
+  background: var(--color-surface);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px var(--color-shadow);
 }
+
 th, td {
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid #eee;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
 }
+
 th {
   text-align: left;
-  background: #f8fafc;
+  background: var(--color-background-soft);
+  font-weight: 600;
+  color: var(--color-heading);
 }
+
+td {
+  color: var(--color-text);
+}
+
+tr:hover {
+  background: var(--color-surface-hover);
+}
+
 button {
   margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-button-secondary);
+  color: var(--color-button-secondary-text);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: var(--color-button-secondary-hover);
+  border-color: var(--color-border-hover);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
 }
 </style>

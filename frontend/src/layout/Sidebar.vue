@@ -127,8 +127,8 @@ defineProps({
 <style scoped>
 .sidebar {
   width: 280px;
-  background: --color-background;
-  border-right: 1px solid #e5e7eb;
+  background: var(--color-background-soft);
+  border-right: 1px solid var(--color-border);
   height: 100%;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
@@ -157,7 +157,7 @@ defineProps({
 .nav-title {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-text-subtle);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0 1.5rem;
@@ -175,7 +175,7 @@ defineProps({
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
-  color: #374151;
+  color: var(--color-text);
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -183,15 +183,15 @@ defineProps({
 }
 
 .nav-link:hover {
-  background: #01f5f9;
-  color: #1f2937;
-  border-left-color: #d1d5db;
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+  border-left-color: var(--color-border-hover);
 }
 
 .nav-link.router-link-active {
-  background: #0ff6ff;
-  color: #2563eb;
-  border-left-color: #2563eb;
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+  border-left-color: var(--color-primary-600);
 }
 
 .nav-link svg {
@@ -208,7 +208,7 @@ defineProps({
     top: 64px;
     left: 0;
     height: calc(100vh - 64px);
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 8px var(--color-shadow-elevated);
   }
 }
 

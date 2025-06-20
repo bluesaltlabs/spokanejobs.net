@@ -45,8 +45,8 @@ function goProfile() {
   bottom: 0;
   left: 0;
   right: 0;
-  background: --color-background;
-  border-top: 1px solid #eee;
+  background: var(--color-background-elevated);
+  border-top: 1px solid var(--color-border);
   z-index: 100;
   display: none;
 }
@@ -66,9 +66,14 @@ function goProfile() {
   flex-direction: column;
   align-items: center;
   font-size: 14px;
-  color: #333;
+  color: var(--color-text);
   flex: 1;
   padding: 0;
+  transition: color 0.2s ease;
+}
+
+.footer-btn:hover {
+  color: var(--color-primary-600);
 }
 
 .footer-btn .icon {
