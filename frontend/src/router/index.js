@@ -3,6 +3,8 @@ import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import CompaniesListView from '@/views/CompaniesListView.vue'
 import CompanyDetailView from '@/views/CompanyDetailView.vue'
+import CompanyCreateView from '@/views/CompanyCreateView.vue'
+import CompanyEditView from '@/views/CompanyEditView.vue'
 import JobsListView from '@/views/JobsListView.vue'
 import JobDetailView from '@/views/JobDetailView.vue'
 import ProfileView from '@/views/ProfileView.vue'
@@ -26,9 +28,19 @@ const router = createRouter({
       component: CompaniesListView,
     },
     {
+      path: '/companies/create',
+      name: 'company-create',
+      component: CompanyCreateView,
+    },
+    {
       path: '/companies/:slug',
       name: 'company-detail',
       component: CompanyDetailView,
+    },
+    {
+      path: '/companies/:slug/edit',
+      name: 'company-edit',
+      component: CompanyEditView,
     },
     {
       path: '/jobs',

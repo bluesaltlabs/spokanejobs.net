@@ -13,7 +13,7 @@ export const useCompanies = defineStore('companies', {
     },
     sortedCompanies(state) {
       // return the companies sorted by name
-      return state.companies?.sort((a, b) => a.name.localeCompare(b.name))
+      return state.companies?.slice().sort((a, b) => a.name.localeCompare(b.name))
     }
   },
   actions: {
@@ -26,21 +26,28 @@ export const useCompanies = defineStore('companies', {
       }
       this.companies = data
     },
+    async createCompany(company) {
+      const { error } = await supabase.from('companies').insert([company])
+
+      if (error) throw error
+      await this.fetchCompanies()
+    },
+    async updateCompany(company) {
+      const { error } = await supabase.from('companies').update(company).eq('id', company.id)
+
+      if (error) throw error
+      await this.fetchCompanies()
+    },
+    async deleteCompany(id) {
+      const { error } = await supabase.from('companies').delete().eq('id', id)
+
+      if (error) throw error
+      await this.fetchCompanies()
+    },
     updateFilters(newFilters) {
       const { search, ...rest } = newFilters
       this.filters = { search: search ?? '', ...rest }
       // fetchCompanies()
     },
-    // addCompany(attributes) {
-    //   this.companies.push({
-    //     name: attributes?.name,
-    //     slug: attributes?.slug,
-    //     description: attributes?.description,
-    //     website: attributes?.website,
-    //     job_board_url: attributes?.job_board_url,
-    //     logo_url: attributes?.logo_url,
-    //     industry: attributes?.industry,
-    //   })
-    // },
   },
 })

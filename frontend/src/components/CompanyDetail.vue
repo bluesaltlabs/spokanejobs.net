@@ -1,34 +1,28 @@
 <script setup>
-import { onMounted } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
-//import {storeToRefs } from 'pinia'
+import { onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useCompany } from '@/stores/company'
 
 const companyStore = useCompany()
+const route = useRoute()
 
 onMounted(() => {
-  companyStore.fetchCompany(this.$route.query.slug)
+  companyStore.fetchCompany(route.params.slug)
 })
 
+const company = computed(() => companyStore.company)
 </script>
 
 <template>
-<div>
-  <h1>
-    <!-- <span>Company: {{ companiesStore.company?.name }}</span><br /> -->
-    <!-- <small>{{ companiesStore.company?.slug }}</small> -->
-  </h1>
-  <!-- <RouterLink :to="{ name: 'companies-list' }"> -->
-    <!-- < Companies -->
-  <!-- </RouterLink> -->
-
-  <code>
-    {{ this.$route.query }}
-  </code>
-  <p>
-  <!-- {{ companiesStore?.company.description }} -->
-  </p>
-</div>
+  <div v-if="company">
+    <h1>{{ company.name }}</h1>
+    <p><strong>Slug:</strong> {{ company.slug }}</p>
+    <p v-if="company.website"><strong>Website:</strong> <a :href="company.website" target="_blank">{{ company.website }}</a></p>
+    <p v-if="company.description"><strong>Description:</strong> {{ company.description }}</p>
+  </div>
+  <div v-else>
+    <p>Loading...</p>
+  </div>
 </template>
 
 <style scoped>
