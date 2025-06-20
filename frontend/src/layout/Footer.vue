@@ -5,17 +5,17 @@
         <span class="icon">🏠</span>
         <span class="label">Home</span>
       </button>
-      <button class="footer-btn" @click="goSearch">
-        <span class="icon">🔍</span>
-        <span class="label">Search</span>
+      <button class="footer-btn" @click="goCompanies">
+        <span class="icon">🏢</span>
+        <span class="label">Companies</span>
       </button>
-      <button class="footer-btn" @click="goNotifications">
-        <span class="icon">🔔</span>
-        <span class="label">Alerts</span>
+      <button class="footer-btn" @click="goJobs">
+        <span class="icon">💼</span>
+        <span class="label">Jobs</span>
       </button>
-      <button class="footer-btn" @click="goProfile">
-        <span class="icon">👤</span>
-        <span class="label">Profile</span>
+      <button class="footer-btn" @click="goAbout">
+        <span class="icon">ℹ️</span>
+        <span class="label">About</span>
       </button>
     </nav>
   </footer>
@@ -28,14 +28,14 @@ const router = useRouter()
 function goHome() {
   router.push({ name: 'home' })
 }
-function goSearch() {
-  router.push({ name: 'search' })
+function goCompanies() {
+  router.push({ name: 'companies-grid' })
 }
-function goNotifications() {
-  router.push({ name: 'notifications' })
+function goJobs() {
+  router.push({ name: 'jobs-list' })
 }
-function goProfile() {
-  router.push({ name: 'profile' })
+function goAbout() {
+  router.push({ name: 'about' })
 }
 </script>
 
