@@ -358,6 +358,12 @@ function goToView() {
       <!-- Left Column - User Info -->
       <div class="user-info-section">
         <h2>Personal Information</h2>
+        <div class="avatar-preview">
+          <div class="avatar">
+            <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar preview" />
+            <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
+          </div>
+        </div>
         <form>
           <div class="form-group">
             <label for="firstName">First Name</label>
@@ -401,12 +407,7 @@ function goToView() {
               class="themed-input"
               placeholder="Enter avatar image URL"
             />
-            <div class="avatar-preview">
-              <div class="avatar">
-                <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar preview" />
-                <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
-              </div>
-            </div>
+
           </div>
 
           <div v-if="saved" class="save-indicator saved">

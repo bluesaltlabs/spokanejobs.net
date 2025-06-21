@@ -17,7 +17,7 @@ function goToEdit() {
 
 <style scoped>
 .profile-view {
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   background: var(--background-color);
@@ -36,15 +36,46 @@ function goToEdit() {
   margin: 0;
 }
 
-.profile-info {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 1rem;
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Desktop 2-column layout */
+@media (min-width: 768px) {
+  .profile-content {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 3rem;
+  }
+
+  .user-info-section {
+    flex: 0 0 400px;
+    margin-bottom: 0;
+  }
+
+  .resume-section {
+    flex: 1;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+}
+
+.user-info-section {
   margin-bottom: 2rem;
+}
+
+.user-info-section h2 {
+  margin-bottom: 1.5rem;
+  color: var(--color-heading);
+  font-size: 1.5rem;
 }
 
 .profile-avatar {
   text-align: center;
+  margin-bottom: 1.5rem;
 }
 
 .avatar {
@@ -66,31 +97,31 @@ function goToEdit() {
   }
 }
 
-.profile-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .profile-field {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .profile-field label {
   font-weight: 600;
   color: var(--color-text-subtle);
   font-size: 0.9rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   display: block;
 }
 
 .profile-field .value {
   font-size: 1.1rem;
   color: var(--color-text);
+  padding: 0.75rem;
+  background: var(--color-surface-hover);
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
 }
 
 .resume-section {
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
 }
 
 .resume-header {
@@ -98,6 +129,12 @@ function goToEdit() {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.resume-header h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: 1.5rem;
 }
 
 .resume-entry {
@@ -199,39 +236,49 @@ function goToEdit() {
       <button @click="goToEdit" class="btn btn-primary">Edit Profile</button>
     </div>
 
-    <div class="profile-info">
-      <div class="profile-avatar">
-        <div class="avatar">
-          <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar" />
-          <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
+    <div class="profile-content">
+      <!-- Left Column - User Info -->
+      <div class="user-info-section">
+        <h2>Personal Information</h2>
+        
+        <div class="profile-avatar">
+          <div class="avatar">
+            <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar" />
+            <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
+          </div>
         </div>
-      </div>
 
-      <div class="profile-details">
         <div class="profile-field">
-          <label>Name</label>
-          <div class="value">{{ profile.first_name }} {{ profile.last_name }}</div>
+          <label>First Name</label>
+          <div class="value">{{ profile.first_name || 'Not provided' }}</div>
         </div>
+        
+        <div class="profile-field">
+          <label>Last Name</label>
+          <div class="value">{{ profile.last_name || 'Not provided' }}</div>
+        </div>
+        
         <div class="profile-field">
           <label>Email</label>
-          <div class="value">{{ profile.email }}</div>
+          <div class="value">{{ profile.email || 'Not provided' }}</div>
         </div>
       </div>
-    </div>
 
-    <div class="resume-section">
-      <div class="resume-header">
-        <h2>Resume Entries</h2>
-      </div>
+      <!-- Right Column - Resume Entries -->
+      <div class="resume-section">
+        <div class="resume-header">
+          <h2>Resume Entries</h2>
+        </div>
 
-      <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
-        <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
-        <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
-        <p>{{ entry.description }}</p>
-      </div>
+        <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
+          <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
+          <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+          <p>{{ entry.description }}</p>
+        </div>
 
-      <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
-        <p>No resume entries yet. <button @click="goToEdit" class="btn btn-primary">Add your first entry</button></p>
+        <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
+          <p>No resume entries yet. <button @click="goToEdit" class="btn btn-primary">Add your first entry</button></p>
+        </div>
       </div>
     </div>
   </div>
