@@ -196,7 +196,7 @@ function goToEdit() {
   <div class="profile-view">
     <div class="profile-header">
       <h1>Profile</h1>
-      <button @click="goToEdit" class="themed-btn">Edit Profile</button>
+      <button @click="goToEdit" class="btn btn-primary">Edit Profile</button>
     </div>
 
     <div class="profile-info">
@@ -231,7 +231,7 @@ function goToEdit() {
       </div>
 
       <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
-        <p>No resume entries yet. <button @click="goToEdit" class="themed-btn">Add your first entry</button></p>
+        <p>No resume entries yet. <button @click="goToEdit" class="btn btn-primary">Add your first entry</button></p>
       </div>
     </div>
   </div>

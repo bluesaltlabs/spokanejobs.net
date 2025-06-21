@@ -17,7 +17,7 @@ const toggleDarkMode = () => {
 <template>
   <button
     @click="toggleDarkMode"
-    class="dark-mode-toggle"
+    class="btn btn-ghost dark-mode-toggle"
     :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
   >
     <svg v-if="!isDark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -38,21 +38,5 @@ const toggleDarkMode = () => {
 </template>
 
 <style scoped>
-.dark-mode-toggle {
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  border-radius: var(--border-radius-medium);
-  cursor: pointer;
-  color: var(--color-text-subtle);
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dark-mode-toggle:hover {
-  background: var(--color-surface-hover);
-  color: var(--color-text);
-}
+/* Remove .dark-mode-toggle styles from <style> */
 </style>

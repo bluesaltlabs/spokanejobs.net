@@ -53,6 +53,6 @@ async function submit() {
       <label>Description</label>
       <textarea v-model="form.description" />
     </div>
-    <button type="submit">{{ isEdit ? 'Update' : 'Create' }}</button>
+    <button type="submit" class="btn btn-primary">{{ isEdit ? 'Update' : 'Create' }}</button>
   </form>
 </template>

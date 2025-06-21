@@ -46,8 +46,8 @@ async function deleteCompany(id) {
             <a :href="company.website" target="_blank" v-if="company.website">{{ company.website }}</a>
           </td>
           <td>
-            <button @click="editCompany(company.slug)">Edit</button>
-            <button @click="deleteCompany(company.id)">Delete</button>
+            <button @click="editCompany(company.slug)" class="btn btn-secondary btn-sm">Edit</button>
+            <button @click="deleteCompany(company.id)" class="btn btn-danger btn-sm">Delete</button>
           </td>
         </tr>
       </tbody>

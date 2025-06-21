@@ -215,7 +215,7 @@ function goToView() {
   border: 1px solid #c3e6cb;
 }
 
-.themed-btn {
+.btn-primary {
   background: linear-gradient(90deg, #4f8cff 0%, #2356c7 100%);
   color: #fff;
   border: none;
@@ -229,7 +229,7 @@ function goToView() {
   margin-right: 0.5rem;
 }
 
-.themed-btn:hover, .themed-btn:focus {
+.btn-primary:hover, .btn-primary:focus {
   background: linear-gradient(90deg, #2356c7 0%, #4f8cff 100%);
   outline: none;
 }
@@ -351,7 +351,7 @@ function goToView() {
   <div class="profile-edit-view">
     <div class="profile-header">
       <h1>Edit Profile</h1>
-      <button @click="goToView" class="themed-btn btn-secondary">View Profile</button>
+      <button @click="goToView" class="btn btn-secondary">View Profile</button>
     </div>
 
     <div class="profile-edit-content">
@@ -419,7 +419,7 @@ function goToView() {
       <div class="resume-section">
         <div class="resume-header">
           <h2>Resume Entries</h2>
-          <button @click="startAddEntry" class="themed-btn">Add Entry</button>
+          <button @click="startAddEntry" class="btn btn-primary">Add Entry</button>
         </div>
 
         <div v-if="showEntryForm" class="resume-form">
@@ -428,8 +428,8 @@ function goToView() {
           <input v-model="newEntry.startDate" placeholder="Start Date" type="date" class="themed-input" />
           <input v-model="newEntry.endDate" placeholder="End Date" type="date" class="themed-input" />
           <textarea v-model="newEntry.description" placeholder="Description" class="themed-input"></textarea>
-          <button @click="saveEntry" class="themed-btn">{{ editingId ? 'Update' : 'Add' }} Entry</button>
-          <button @click="cancelEntry" type="button" class="themed-btn btn-secondary">Cancel</button>
+          <button @click="saveEntry" class="btn btn-primary">{{ editingId ? 'Update' : 'Add' }} Entry</button>
+          <button @click="cancelEntry" type="button" class="btn btn-secondary">Cancel</button>
         </div>
 
         <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
@@ -437,8 +437,8 @@ function goToView() {
           <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
           <p>{{ entry.description }}</p>
           <div class="resume-entry-actions">
-            <button @click="startEditEntry(entry)" class="themed-btn">Edit</button>
-            <button @click="removeEntry(entry.id)" class="themed-btn btn-danger">Delete</button>
+            <button @click="startEditEntry(entry)" class="btn btn-primary btn-sm">Edit</button>
+            <button @click="removeEntry(entry.id)" class="btn btn-danger btn-sm">Delete</button>
           </div>
         </div>
 

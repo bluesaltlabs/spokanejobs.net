@@ -30,7 +30,7 @@ const profile = useProfileStore()
 
         <!-- Sidebar Toggle Button -->
         <button
-          class="sidebar-toggle"
+          class="btn btn-ghost sidebar-toggle"
           @click="$emit('toggle-sidebar')"
           aria-label="Toggle sidebar"
         >
@@ -48,7 +48,7 @@ const profile = useProfileStore()
 
         <!-- User Account Menu -->
         <div class="user-menu">
-          <RouterLink to="/profile" class="user-menu-button" aria-label="User menu">
+          <RouterLink to="/profile" class="btn btn-ghost user-menu-button" aria-label="User menu">
             <div class="user-avatar">
               <div v-if="profile.avatar">
                 <img :src="profile.avatar" alt="Avatar" />

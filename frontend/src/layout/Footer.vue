@@ -1,19 +1,19 @@
 <template>
   <footer class="mobile-footer">
     <nav class="footer-nav">
-      <button class="footer-btn" @click="goHome">
+      <button class="btn btn-ghost footer-btn" @click="goHome">
         <span class="icon">🏠</span>
         <span class="label">Home</span>
       </button>
-      <button class="footer-btn" @click="goCompanies">
+      <button class="btn btn-ghost footer-btn" @click="goCompanies">
         <span class="icon">🏢</span>
         <span class="label">Companies</span>
       </button>
-      <button class="footer-btn" @click="goJobs">
+      <button class="btn btn-ghost footer-btn" @click="goJobs">
         <span class="icon">💼</span>
         <span class="label">Jobs</span>
       </button>
-      <button class="footer-btn" @click="goAbout">
+      <button class="btn btn-ghost footer-btn" @click="goAbout">
         <span class="icon">ℹ️</span>
         <span class="label">About</span>
       </button>
