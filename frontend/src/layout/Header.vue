@@ -1,6 +1,8 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
+const appName = import.meta.env.VITE_APP_NAME
+const appAbbr = import.meta.env.VITE_APP_ABBR
 
 // oh so fancy!
 // todo: but this should be in the store and not here.
@@ -16,9 +18,9 @@ defineEmits(['toggle-sidebar'])
         <div class="logo">
           <RouterLink to="/" class="logo-link">
             <div class="logo-placeholder">
-              <span>BR</span>
+              <span>{{ appAbbr }}</span>
             </div>
-            <span class="logo-text">Bedrock</span>
+            <span class="logo-text">{{ appName }}</span>
           </RouterLink>
         </div>
 
