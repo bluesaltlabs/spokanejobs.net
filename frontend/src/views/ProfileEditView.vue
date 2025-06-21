@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
+import BaseButton from '@/components/BaseButton.vue'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -215,33 +216,6 @@ function goToView() {
   border: 1px solid #c3e6cb;
 }
 
-.btn-primary {
-  background: linear-gradient(90deg, #4f8cff 0%, #2356c7 100%);
-  color: #fff;
-  border: none;
-  border-radius: var(--border-radius-small);
-  padding: 0.5rem 1.2rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(79,140,255,0.08);
-  margin-right: 0.5rem;
-}
-
-.btn-primary:hover, .btn-primary:focus {
-  background: linear-gradient(90deg, #2356c7 0%, #4f8cff 100%);
-  outline: none;
-}
-
-.btn-secondary {
-  background: #6c757d;
-}
-
-.btn-secondary:hover {
-  background: #5a6268;
-}
-
 .resume-section {
   margin-top: 2rem;
   padding-top: 2rem;
@@ -337,21 +311,13 @@ function goToView() {
   margin: 0;
   font-size: 1rem;
 }
-
-.btn-danger {
-  background: #e74c3c;
-}
-
-.btn-danger:hover {
-  background: #c0392b;
-}
 </style>
 
 <template>
   <div class="profile-edit-view">
     <div class="profile-header">
       <h1>Edit Profile</h1>
-      <button @click="goToView" class="btn btn-secondary">View Profile</button>
+      <BaseButton @click="goToView" variant="secondary">View Profile</BaseButton>
     </div>
 
     <div class="profile-edit-content">
@@ -407,7 +373,6 @@ function goToView() {
               class="themed-input"
               placeholder="Enter avatar image URL"
             />
-
           </div>
 
           <div v-if="saved" class="save-indicator saved">
@@ -420,7 +385,7 @@ function goToView() {
       <div class="resume-section">
         <div class="resume-header">
           <h2>Resume Entries</h2>
-          <button @click="startAddEntry" class="btn btn-primary">Add Entry</button>
+          <BaseButton @click="startAddEntry" variant="primary">Add Entry</BaseButton>
         </div>
 
         <div v-if="showEntryForm" class="resume-form">
@@ -429,8 +394,8 @@ function goToView() {
           <input v-model="newEntry.startDate" placeholder="Start Date" type="date" class="themed-input" />
           <input v-model="newEntry.endDate" placeholder="End Date" type="date" class="themed-input" />
           <textarea v-model="newEntry.description" placeholder="Description" class="themed-input"></textarea>
-          <button @click="saveEntry" class="btn btn-primary">{{ editingId ? 'Update' : 'Add' }} Entry</button>
-          <button @click="cancelEntry" type="button" class="btn btn-secondary">Cancel</button>
+          <BaseButton @click="saveEntry" variant="primary">{{ editingId ? 'Update' : 'Add' }} Entry</BaseButton>
+          <BaseButton @click="cancelEntry" variant="secondary">Cancel</BaseButton>
         </div>
 
         <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
@@ -438,8 +403,8 @@ function goToView() {
           <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
           <p>{{ entry.description }}</p>
           <div class="resume-entry-actions">
-            <button @click="startEditEntry(entry)" class="btn btn-primary btn-sm">Edit</button>
-            <button @click="removeEntry(entry.id)" class="btn btn-danger btn-sm">Delete</button>
+            <BaseButton @click="startEditEntry(entry)" variant="primary" size="small">Edit</BaseButton>
+            <BaseButton @click="removeEntry(entry.id)" variant="danger" size="small">Delete</BaseButton>
           </div>
         </div>
 

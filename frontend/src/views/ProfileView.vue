@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
+import BaseButton from '@/components/BaseButton.vue'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -189,25 +190,6 @@ function goToEdit() {
   font-size: 1rem;
 }
 
-.themed-btn {
-  background: linear-gradient(90deg, #4f8cff 0%, #2356c7 100%);
-  color: #fff;
-  border: none;
-  border-radius: var(--border-radius-small);
-  padding: 0.5rem 1.2rem;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(79,140,255,0.08);
-  margin-right: 0.5rem;
-}
-
-.themed-btn:hover, .themed-btn:focus {
-  background: linear-gradient(90deg, #2356c7 0%, #4f8cff 100%);
-  outline: none;
-}
-
 .empty-resume {
   text-align: center;
   padding: 2rem;
@@ -222,10 +204,8 @@ function goToEdit() {
   font-size: 1rem;
 }
 
-.empty-resume .themed-btn {
+.empty-resume .base-button {
   margin-left: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.9rem;
 }
 </style>
 
@@ -233,7 +213,7 @@ function goToEdit() {
   <div class="profile-view">
     <div class="profile-header">
       <h1>Profile</h1>
-      <button @click="goToEdit" class="btn btn-primary">Edit Profile</button>
+      <BaseButton @click="goToEdit" variant="primary">Edit Profile</BaseButton>
     </div>
 
     <div class="profile-content">
@@ -277,7 +257,7 @@ function goToEdit() {
         </div>
 
         <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
-          <p>No resume entries yet. <button @click="goToEdit" class="btn btn-primary">Add your first entry</button></p>
+          <p>No resume entries yet. <BaseButton @click="goToEdit" variant="primary" size="small">Add your first entry</BaseButton></p>
         </div>
       </div>
     </div>
