@@ -1,12 +1,20 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import { useProfileStore } from '@/stores/profile'
+import { onMounted } from 'vue'
+
 const appName = import.meta.env.VITE_APP_NAME
 const appAbbr = import.meta.env.VITE_APP_ABBR
 
 // oh so fancy!
 // todo: but this should be in the store and not here.
 defineEmits(['toggle-sidebar'])
+
+const profile = useProfileStore()
+onMounted(() => {
+  profile.loadProfile()
+})
 </script>
 
 <template>
@@ -51,7 +59,9 @@ defineEmits(['toggle-sidebar'])
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>
-            <span class="user-name">User</span>
+            <span class="user-name">
+              {{ profile.first_name || profile.last_name ? `${profile.first_name} ${profile.last_name}`.trim() : profile.email ? `${profile.email}` : 'User' }}
+            </span>
             <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="6,9 12,15 18,9"></polyline>
             </svg>
