@@ -2,7 +2,6 @@
 import { RouterLink } from 'vue-router'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import { useProfileStore } from '@/stores/profile'
-import { onMounted } from 'vue'
 
 const appName = import.meta.env.VITE_APP_NAME
 const appAbbr = import.meta.env.VITE_APP_ABBR
@@ -12,9 +11,6 @@ const appAbbr = import.meta.env.VITE_APP_ABBR
 defineEmits(['toggle-sidebar'])
 
 const profile = useProfileStore()
-onMounted(() => {
-  profile.loadProfile()
-})
 </script>
 
 <template>
@@ -52,12 +48,12 @@ onMounted(() => {
 
         <!-- User Account Menu -->
         <div class="user-menu">
-          <button class="user-menu-button" aria-label="User menu">
+          <RouterLink to="/profile" class="user-menu-button" aria-label="User menu">
             <div class="user-avatar">
               <div v-if="profile.avatar">
                 <img :src="profile.avatar" alt="Avatar" />
               </div>
-              <svg v-if="!profile.avatar"> width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg v-if="!profile.avatar" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
@@ -68,7 +64,7 @@ onMounted(() => {
             <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="6,9 12,15 18,9"></polyline>
             </svg>
-          </button>
+          </RouterLink>
         </div>
       </div>
 

@@ -1,29 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
+import { useProfileStore } from '@/stores/profile'
 
-const isDark = ref(false)
+const profile = useProfileStore()
+
+const isDark = computed({
+  get: () => profile.dark_mode,
+  set: (val) => profile.setDarkMode(val)
+})
 
 const toggleDarkMode = () => {
   isDark.value = !isDark.value
-  if (isDark.value) {
-    document.documentElement.classList.add('dark')
-    localStorage.setItem('theme', 'dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-    localStorage.setItem('theme', 'light')
-  }
 }
-
-onMounted(() => {
-  // Check for saved theme preference or default to system preference
-  const savedTheme = localStorage.getItem('theme')
-  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-
-  if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
-    isDark.value = true
-    document.documentElement.classList.add('dark')
-  }
-})
 </script>
 
 <template>

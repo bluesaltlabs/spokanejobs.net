@@ -20,6 +20,7 @@ export const useProfileStore = defineStore('profile', {
     last_name: '',
     email: '',
     avatar: '',
+    dark_mode: false, // add dark_mode to state
   }),
   actions: {
     async loadProfile() {
@@ -36,10 +37,15 @@ export const useProfileStore = defineStore('profile', {
         last_name: this.last_name,
         email: this.email,
         avatar: this.avatar,
+        dark_mode: this.dark_mode, // persist dark_mode
       }, 'user')
     },
     updateField(field, value) {
       this[field] = value
+    },
+    setDarkMode(value) {
+      this.dark_mode = value
+      this.saveProfile()
     },
   },
 })
