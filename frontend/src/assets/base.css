@@ -56,10 +56,12 @@
   --color-surface: var(--color-white);
   --color-surface-hover: var(--color-gray-50);
   --color-surface-active: var(--color-gray-100);
+  --color-surface-dark: var(--color-gray-800);
 
   --color-border: var(--color-gray-200);
   --color-border-hover: var(--color-gray-300);
   --color-border-focus: var(--color-primary-500);
+  --color-border-dark: var(--color-gray-600);
 
   --color-text: var(--color-gray-900);
   --color-text-muted: var(--color-gray-600);
@@ -143,10 +145,12 @@
   --color-surface: var(--color-white);
   --color-surface-hover: var(--color-gray-50);
   --color-surface-active: var(--color-gray-100);
+  --color-surface-dark: var(--color-gray-800);
 
   --color-border: var(--color-gray-200);
   --color-border-hover: var(--color-gray-300);
   --color-border-focus: var(--color-primary-500);
+  --color-border-dark: var(--color-gray-600);
 
   --color-text: var(--color-gray-900);
   --color-text-muted: var(--color-gray-600);
@@ -210,10 +214,12 @@
   --color-surface: var(--color-gray-800);
   --color-surface-hover: var(--color-gray-700);
   --color-surface-active: var(--color-gray-600);
+  --color-surface-dark: var(--color-gray-700);
 
   --color-border: var(--color-gray-700);
   --color-border-hover: var(--color-gray-600);
   --color-border-focus: var(--color-primary-500);
+  --color-border-dark: var(--color-gray-500);
 
   --color-text: var(--color-gray-100);
   --color-text-muted: var(--color-gray-400);

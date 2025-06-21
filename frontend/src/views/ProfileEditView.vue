@@ -252,42 +252,42 @@ function goToView() {
 }
 
 .resume-entry {
-  border: 1.5px solid var(--color-border, #d1d5db);
-  border-radius: 8px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
   padding: 1.25rem 1rem 1rem 1rem;
   margin-bottom: 1.25rem;
-  background: var(--color-surface, #fff);
-  box-shadow: 0 1px 4px rgba(79,140,255,0.06);
+  background: var(--color-surface);
+  box-shadow: 0 1px 4px var(--color-shadow);
   transition: background 0.2s, border 0.2s;
 }
 
 [data-theme="dark"] .resume-entry {
-  background: var(--color-surface-dark, #23272f);
-  border-color: var(--color-border-dark, #3a3f4b);
-  box-shadow: 0 1px 6px rgba(79,140,255,0.10);
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
+  box-shadow: 0 1px 6px var(--color-shadow-elevated);
 }
 
 .resume-entry strong {
-  color: var(--resume-title-color, #2356c7);
+  color: var(--color-primary-600);
   font-size: 1.1rem;
   font-weight: 700;
 }
 
 .resume-entry em {
-  color: var(--resume-company-color, #4f8cff);
+  color: var(--color-primary-500);
   font-style: normal;
   font-weight: 600;
 }
 
 .resume-entry span {
-  color: var(--resume-date-color, #6c757d);
+  color: var(--color-text-muted);
   font-size: 0.95rem;
   display: block;
   margin-bottom: 0.5rem;
 }
 
 .resume-entry p {
-  color: var(--resume-desc-color, #222);
+  color: var(--color-text);
   margin: 0.5rem 0 0 0;
   font-size: 1rem;
 }
