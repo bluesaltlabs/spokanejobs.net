@@ -54,7 +54,10 @@ onMounted(() => {
         <div class="user-menu">
           <button class="user-menu-button" aria-label="User menu">
             <div class="user-avatar">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <div v-if="profile.avatar">
+                <img :src="profile.avatar" alt="Avatar" />
+              </div>
+              <svg v-if="!profile.avatar"> width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
@@ -182,6 +185,12 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   color: var(--color-text-subtle);
+
+  img {
+    max-width: 32px;
+    max-height: 32px;
+    border-radius: var(--border-radius-small);
+  }
 }
 
 .user-name {

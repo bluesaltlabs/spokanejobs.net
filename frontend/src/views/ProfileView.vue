@@ -41,6 +41,23 @@ onMounted(() => {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.profile-view .avatar {
+  width: 100px;
+  height: 100px;
+  background: var(--color-surface-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-subtle);
+
+  img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: var(--border-radius-small);
+    display: block;
+  }
+}
 </style>
 
 <template>
@@ -63,8 +80,8 @@ onMounted(() => {
         <label>Avatar URL:</label>
         <input v-model="profile.avatar" type="text" />
       </div>
-      <div v-if="profile.avatar">
-        <img :src="profile.avatar" alt="Avatar" style="max-width:100px;max-height:100px;" />
+      <div class="avatar">
+        <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar" />
       </div>
       <button type="submit">Save</button>
       <span v-if="saved" style="margin-left:1rem;color:green;">Saved!</span>
