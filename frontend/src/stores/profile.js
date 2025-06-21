@@ -21,6 +21,7 @@ export const useProfileStore = defineStore('profile', {
     email: '',
     avatar: '',
     dark_mode: false, // add dark_mode to state
+    resumeEntries: [], // add resumeEntries to state
   }),
   actions: {
     async loadProfile() {
@@ -32,19 +33,39 @@ export const useProfileStore = defineStore('profile', {
     },
     async saveProfile() {
       const db = await getDb()
-      await db.put(STORE_NAME, {
+      // De-proxy and deeply clone the data before saving
+      const dataToSave = JSON.parse(JSON.stringify({
         first_name: this.first_name,
         last_name: this.last_name,
         email: this.email,
         avatar: this.avatar,
-        dark_mode: this.dark_mode, // persist dark_mode
-      }, 'user')
+        dark_mode: this.dark_mode,
+        resumeEntries: this.resumeEntries,
+      }))
+      await db.put(STORE_NAME, dataToSave, 'user')
     },
     updateField(field, value) {
       this[field] = value
     },
     setDarkMode(value) {
       this.dark_mode = value
+      this.saveProfile()
+    },
+    // Resume Entries Actions
+    addResumeEntry(entry) {
+      // entry: { id, jobTitle, company, startDate, endDate, description, ... }
+      this.resumeEntries.push(entry)
+      this.saveProfile()
+    },
+    editResumeEntry(id, updatedEntry) {
+      const idx = this.resumeEntries.findIndex(e => e.id === id)
+      if (idx !== -1) {
+        this.resumeEntries[idx] = { ...this.resumeEntries[idx], ...updatedEntry }
+        this.saveProfile()
+      }
+    },
+    removeResumeEntry(id) {
+      this.resumeEntries = this.resumeEntries.filter(e => e.id !== id)
       this.saveProfile()
     },
   },
