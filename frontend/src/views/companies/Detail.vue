@@ -12,6 +12,7 @@ onMounted(() => {
   companyStore.fetchCompany(route.params.slug)
 })
 
+// todo: update this page so that it loads from JSON and not supabase.
 const company = computed(() => companyStore.company)
 </script>
 
