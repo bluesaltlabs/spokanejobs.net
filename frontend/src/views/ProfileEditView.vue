@@ -520,6 +520,8 @@ function goToView() {
             />
           </div>
 
+          <!-- todo: update this so it's the first option -->
+          <!--       and loads from gravatar when a valid email address is entered -->
           <div class="form-group">
             <label for="email">Email</label>
             <input

@@ -30,3 +30,18 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+---
+
+## To Do
+
+- [ ] Create a contact page
+- [ ] update the about page
+- [ ] determine what to add to the home page (just list jobs? )
+- [ ] add resources, events, etc (plan out how to add these things)
+- [ ] clean up the pages and components so there are less extra files
+- [ ]
+
+
+---
