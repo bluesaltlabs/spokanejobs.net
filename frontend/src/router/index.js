@@ -5,8 +5,6 @@ import ContactView from '@/views/static/Contact.vue'
 import SitemapView from '@/views/static/Sitemap.vue'
 import CompaniesGridView from '@/views/companies/Grid.vue'
 import CompanyDetailView from '@/views/companies/Detail.vue'
-import CompanyCreateView from '@/views/companies/Create.vue'
-import CompanyEditView from '@/views/companies/Edit.vue'
 import JobsListView from '@/views/jobs/List.vue'
 import JobDetailView from '@/views/jobs/Detail.vue'
 import ProfileView from '@/views/profile/Detail.vue'
@@ -41,19 +39,9 @@ const router = createRouter({
       component: CompaniesGridView,
     },
     {
-      path: '/companies/create',
-      name: 'company-create',
-      component: CompanyCreateView,
-    },
-    {
       path: '/companies/:slug',
       name: 'company-detail',
       component: CompanyDetailView,
-    },
-    {
-      path: '/companies/:slug/edit',
-      name: 'company-edit',
-      component: CompanyEditView,
     },
     {
       path: '/jobs',

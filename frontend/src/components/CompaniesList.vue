@@ -9,17 +9,6 @@ const router = useRouter()
 onMounted(() => {
   companiesStore.fetchCompanies()
 })
-
-function editCompany(slug) {
-  router.push({ name: 'company-edit', params: { slug } })
-}
-
-async function deleteCompany(id) {
-  if (confirm('Delete this company?')) {
-    await companiesStore.deleteCompany(id)
-    await companiesStore.fetchCompanies()
-  }
-}
 </script>
 
 <template>
@@ -31,7 +20,6 @@ async function deleteCompany(id) {
           <th>Name</th>
           <th>Slug</th>
           <th>Website</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -44,10 +32,6 @@ async function deleteCompany(id) {
           <td>{{ company.slug }}</td>
           <td>
             <a :href="company.website" target="_blank" v-if="company.website">{{ company.website }}</a>
-          </td>
-          <td>
-            <button @click="editCompany(company.slug)" class="btn btn-secondary btn-sm">Edit</button>
-            <button @click="deleteCompany(company.id)" class="btn btn-danger btn-sm">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -83,22 +67,6 @@ td {
 
 tr:hover {
   background: var(--color-surface-hover);
-}
-
-button {
-  margin-right: 0.5rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--color-border);
-  background: var(--color-button-secondary);
-  color: var(--color-button-secondary-text);
-  border-radius: var(--border-radius-small);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-button:hover {
-  background: var(--color-button-secondary-hover);
-  border-color: var(--color-border-hover);
 }
 
 a {

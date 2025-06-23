@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
-import { supabase } from '@/lib/supabaseClient'
 
-export const useCompanies = defineStore('app', {
+export const useApp = defineStore('app', {
   // state
   state: () => ({
     expandSidebar: true

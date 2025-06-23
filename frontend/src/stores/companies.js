@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { supabase } from '@/lib/supabaseClient'
+import { githubClient } from '@/lib/githubClient'
 
 export const useCompanies = defineStore('companies', {
   // state
@@ -18,7 +18,7 @@ export const useCompanies = defineStore('companies', {
   },
   actions: {
     async fetchCompanies() {
-      const { data, error } = await supabase.from('companies').select('*') // todo: this probably needs to use filters
+      const { data, error } = await githubClient.fetchCompanies()
 
       if (error) {
         console.error(error)
@@ -26,24 +26,8 @@ export const useCompanies = defineStore('companies', {
       }
       this.companies = data
     },
-    async createCompany(company) {
-      const { error } = await supabase.from('companies').insert([company])
-
-      if (error) throw error
-      await this.fetchCompanies()
-    },
-    async updateCompany(company) {
-      const { error } = await supabase.from('companies').update(company).eq('id', company.id)
-
-      if (error) throw error
-      await this.fetchCompanies()
-    },
-    async deleteCompany(id) {
-      const { error } = await supabase.from('companies').delete().eq('id', id)
-
-      if (error) throw error
-      await this.fetchCompanies()
-    },
+    // Note: Create, update, and delete operations are removed since we're reading from a static JSON file
+    // These operations would need to be handled differently if write access is required
     updateFilters(newFilters) {
       const { search, ...rest } = newFilters
       this.filters = { search: search ?? '', ...rest }

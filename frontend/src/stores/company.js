@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { supabase } from '@/lib/supabaseClient'
+import { githubClient } from '@/lib/githubClient'
 
 export const useCompany = defineStore('company', {
   // state
@@ -8,12 +8,21 @@ export const useCompany = defineStore('company', {
   }),
   actions: {
     async fetchCompany(slug) {
-      const { data, error } = await supabase.from('companies').select('*').eq('slug', slug).single()
+      const { data, error } = await githubClient.fetchCompanies()
+      
       if (error) {
         console.error(error)
         throw error
       }
-      this.company = data
+      
+      // Find the company by slug from the fetched data
+      const company = data.find(company => company.slug === slug)
+      
+      if (!company) {
+        throw new Error(`Company with slug '${slug}' not found`)
+      }
+      
+      this.company = company
     },
   },
 })
