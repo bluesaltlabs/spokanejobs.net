@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompanies } from '@/stores/companies'
+import SkeletonTableRow from '@/components/SkeletonTableRow.vue'
 
 // setup
 const companiesStore = useCompanies()
@@ -11,6 +12,8 @@ const router = useRouter()
 onMounted(() => {
   companiesStore.fetchCompanies()
 })
+
+const loading = computed(() => companiesStore.loading)
 </script>
 
 <template>
@@ -25,7 +28,17 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="company in companiesStore.sortedCompanies" :key="company.id">
+        <!-- Loading skeleton rows -->
+        <SkeletonTableRow 
+          v-if="loading" 
+          v-for="i in 8" 
+          :key="`skeleton-${i}`"
+          :columns="3"
+          :column-widths="['40%', '30%', '30%']"
+        />
+        
+        <!-- Actual company data -->
+        <tr v-else v-for="company in companiesStore.sortedCompanies" :key="company.id">
           <td>
             <router-link :to="{ name: 'company-detail', params: { slug: company.slug } }">
               {{ company.name }}

@@ -6,6 +6,7 @@ export const useCompanies = defineStore('companies', {
   state: () => ({
     companies: [],
     filters: { search: '' },
+    loading: false,
   }),
   getters: {
     countCompanies(state) {
@@ -18,13 +19,18 @@ export const useCompanies = defineStore('companies', {
   },
   actions: {
     async fetchCompanies() {
-      const { data, error } = await githubClient.fetchCompanies()
+      this.loading = true
+      try {
+        const { data, error } = await githubClient.fetchCompanies()
 
-      if (error) {
-        console.error(error)
-        throw error
+        if (error) {
+          console.error(error)
+          throw error
+        }
+        this.companies = data
+      } finally {
+        this.loading = false
       }
-      this.companies = data
     },
     // Note: Create, update, and delete operations are removed since we're reading from a static JSON file
     // These operations would need to be handled differently if write access is required

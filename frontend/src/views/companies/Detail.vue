@@ -2,6 +2,9 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCompany } from '@/stores/company'
+import SkeletonText from '@/components/SkeletonText.vue'
+import SkeletonImage from '@/components/SkeletonImage.vue'
+import SkeletonButton from '@/components/SkeletonButton.vue'
 
 // Setup
 const companyStore = useCompany()
@@ -14,6 +17,7 @@ onMounted(() => {
 
 // todo: update this page so that it loads from JSON and not supabase.
 const company = computed(() => companyStore.company)
+const loading = computed(() => companyStore.loading)
 </script>
 
 <template>
@@ -24,30 +28,44 @@ const company = computed(() => companyStore.company)
         <router-link class="back-button-link" to="/companies">🏢 All Companies</router-link>
       </div>
     </div>
-      <div v-if="company">
-        <h1 class="company-name">{{ company.name }}</h1>
-        <div class="company-links-container">
-          <span v-if="company.website"><a :href="company.website" target="_blank" :alt="company.website">🌐 Website</a></span>
-          <span v-if="company.job_board_url"><a :href="company.job_board_url" target="_blank" :alt="company.job_board_url">💼 Jobs</a></span>
+    
+    <div v-if="loading">
+      <!-- Loading skeleton -->
+      <div class="skeleton-content">
+        <SkeletonText variant="title" :lines="1" />
+        <div class="skeleton-links">
+          <SkeletonButton width="100px" height="35px" />
+          <SkeletonButton width="80px" height="35px" />
         </div>
-
         <div class="spacer"></div>
-        <img v-if="company?.logo_url" :src="company.logo_url" :alt="company.name + ' Logo'" class="company-logo" />
-
-
-        <!-- add a spacer here, or add padding to the paragraphs -->
-        <p v-if="company.description">{{ company.description }}</p>
+        <SkeletonImage width="425px" height="425px" />
+        <div class="spacer"></div>
+        <SkeletonText :lines="4" :line-height="20" />
+        <SkeletonText :lines="3" :line-height="20" last-line-width="60%" />
       </div>
-      <div v-else>
-        <p>Loading...</p>
-        <!-- todo: add loading shadow elements for better UX -->
+    </div>
+    
+    <div v-else-if="company">
+      <h1 class="company-name">{{ company.name }}</h1>
+      <div class="company-links-container">
+        <span v-if="company.website"><a :href="company.website" target="_blank" :alt="company.website">🌐 Website</a></span>
+        <span v-if="company.job_board_url"><a :href="company.job_board_url" target="_blank" :alt="company.job_board_url">💼 Jobs</a></span>
       </div>
+
+      <div class="spacer"></div>
+      <img v-if="company?.logo_url" :src="company.logo_url" :alt="company.name + ' Logo'" class="company-logo" />
+
+      <!-- add a spacer here, or add padding to the paragraphs -->
+      <p v-if="company.description">{{ company.description }}</p>
+    </div>
+    
+    <div v-else>
+      <p>Company not found.</p>
+    </div>
   </main>
 </template>
 
-
 <style scoped>
-
 .company-name {
   margin-top: 25px;
   margin-bottom: 15px;
@@ -80,10 +98,20 @@ img.company-logo {
   height: 30px;
 }
 
+.skeleton-content {
+  margin-top: 25px;
+}
+
+.skeleton-links {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  gap: 8px;
+}
+
 .company-links-container {
   margin-top: 15px;
   margin-bottom: 15px;
-
 
   a {
     border-radius: var(--border-radius-small);
