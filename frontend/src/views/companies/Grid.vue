@@ -11,11 +11,6 @@ const companiesStore = useCompanies()
 onMounted(() => {
   companiesStore.fetchCompanies()
 })
-
-// functions
-function goToCreate() {
-  router.push({ name: 'company-create' })
-}
 </script>
 
 <template>
