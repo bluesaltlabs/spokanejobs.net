@@ -1,10 +1,11 @@
-const COMPANIES_URL = import.meta.env.COMPANIES_URL
+const companiesUrl = import.meta.env.VITE_COMPANIES_URL ?? '/api/companies.json'
 
 export const githubClient = {
   async fetchCompanies() {
     try {
-      // Use local proxy in development, direct URL in production
-      const url = import.meta.env.DEV ? '/api/companies.json' : COMPANIES_URL
+      const url = companiesUrl
+
+      console.debug(`Fetching companies from ${url}`)
 
       const response = await fetch(url)
       if (!response.ok) {
@@ -14,20 +15,6 @@ export const githubClient = {
       return { data, error: null }
     } catch (error) {
       console.error('Error fetching companies from GitHub:', error)
-
-      // Fallback to local JSON file in development
-      if (import.meta.env.DEV) {
-        try {
-          console.log('Falling back to local companies.json file...')
-          const localResponse = await fetch('/companies.json')
-          if (localResponse.ok) {
-            const localData = await localResponse.json()
-            return { data: localData, error: null }
-          }
-        } catch (localError) {
-          console.error('Error fetching local companies.json:', localError)
-        }
-      }
 
       return { data: null, error }
     }
