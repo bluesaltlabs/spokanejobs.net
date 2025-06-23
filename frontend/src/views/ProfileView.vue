@@ -56,11 +56,23 @@ function goToEdit() {
     margin-bottom: 0;
   }
 
-  .resume-section {
+  .entries-section {
     flex: 1;
     margin-top: 0;
     padding-top: 0;
     border-top: none;
+  }
+
+  .resume-section {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .education-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
   }
 }
 
@@ -213,6 +225,101 @@ function goToEdit() {
 .empty-resume .base-button {
   margin-left: 0.5rem;
 }
+
+.education-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.education-header h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: 1.5rem;
+}
+
+.education-entry {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  padding: 1.25rem 1rem 1rem 1rem;
+  margin-bottom: 1.25rem;
+  background: var(--color-surface);
+  box-shadow: 0 1px 4px var(--color-shadow);
+  transition: background 0.2s, border 0.2s;
+}
+
+[data-theme="dark"] .education-entry {
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
+  box-shadow: 0 1px 6px var(--color-shadow-elevated);
+}
+
+.education-entry strong {
+  color: var(--color-primary-600);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.education-entry em {
+  color: var(--color-primary-500);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.education-entry span {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.education-entry p {
+  color: var(--color-text);
+  margin: 0.5rem 0 0 0;
+  font-size: 1rem;
+}
+
+/* Dark theme overrides for education colors */
+[data-theme="dark"] .education-entry strong {
+  color: var(--color-primary-400);
+}
+
+[data-theme="dark"] .education-entry em {
+  color: var(--color-primary-300);
+}
+
+[data-theme="dark"] .education-entry span {
+  color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .education-entry p {
+  color: var(--color-text);
+}
+
+.empty-education {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-subtle);
+  background: var(--color-surface-hover);
+  border-radius: var(--border-radius-medium);
+  border: 1px dashed var(--color-border);
+}
+
+.empty-education p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.empty-education .base-button {
+  margin-left: 0.5rem;
+}
 </style>
 
 <template>
@@ -250,20 +357,40 @@ function goToEdit() {
         </div>
       </div>
 
-      <!-- Right Column - Resume Entries -->
-      <div class="resume-section">
-        <div class="resume-header">
-          <h2>Resume Entries</h2>
+      <!-- Right Column - Resume and Education Entries -->
+      <div class="entries-section">
+        <!-- Resume Entries -->
+        <div class="resume-section">
+          <div class="resume-header">
+            <h2>Resume Entries</h2>
+          </div>
+
+          <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
+            <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
+            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+            <p>{{ entry.description }}</p>
+          </div>
+
+          <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
+            <p>No resume entries yet. <BaseButton @click="goToEdit" variant="primary" size="small">Add your first entry</BaseButton></p>
+          </div>
         </div>
 
-        <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
-          <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
-          <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
-          <p>{{ entry.description }}</p>
-        </div>
+        <!-- Education History Section -->
+        <div class="education-section">
+          <div class="education-header">
+            <h2>Education History</h2>
+          </div>
 
-        <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
-          <p>No resume entries yet. <BaseButton @click="goToEdit" variant="primary" size="small">Add your first entry</BaseButton></p>
+          <div v-for="entry in profile.educationEntries" :key="entry.id" class="education-entry">
+            <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
+            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+            <p>{{ entry.description }}</p>
+          </div>
+
+          <div v-if="profile.educationEntries.length === 0" class="empty-education">
+            <p>No education entries yet. <BaseButton @click="goToEdit" variant="primary" size="small">Add your first entry</BaseButton></p>
+          </div>
         </div>
       </div>
     </div>

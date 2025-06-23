@@ -40,11 +40,34 @@ const newEntry = ref({
 const editingId = ref(null)
 const showEntryForm = ref(false)
 
+// Education Entry Management
+const newEducationEntry = ref({
+  id: '',
+  degree: '',
+  institution: '',
+  startDate: '',
+  endDate: '',
+  description: ''
+})
+const editingEducationId = ref(null)
+const showEducationForm = ref(false)
+
 function resetNewEntry() {
   newEntry.value = {
     id: '',
     jobTitle: '',
     company: '',
+    startDate: '',
+    endDate: '',
+    description: ''
+  }
+}
+
+function resetNewEducationEntry() {
+  newEducationEntry.value = {
+    id: '',
+    degree: '',
+    institution: '',
     startDate: '',
     endDate: '',
     description: ''
@@ -57,23 +80,48 @@ function startAddEntry() {
   showEntryForm.value = true
 }
 
+function startAddEducationEntry() {
+  editingEducationId.value = null
+  resetNewEducationEntry()
+  showEducationForm.value = true
+}
+
 function startEditEntry(entry) {
   editingId.value = entry.id
   newEntry.value = { ...entry }
   showEntryForm.value = true
 }
 
+function startEditEducationEntry(entry) {
+  editingEducationId.value = entry.id
+  newEducationEntry.value = { ...entry }
+  showEducationForm.value = true
+}
+
 async function saveEntry() {
   if (!newEntry.value.jobTitle || !newEntry.value.company) return
   if (editingId.value) {
-    await profile.editResumeEntry(editingId.value, { ...newEntry.value })
+    profile.editResumeEntry(editingId.value, { ...newEntry.value })
   } else {
-    await profile.addResumeEntry({ ...newEntry.value, id: Date.now().toString() })
+   profile.addResumeEntry({ ...newEntry.value, id: Date.now().toString() })
   }
   await profile.loadProfile()
   editingId.value = null
   resetNewEntry()
   showEntryForm.value = false
+}
+
+async function saveEducationEntry() {
+  if (!newEducationEntry.value.degree || !newEducationEntry.value.institution) return
+  if (editingEducationId.value) {
+    profile.editEducationEntry(editingEducationId.value, { ...newEducationEntry.value })
+  } else {
+   profile.addEducationEntry({ ...newEducationEntry.value, id: Date.now().toString() })
+  }
+  await profile.loadProfile()
+  editingEducationId.value = null
+  resetNewEducationEntry()
+  showEducationForm.value = false
 }
 
 function cancelEntry() {
@@ -82,8 +130,19 @@ function cancelEntry() {
   showEntryForm.value = false
 }
 
+function cancelEducationEntry() {
+  resetNewEducationEntry()
+  editingEducationId.value = null
+  showEducationForm.value = false
+}
+
 async function removeEntry(id) {
-  await profile.removeResumeEntry(id)
+  profile.removeResumeEntry(id)
+  await profile.loadProfile()
+}
+
+async function removeEducationEntry(id) {
+  profile.removeEducationEntry(id)
   await profile.loadProfile()
 }
 
@@ -132,11 +191,23 @@ function goToView() {
     margin-bottom: 0;
   }
 
-  .resume-section {
+  .entries-section {
     flex: 1;
     margin-top: 0;
     padding-top: 0;
     border-top: none;
+  }
+
+  .resume-section {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .education-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
   }
 }
 
@@ -311,6 +382,102 @@ function goToView() {
   margin: 0;
   font-size: 1rem;
 }
+
+.education-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.education-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.education-header h2 {
+  margin: 0;
+  color: var(--color-heading);
+  font-size: 1.5rem;
+}
+
+.education-form {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f5f7fa;
+  border-radius: var(--border-radius-small);
+  border: 1px solid var(--color-border);
+}
+
+.education-form input, .education-form textarea {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius-small);
+}
+
+.education-entry {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  padding: 1.25rem 1rem 1rem 1rem;
+  margin-bottom: 1.25rem;
+  background: var(--color-surface);
+  box-shadow: 0 1px 4px var(--color-shadow);
+  transition: background 0.2s, border 0.2s;
+}
+
+[data-theme="dark"] .education-entry {
+  background: var(--color-surface-dark);
+  border-color: var(--color-border-dark);
+  box-shadow: 0 1px 6px var(--color-shadow-elevated);
+}
+
+.education-entry strong {
+  color: var(--color-primary-600);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.education-entry em {
+  color: var(--color-primary-500);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.education-entry span {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.education-entry p {
+  color: var(--color-text);
+  margin: 0.5rem 0 0 0;
+  font-size: 1rem;
+}
+
+.education-entry-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.empty-education {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-subtle);
+  background: var(--color-surface-hover);
+  border-radius: 8px;
+  border: 1px dashed var(--color-border);
+}
+
+.empty-education p {
+  margin: 0;
+  font-size: 1rem;
+}
 </style>
 
 <template>
@@ -381,35 +548,70 @@ function goToView() {
         </form>
       </div>
 
-      <!-- Right Column - Resume Entries -->
-      <div class="resume-section">
-        <div class="resume-header">
-          <h2>Resume Entries</h2>
-          <BaseButton @click="startAddEntry" variant="primary">Add Entry</BaseButton>
-        </div>
+      <!-- Right Column - Resume and Education Entries -->
+      <div class="entries-section">
+        <!-- Resume Entries -->
+        <div class="resume-section">
+          <div class="resume-header">
+            <h2>Resume Entries</h2>
+            <BaseButton @click="startAddEntry" variant="primary">Add Entry</BaseButton>
+          </div>
 
-        <div v-if="showEntryForm" class="resume-form">
-          <input v-model="newEntry.jobTitle" placeholder="Job Title" class="themed-input" />
-          <input v-model="newEntry.company" placeholder="Company" class="themed-input" />
-          <input v-model="newEntry.startDate" placeholder="Start Date" type="date" class="themed-input" />
-          <input v-model="newEntry.endDate" placeholder="End Date" type="date" class="themed-input" />
-          <textarea v-model="newEntry.description" placeholder="Description" class="themed-input"></textarea>
-          <BaseButton @click="saveEntry" variant="primary">{{ editingId ? 'Update' : 'Add' }} Entry</BaseButton>
-          <BaseButton @click="cancelEntry" variant="secondary">Cancel</BaseButton>
-        </div>
+          <div v-if="showEntryForm" class="resume-form">
+            <input v-model="newEntry.jobTitle" placeholder="Job Title" class="themed-input" />
+            <input v-model="newEntry.company" placeholder="Company" class="themed-input" />
+            <input v-model="newEntry.startDate" placeholder="Start Date" type="date" class="themed-input" />
+            <input v-model="newEntry.endDate" placeholder="End Date" type="date" class="themed-input" />
+            <textarea v-model="newEntry.description" placeholder="Description" class="themed-input"></textarea>
+            <BaseButton @click="saveEntry" variant="primary">{{ editingId ? 'Update' : 'Add' }} Entry</BaseButton>
+            <BaseButton @click="cancelEntry" variant="secondary">Cancel</BaseButton>
+          </div>
 
-        <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
-          <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
-          <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
-          <p>{{ entry.description }}</p>
-          <div class="resume-entry-actions">
-            <BaseButton @click="startEditEntry(entry)" variant="primary" size="small">Edit</BaseButton>
-            <BaseButton @click="removeEntry(entry.id)" variant="danger" size="small">Delete</BaseButton>
+          <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
+            <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
+            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+            <p>{{ entry.description }}</p>
+            <div class="resume-entry-actions">
+              <BaseButton @click="startEditEntry(entry)" variant="primary" size="small">Edit</BaseButton>
+              <BaseButton @click="removeEntry(entry.id)" variant="danger" size="small">Delete</BaseButton>
+            </div>
+          </div>
+
+          <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
+            <p>No resume entries yet. Click "Add Entry" to get started.</p>
           </div>
         </div>
 
-        <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
-          <p>No resume entries yet. Click "Add Entry" to get started.</p>
+        <!-- Education History Section -->
+        <div class="education-section">
+          <div class="education-header">
+            <h2>Education History</h2>
+            <BaseButton @click="startAddEducationEntry" variant="primary">Add Education</BaseButton>
+          </div>
+
+          <div v-if="showEducationForm" class="education-form">
+            <input v-model="newEducationEntry.degree" placeholder="Degree" class="themed-input" />
+            <input v-model="newEducationEntry.institution" placeholder="Institution" class="themed-input" />
+            <input v-model="newEducationEntry.startDate" placeholder="Start Date" type="date" class="themed-input" />
+            <input v-model="newEducationEntry.endDate" placeholder="End Date" type="date" class="themed-input" />
+            <textarea v-model="newEducationEntry.description" placeholder="Description" class="themed-input"></textarea>
+            <BaseButton @click="saveEducationEntry" variant="primary">{{ editingEducationId ? 'Update' : 'Add' }} Education</BaseButton>
+            <BaseButton @click="cancelEducationEntry" variant="secondary">Cancel</BaseButton>
+          </div>
+
+          <div v-for="entry in profile.educationEntries" :key="entry.id" class="education-entry">
+            <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
+            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+            <p>{{ entry.description }}</p>
+            <div class="education-entry-actions">
+              <BaseButton @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</BaseButton>
+              <BaseButton @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</BaseButton>
+            </div>
+          </div>
+
+          <div v-if="profile.educationEntries.length === 0" class="empty-education">
+            <p>No education entries yet. Click "Add Education" to get started.</p>
+          </div>
         </div>
       </div>
     </div>

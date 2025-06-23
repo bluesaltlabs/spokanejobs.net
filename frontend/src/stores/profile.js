@@ -22,6 +22,7 @@ export const useProfileStore = defineStore('profile', {
     avatar: '',
     dark_mode: false, // add dark_mode to state
     resumeEntries: [], // add resumeEntries to state
+    educationEntries: [], // add educationEntries to state
   }),
   actions: {
     async loadProfile() {
@@ -41,6 +42,7 @@ export const useProfileStore = defineStore('profile', {
         avatar: this.avatar,
         dark_mode: this.dark_mode,
         resumeEntries: this.resumeEntries,
+        educationEntries: this.educationEntries,
       }))
       await db.put(STORE_NAME, dataToSave, 'user')
     },
@@ -66,6 +68,23 @@ export const useProfileStore = defineStore('profile', {
     },
     removeResumeEntry(id) {
       this.resumeEntries = this.resumeEntries.filter(e => e.id !== id)
+      this.saveProfile()
+    },
+    // Education Entries Actions
+    addEducationEntry(entry) {
+      // entry: { id, degree, institution, startDate, endDate, description, ... }
+      this.educationEntries.push(entry)
+      this.saveProfile()
+    },
+    editEducationEntry(id, updatedEntry) {
+      const idx = this.educationEntries.findIndex(e => e.id === id)
+      if (idx !== -1) {
+        this.educationEntries[idx] = { ...this.educationEntries[idx], ...updatedEntry }
+        this.saveProfile()
+      }
+    },
+    removeEducationEntry(id) {
+      this.educationEntries = this.educationEntries.filter(e => e.id !== id)
       this.saveProfile()
     },
   },
