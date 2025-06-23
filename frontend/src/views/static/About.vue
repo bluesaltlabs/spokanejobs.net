@@ -1,3 +1,7 @@
+<script setup>
+const appName = import.meta.env.VITE_APP_NAME
+</script>
+
 <style scoped>
   h1 {
     margin-top: 2rem;
@@ -12,7 +16,7 @@
 
 <template>
   <div class="about">
-    <h1>About | Bedrock</h1>
+    <h1>About | {{ appName }}</h1>
 
     <p>
       todo

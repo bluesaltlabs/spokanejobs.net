@@ -1,5 +1,5 @@
 <script setup>
-import CompaniesGrid from '../components/CompaniesGrid.vue'
+import CompaniesGrid from '@/components/CompaniesGrid.vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 function goToCreate() {

@@ -1,15 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
-import AboutView from '@/views/AboutView.vue'
-//import CompaniesListView from '@/views/CompaniesListView.vue'
-import CompaniesGridView from '@/views/CompaniesGridView.vue'
-import CompanyDetailView from '@/views/CompanyDetailView.vue'
-import CompanyCreateView from '@/views/CompanyCreateView.vue'
-import CompanyEditView from '@/views/CompanyEditView.vue'
-import JobsListView from '@/views/JobsListView.vue'
-import JobDetailView from '@/views/JobDetailView.vue'
-import ProfileView from '@/views/ProfileView.vue'
-import ProfileEditView from '@/views/ProfileEditView.vue'
+import HomeView from '@/views/static/Home.vue'
+import AboutView from '@/views/static/About.vue'
+import ContactView from '@/views/static/Contact.vue'
+import SitemapView from '@/views/static/Sitemap.vue'
+import CompaniesGridView from '@/views/companies/Grid.vue'
+import CompanyDetailView from '@/views/companies/Detail.vue'
+import CompanyCreateView from '@/views/companies/Create.vue'
+import CompanyEditView from '@/views/companies/Edit.vue'
+import JobsListView from '@/views/jobs/List.vue'
+import JobDetailView from '@/views/jobs/Detail.vue'
+import ProfileView from '@/views/profile/Detail.vue'
+import ProfileEditView from '@/views/profile/Edit.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,16 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: AboutView,
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: ContactView,
+    },
+    {
+      path: '/sitemap',
+      name: 'sitemap',
+      component: SitemapView,
     },
     {
       path: '/companies',

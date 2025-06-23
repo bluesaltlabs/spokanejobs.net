@@ -1,5 +1,5 @@
 <script setup>
-import CompaniesList from '../components/CompaniesList.vue'
+import CompaniesList from '@/components/CompaniesList.vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 function goToCreate() {

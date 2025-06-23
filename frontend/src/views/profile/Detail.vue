@@ -333,7 +333,7 @@ function goToEdit() {
       <!-- Left Column - User Info -->
       <div class="user-info-section">
         <h2>Personal Information</h2>
-        
+
         <div class="profile-avatar">
           <div class="avatar">
             <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar" />
@@ -345,12 +345,12 @@ function goToEdit() {
           <label>First Name</label>
           <div class="value">{{ profile.first_name || 'Not provided' }}</div>
         </div>
-        
+
         <div class="profile-field">
           <label>Last Name</label>
           <div class="value">{{ profile.last_name || 'Not provided' }}</div>
         </div>
-        
+
         <div class="profile-field">
           <label>Email</label>
           <div class="value">{{ profile.email || 'Not provided' }}</div>
