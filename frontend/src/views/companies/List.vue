@@ -1,12 +1,10 @@
 <script setup>
 import { onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useCompanies } from '@/stores/companies'
 import SkeletonTableRow from '@/components/skeleton/TableRow.vue'
 
 // setup
 const companiesStore = useCompanies()
-const router = useRouter()
 
 // Fetch companies on component mount
 onMounted(() => {
@@ -19,6 +17,8 @@ const loading = computed(() => companiesStore.loading)
 <template>
   <main>
     <h1>Companies</h1>
+    <hr />
+
     <table>
       <thead>
         <tr>

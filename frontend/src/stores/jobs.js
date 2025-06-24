@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
-import { supabase } from '@/lib/supabaseClient'
+import { githubClient } from '@/lib/githubClient'
 
 export const useJobs = defineStore('jobs', {
   // state
   state: () => ({
     jobs: [],
     filters: { search: '' },
+    loading: false,
   }),
   getters: {
     countJobs(state) {
@@ -18,29 +19,24 @@ export const useJobs = defineStore('jobs', {
   },
   actions: {
     async fetchJobs() {
-      const { data, error } = await supabase.from('jobs').select('*') // todo: this probably needs to use filters
+      this.loading = true
+      try {
+        const { data, error } = await githubClient.fetchJobs()
 
-      if (error) {
-        console.error(error)
-        throw error
+        if (error) {
+          console.error(error)
+          throw error
+        }
+        this.jobs = data
+      } finally {
+        this.loading = false
       }
-      this.jobs = data
     },
+
     updateFilters(newFilters) {
       const { search, ...rest } = newFilters
       this.filters = { search: search ?? '', ...rest }
       // fetchJobs()
     },
-    // addJob(attributes) {
-    //   this.jobs.push({
-    //     name: attributes?.name,
-    //     slug: attributes?.slug,
-    //     description: attributes?.description,
-    //     website: attributes?.website,
-    //     job_board_url: attributes?.job_board_url,
-    //     logo_url: attributes?.logo_url,
-    //     industry: attributes?.industry,
-    //   })
-    // },
   },
 })

@@ -32,8 +32,7 @@ export const useCompanies = defineStore('companies', {
         this.loading = false
       }
     },
-    // Note: Create, update, and delete operations are removed since we're reading from a static JSON file
-    // These operations would need to be handled differently if write access is required
+
     updateFilters(newFilters) {
       const { search, ...rest } = newFilters
       this.filters = { search: search ?? '', ...rest }
