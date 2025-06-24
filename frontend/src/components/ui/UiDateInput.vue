@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-dateinput">
+  <div class="ui-dateinput ui-form-element">
     <input
       :type="withTime ? 'datetime-local' : 'date'"
       :value="modelValue"
@@ -38,5 +38,11 @@ defineProps({
 .ui-dateinput__input:disabled {
   background: #f3f4f6;
   color: #9ca3af;
+}
+/* Utility class for consistent vertical spacing of form elements */
+.ui-form-element {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem !important;
 }
 </style> 

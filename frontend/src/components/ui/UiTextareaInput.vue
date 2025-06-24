@@ -4,7 +4,7 @@
     :placeholder="placeholder"
     :rows="rows"
     :disabled="disabled"
-    class="ui-textarea"
+    class="ui-textarea ui-form-element"
     @input="$emit('update:modelValue', $event.target.value)"
     @focus="$emit('focus', $event)"
     @blur="$emit('blur', $event)"
@@ -39,5 +39,11 @@ defineProps({
 .ui-textarea:disabled {
   background: #f3f4f6;
   color: #9ca3af;
+}
+/* Utility class for consistent vertical spacing of form elements */
+.ui-form-element {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem !important;
 }
 </style> 

@@ -4,7 +4,7 @@
     :value="modelValue"
     :placeholder="placeholder"
     :disabled="disabled"
-    class="ui-input"
+    class="ui-input ui-form-element"
     @input="$emit('update:modelValue', $event.target.value)"
     @focus="$emit('focus', $event)"
     @blur="$emit('blur', $event)"
@@ -38,5 +38,11 @@ defineProps({
 .ui-input:disabled {
   background: #f3f4f6;
   color: #9ca3af;
+}
+/* Utility class for consistent vertical spacing of form elements */
+.ui-form-element {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem !important;
 }
 </style> 

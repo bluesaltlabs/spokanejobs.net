@@ -357,9 +357,13 @@ function goToView() {
 .resume-form {
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: #f5f7fa;
+  background: var(--color-surface-hover);
   border-radius: var(--border-radius-small);
   border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .resume-form {
+  background: var(--color-surface-dark);
 }
 
 .resume-entry {
@@ -445,9 +449,13 @@ function goToView() {
 .education-form {
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: #f5f7fa;
+  background: var(--color-surface-hover);
   border-radius: var(--border-radius-small);
   border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .education-form {
+  background: var(--color-surface-dark);
 }
 
 .education-entry {
@@ -510,6 +518,18 @@ function goToView() {
   margin: 0;
   font-size: 1rem;
 }
+
+/* Add iOS-style popup button row styling */
+.form-action-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.form-action-btn {
+  flex: 1 1 0;
+  min-width: 0;
+}
 </style>
 
 <template>
@@ -561,8 +581,10 @@ function goToView() {
             <UiDateInput v-model="newEntry.startDate" placeholder="Start Date" />
             <UiDateInput v-model="newEntry.endDate" placeholder="End Date" />
             <UiTextareaInput v-model="newEntry.description" placeholder="Description" />
-            <UiButton @click="saveEntry" variant="primary">{{ editingId ? 'Update' : 'Add' }} Entry</UiButton>
-            <UiButton @click="cancelEntry" variant="secondary">Cancel</UiButton>
+            <div class="form-action-row">
+              <UiButton @click="saveEntry" variant="primary" class="form-action-btn">{{ editingId ? 'Update' : 'Add' }} Entry</UiButton>
+              <UiButton @click="cancelEntry" variant="secondary" class="form-action-btn">Cancel</UiButton>
+            </div>
           </div>
           <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
             <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
@@ -588,8 +610,10 @@ function goToView() {
             <UiDateInput v-model="newEducationEntry.startDate" placeholder="Start Date" />
             <UiDateInput v-model="newEducationEntry.endDate" placeholder="End Date" />
             <UiTextareaInput v-model="newEducationEntry.description" placeholder="Description" />
-            <UiButton @click="saveEducationEntry" variant="primary">{{ editingEducationId ? 'Update' : 'Add' }} Education</UiButton>
-            <UiButton @click="cancelEducationEntry" variant="secondary">Cancel</UiButton>
+            <div class="form-action-row">
+              <UiButton @click="saveEducationEntry" variant="primary" class="form-action-btn">{{ editingEducationId ? 'Update' : 'Add' }} Education</UiButton>
+              <UiButton @click="cancelEducationEntry" variant="secondary" class="form-action-btn">Cancel</UiButton>
+            </div>
           </div>
           <div v-for="entry in profile.educationEntries" :key="entry.id" class="education-entry">
             <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
