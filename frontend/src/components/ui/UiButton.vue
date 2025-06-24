@@ -54,4 +54,12 @@ defineProps({
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+.ui-btn.success {
+  background: #22c55e;
+  color: #fff;
+}
+.ui-btn.info {
+  background: #0ea5e9;
+  color: #fff;
+}
 </style> 

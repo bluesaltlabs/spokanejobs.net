@@ -3,6 +3,9 @@ import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import { UiButton, UiTextInput, UiTextareaInput, UiDateInput, UiForm, UiFormGroup } from '@/components/ui'
+import ExportIcon from '@/components/icons/Export.vue'
+import ImportIcon from '@/components/icons/Import.vue'
+import ViewIcon from '@/components/icons/View.vue'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -530,17 +533,53 @@ function goToView() {
   flex: 1 1 0;
   min-width: 0;
 }
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  
+}
+
+.header-actions svg {
+  position: relative;
+  margin-right: 0.5em;
+}
+
+@media (max-width: 1023px) {
+  .header-actions  {
+    svg {
+      margin-right: 0 !important;
+    }
+  }
+  .button-tooltip {
+    display: none !important;
+  }
+}
+
+
 </style>
 
 <template>
   <div class="profile-edit-view">
     <div class="profile-header">
       <h1>Edit Profile</h1>
-      <div class="header-actions">
-        <UiButton @click="exportProfile" variant="secondary">Export Profile</UiButton>
-        <UiButton @click="$refs.fileInput.click()" variant="secondary">Import Profile</UiButton>
-        <UiButton @click="goToView" variant="secondary">View Profile</UiButton>
-      </div>
+    </div>
+    <div class="header-actions">
+      <UiButton @click="exportProfile" variant="success" aria-label="Export Profile">
+          <ExportIcon  />
+          <span class="button-tooltip">Export Profile</span>
+        </UiButton>
+        <UiButton @click="$refs.fileInput.click()" variant="info" aria-label="Import Profile">
+          <ImportIcon  />
+          <span class="button-tooltip">Import Profile</span>
+        </UiButton>
+        <UiButton @click="goToView" variant="primary" aria-label="View Profile">
+          <ViewIcon  />
+          <span class="button-tooltip">View Profile</span>
+        </UiButton>
+
     </div>
     <input ref="fileInput" type="file" accept=".json" style="display: none" @change="importProfile" />
     <div class="profile-edit-content">

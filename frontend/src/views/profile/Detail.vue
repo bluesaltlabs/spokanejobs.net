@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import { UiButton } from '@/components/ui'
+import ProfileIcon from '@/components/icons/Profile.vue'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -320,16 +321,28 @@ function goToEdit() {
 .empty-education .base-button {
   margin-left: 0.5rem;
 }
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
 </style>
 
 <template>
   <div class="profile-view">
     <div class="profile-header">
       <h1>Profile</h1>
-      <UiButton @click="goToEdit" variant="primary">Edit Profile</UiButton>
+    </div>
+    <div class="profile-actions">
+      <UiButton @click="goToEdit" variant="primary">
+        <ProfileIcon style="margin-right: 0.5em; vertical-align: middle;" />
+        Edit Profile
+      </UiButton>
     </div>
 
     <div class="profile-content">
+      
       <!-- Left Column - User Info -->
       <div class="user-info-section">
         <h2>Personal Information</h2>
