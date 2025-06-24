@@ -1,45 +1,42 @@
 <script setup>
-import IconAbout from '@/components/icons/About.vue'
-import IconCompanies from '@/components/icons/Companies.vue'
-import IconHome from '@/components/icons/Home.vue'
-import IconJobs from '@/components/icons/Jobs.vue'
-//import IconProfile from '@/components/icons/Profile.vue'
+import navLinks from '@/lib/navLinks.json'
+import { useRouter, useRoute } from 'vue-router'
+import { computed, defineAsyncComponent } from 'vue'
 
-import { useRouter } from 'vue-router'
 const router = useRouter()
+const route = useRoute()
 
-function goHome() {
-  router.push({ name: 'home' })
+// Map icon names to components
+const iconMap = {
+  About: defineAsyncComponent(() => import('@/components/icons/About.vue')),
+  Resources: defineAsyncComponent(() => import('@/components/icons/Resources.vue')),
+  Companies: defineAsyncComponent(() => import('@/components/icons/Companies.vue')),
+  Jobs: defineAsyncComponent(() => import('@/components/icons/Jobs.vue')),
+  Contact: defineAsyncComponent(() => import('@/components/icons/Contact.vue')),
 }
-function goCompanies() {
-  router.push({ name: 'companies-grid' })
-}
-function goJobs() {
-  router.push({ name: 'jobs-list' })
-}
-function goAbout() {
-  router.push({ name: 'about' })
+
+// Flatten nav items for the footer (no sections)
+const footerLinks = computed(() => {
+  return navLinks.flatMap(section => section.items)
+})
+
+function goTo(routeName) {
+  router.push({ name: routeName })
 }
 </script>
 
 <template>
   <footer class="mobile-footer">
     <nav class="footer-nav">
-      <button class="btn btn-ghost footer-btn" @click="goHome">
-        <IconHome />
-        <span class="label">Home</span>
-      </button>
-      <button class="btn btn-ghost footer-btn" @click="goCompanies">
-        <IconCompanies />
-        <span class="label">Companies</span>
-      </button>
-      <button class="btn btn-ghost footer-btn" @click="goJobs">
-        <IconJobs />
-        <span class="label">Jobs</span>
-      </button>
-      <button class="btn btn-ghost footer-btn" @click="goAbout">
-        <IconAbout />
-        <span class="label">About</span>
+      <button
+        v-for="item in footerLinks"
+        :key="item.route"
+        class="btn btn-ghost footer-btn"
+        :class="{ active: route.name === item.route }"
+        @click="goTo(item.route)"
+      >
+        <component :is="iconMap[item.icon]" />
+        <span class="label">{{ item.label }}</span>
       </button>
     </nav>
   </footer>
@@ -60,9 +57,10 @@ function goAbout() {
 
 .footer-nav {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: stretch;
+  align-items: stretch;
   height: 56px;
+  padding: 0;
 }
 
 .footer-btn {
@@ -72,11 +70,18 @@ function goAbout() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   font-size: 14px;
   color: var(--color-text);
-  flex: 1;
+  flex: 1 1 0%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
   padding: 0;
-  transition: color 0.2s ease;
+  margin: 0;
+  transition: color 0.2s ease, background 0.2s ease;
+  border-radius: 0;
 }
 
 .footer-btn:hover {
@@ -90,6 +95,12 @@ function goAbout() {
 .footer-btn .label {
   font-size: 12px;
   margin-top: 2px;
+}
+
+.footer-btn.active {
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+  border-top: 3px solid var(--color-primary-600);
 }
 
 @media (max-width: 1200px) {

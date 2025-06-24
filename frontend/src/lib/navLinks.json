@@ -1,0 +1,17 @@
+[
+  {
+    "section": "Main",
+    "items": [
+      { "route": "about", "label": "About", "icon": "About" },
+      { "route": "resources", "label": "Resources", "icon": "Resources" },
+      { "route": "contact", "label": "Contact", "icon": "Contact" }
+    ]
+  },
+  {
+    "section": "Data",
+    "items": [
+      { "route": "companies-grid", "label": "Companies", "icon": "Companies" },
+      { "route": "jobs-list", "label": "Jobs", "icon": "Jobs" }
+    ]
+  }
+] 

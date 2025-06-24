@@ -1,115 +1,38 @@
 <script setup>
+import navLinks from '@/lib/navLinks.json'
 import { RouterLink } from 'vue-router'
+import { defineAsyncComponent } from 'vue'
 import IconAbout from '@/components/icons/About.vue'
 import IconCompanies from '@/components/icons/Companies.vue'
 import IconResources from '@/components/icons/Resources.vue'
 import IconHome from '@/components/icons/Home.vue'
 import IconJobs from '@/components/icons/Jobs.vue'
 import IconProfile from '@/components/icons/Profile.vue'
+
+// Map icon names to components
+const iconMap = {
+  About: defineAsyncComponent(() => import('@/components/icons/About.vue')),
+  Resources: defineAsyncComponent(() => import('@/components/icons/Resources.vue')),
+  Companies: defineAsyncComponent(() => import('@/components/icons/Companies.vue')),
+  Jobs: defineAsyncComponent(() => import('@/components/icons/Jobs.vue')),
+  Contact: defineAsyncComponent(() => import('@/components/icons/Contact.vue')),
+}
 </script>
 
 <template>
   <aside class="sidebar">
     <nav class="sidebar-nav">
-      <div class="nav-section">
-        <h3 class="nav-title">Main</h3>
+      <div v-for="section in navLinks" :key="section.section" class="nav-section">
+        <h3 class="nav-title">{{ section.section }}</h3>
         <ul class="nav-list">
-          <li>
-            <RouterLink to="/" class="nav-link">
-              <IconHome />
-              <span>Home</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/about" class="nav-link">
-              <IconAbout />
-              <span>About</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/resources" class="nav-link">
-              <IconResources />
-              <span>Resources</span>
-            </RouterLink>
-          </li>
-
-          <li>
-            <RouterLink to="/profile" class="nav-link">
-              <IconProfile />
-              <span>Profile</span>
+          <li v-for="item in section.items" :key="item.route">
+            <RouterLink :to="{ name: item.route }" class="nav-link">
+              <component :is="iconMap[item.icon]" />
+              <span>{{ item.label }}</span>
             </RouterLink>
           </li>
         </ul>
       </div>
-
-      <div class="nav-section">
-        <h3 class="nav-title">Data</h3>
-        <ul class="nav-list">
-          <li>
-            <RouterLink to="/companies" class="nav-link">
-              <IconCompanies />
-              <span>Companies</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/jobs" class="nav-link">
-              <IconJobs />
-              <span>Jobs</span>
-            </RouterLink>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Future sections - commented out until routes are created -->
-      <!--
-      <div class="nav-section">
-        <h3 class="nav-title">Additional Data</h3>
-        <ul class="nav-list">
-          <li>
-            <RouterLink to="/contacts" class="nav-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-              <span>Contacts</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/locations" class="nav-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-              <span>Locations</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/categories" class="nav-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-              </svg>
-              <span>Categories</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink to="/tags" class="nav-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                <line x1="7" y1="7" x2="7.01" y2="7"></line>
-              </svg>
-              <span>Tags</span>
-            </RouterLink>
-          </li>
-        </ul>
-      </div>
-      -->
     </nav>
   </aside>
 </template>
