@@ -2,7 +2,7 @@
 import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompanies } from '@/stores/companies'
-import SkeletonTableRow from '@/components/SkeletonTableRow.vue'
+import SkeletonTableRow from '@/components/skeleton/TableRow.vue'
 
 // setup
 const companiesStore = useCompanies()
@@ -29,14 +29,14 @@ const loading = computed(() => companiesStore.loading)
       </thead>
       <tbody>
         <!-- Loading skeleton rows -->
-        <SkeletonTableRow 
-          v-if="loading" 
-          v-for="i in 8" 
+        <SkeletonTableRow
+          v-if="loading"
+          v-for="i in 8"
           :key="`skeleton-${i}`"
           :columns="3"
           :column-widths="['40%', '30%', '30%']"
         />
-        
+
         <!-- Actual company data -->
         <tr v-else v-for="company in companiesStore.sortedCompanies" :key="company.id">
           <td>

@@ -1,17 +1,5 @@
-<template>
-  <tr class="skeleton-table-row">
-    <td v-for="i in columns" :key="i" class="skeleton-table-cell">
-      <SkeletonText 
-        :lines="1" 
-        :line-height="16"
-        :last-line-width="getColumnWidth(i)"
-      />
-    </td>
-  </tr>
-</template>
-
 <script setup>
-import SkeletonText from './SkeletonText.vue'
+import SkeletonText from './Text.vue'
 
 const props = defineProps({
   columns: {
@@ -29,6 +17,18 @@ const getColumnWidth = (columnIndex) => {
 }
 </script>
 
+<template>
+  <tr class="skeleton-table-row">
+    <td v-for="i in columns" :key="i" class="skeleton-table-cell">
+      <SkeletonText
+        :lines="1"
+        :line-height="16"
+        :last-line-width="getColumnWidth(i)"
+      />
+    </td>
+  </tr>
+</template>
+
 <style scoped>
 .skeleton-table-row {
   border-bottom: 1px solid var(--color-border);
@@ -41,4 +41,4 @@ const getColumnWidth = (columnIndex) => {
 .skeleton-table-row:hover {
   background: transparent;
 }
-</style> 
+</style>

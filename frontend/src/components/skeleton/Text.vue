@@ -1,17 +1,3 @@
-<template>
-  <div class="skeleton-text" :class="[`skeleton-text--${variant}`, { 'skeleton-text--animated': animated }]">
-    <div 
-      v-for="i in lines" 
-      :key="i" 
-      class="skeleton-line"
-      :style="{ 
-        width: i === lines && lastLineWidth ? lastLineWidth : '100%',
-        height: `${lineHeight}px`
-      }"
-    ></div>
-  </div>
-</template>
-
 <script setup>
 defineProps({
   lines: {
@@ -37,6 +23,20 @@ defineProps({
   }
 })
 </script>
+
+<template>
+  <div class="skeleton-text" :class="[`skeleton-text--${variant}`, { 'skeleton-text--animated': animated }]">
+    <div
+      v-for="i in lines"
+      :key="i"
+      class="skeleton-line"
+      :style="{
+        width: i === lines && lastLineWidth ? lastLineWidth : '100%',
+        height: `${lineHeight}px`
+      }"
+    ></div>
+  </div>
+</template>
 
 <style scoped>
 .skeleton-text {
@@ -73,4 +73,4 @@ defineProps({
     opacity: 0.4;
   }
 }
-</style> 
+</style>

@@ -2,9 +2,9 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCompany } from '@/stores/company'
-import SkeletonText from '@/components/SkeletonText.vue'
-import SkeletonImage from '@/components/SkeletonImage.vue'
-import SkeletonButton from '@/components/SkeletonButton.vue'
+import SkeletonText from '@/components/skeleton/Text.vue'
+import SkeletonImage from '@/components/skeleton/Image.vue'
+import SkeletonButton from '@/components/skeleton/Button.vue'
 
 // Setup
 const companyStore = useCompany()
@@ -28,7 +28,7 @@ const loading = computed(() => companyStore.loading)
         <router-link class="back-button-link" to="/companies">🏢 All Companies</router-link>
       </div>
     </div>
-    
+
     <div v-if="loading">
       <!-- Loading skeleton -->
       <div class="skeleton-content">
@@ -44,7 +44,7 @@ const loading = computed(() => companyStore.loading)
         <SkeletonText :lines="3" :line-height="20" last-line-width="60%" />
       </div>
     </div>
-    
+
     <div v-else-if="company">
       <h1 class="company-name">{{ company.name }}</h1>
       <div class="company-links-container">
@@ -58,7 +58,7 @@ const loading = computed(() => companyStore.loading)
       <!-- add a spacer here, or add padding to the paragraphs -->
       <p v-if="company.description">{{ company.description }}</p>
     </div>
-    
+
     <div v-else>
       <p>Company not found.</p>
     </div>

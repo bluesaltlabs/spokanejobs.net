@@ -1,40 +1,7 @@
-<template>
-  <div class="skeleton-card" :class="{ 'skeleton-card--animated': animated }">
-    <div v-if="showImage" class="skeleton-card-image">
-      <SkeletonImage :width="imageWidth" :height="imageHeight" />
-    </div>
-    
-    <div class="skeleton-card-content">
-      <SkeletonText 
-        v-if="showTitle" 
-        variant="subtitle" 
-        :lines="1" 
-        :line-height="24"
-      />
-      
-      <SkeletonText 
-        v-if="showDescription" 
-        :lines="descriptionLines" 
-        :line-height="16"
-        :last-line-width="lastLineWidth"
-      />
-      
-      <div v-if="showButtons" class="skeleton-card-actions">
-        <SkeletonButton 
-          v-for="i in buttonCount" 
-          :key="i"
-          :width="buttonWidths[i - 1] || '80px'"
-          height="32px"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import SkeletonText from './SkeletonText.vue'
-import SkeletonImage from './SkeletonImage.vue'
-import SkeletonButton from './SkeletonButton.vue'
+import SkeletonText from './Text.vue'
+import SkeletonImage from './Image.vue'
+import SkeletonButton from './Button.vue'
 
 defineProps({
   showImage: {
@@ -84,6 +51,39 @@ defineProps({
 })
 </script>
 
+<template>
+  <div class="skeleton-card" :class="{ 'skeleton-card--animated': animated }">
+    <div v-if="showImage" class="skeleton-card-image">
+      <SkeletonImage :width="imageWidth" :height="imageHeight" />
+    </div>
+
+    <div class="skeleton-card-content">
+      <SkeletonText
+        v-if="showTitle"
+        variant="subtitle"
+        :lines="1"
+        :line-height="24"
+      />
+
+      <SkeletonText
+        v-if="showDescription"
+        :lines="descriptionLines"
+        :line-height="16"
+        :last-line-width="lastLineWidth"
+      />
+
+      <div v-if="showButtons" class="skeleton-card-actions">
+        <SkeletonButton
+          v-for="i in buttonCount"
+          :key="i"
+          :width="buttonWidths[i - 1] || '80px'"
+          height="32px"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped>
 .skeleton-card {
   background: var(--color-background-soft);
@@ -120,4 +120,4 @@ defineProps({
     opacity: 0.8;
   }
 }
-</style> 
+</style>
