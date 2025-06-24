@@ -2,6 +2,7 @@
 import { RouterLink } from 'vue-router'
 import IconAbout from '@/components/icons/About.vue'
 import IconCompanies from '@/components/icons/Companies.vue'
+import IconResources from '@/components/icons/Resources.vue'
 import IconHome from '@/components/icons/Home.vue'
 import IconJobs from '@/components/icons/Jobs.vue'
 import IconProfile from '@/components/icons/Profile.vue'
@@ -25,6 +26,13 @@ import IconProfile from '@/components/icons/Profile.vue'
               <span>About</span>
             </RouterLink>
           </li>
+          <li>
+            <RouterLink to="/resources" class="nav-link">
+              <IconResources />
+              <span>Resources</span>
+            </RouterLink>
+          </li>
+
           <li>
             <RouterLink to="/profile" class="nav-link">
               <IconProfile />

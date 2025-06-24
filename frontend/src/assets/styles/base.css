@@ -58,3 +58,15 @@ input:disabled, textarea:disabled, select:disabled {
   color: var(--color-text-muted);
   cursor: not-allowed;
 }
+
+.static {
+  h1 {
+    margin-top: 2rem;
+    margin-bottom: 1em;
+  }
+
+  p {
+    margin-top: 1em;
+    margin-bottom: 2em;
+  }
+}

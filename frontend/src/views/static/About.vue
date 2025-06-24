@@ -3,24 +3,18 @@ const appName = import.meta.env.VITE_APP_NAME
 </script>
 
 <style scoped>
-  h1 {
-    margin-top: 2rem;
-    margin-bottom: 1em;
-  }
-
-  p {
-    margin-top: 1em;
-    margin-bottom: 2em;
-  }
 </style>
 
 <template>
-  <div class="about">
-    <h1>About | {{ appName }}</h1>
+  <main class="static about">
+    <h1>
+      About<br />
+      <small>{{ appName }}</small>
+    </h1>
 
     <p>
       todo
     </p>
 
-  </div>
+  </main>
 </template>
