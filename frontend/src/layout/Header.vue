@@ -1,14 +1,11 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import IconProfile from '@/components/icons/Profile.vue'
 import { useProfileStore } from '@/stores/profile'
 
 const appName = import.meta.env.VITE_APP_NAME
 const appAbbr = import.meta.env.VITE_APP_ABBR
-
-// oh so fancy!
-// todo: but this should be in the store and not here.
-defineEmits(['toggle-sidebar'])
 
 const profile = useProfileStore()
 </script>
@@ -27,19 +24,6 @@ const profile = useProfileStore()
             <span class="logo-text">{{ appName }}</span>
           </RouterLink>
         </div>
-
-        <!-- Sidebar Toggle Button -->
-        <button
-          class="btn btn-ghost sidebar-toggle"
-          @click="$emit('toggle-sidebar')"
-          aria-label="Toggle sidebar"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
       </div>
 
       <div class="header-content__right">
@@ -53,10 +37,7 @@ const profile = useProfileStore()
               <div v-if="profile.avatar">
                 <img :src="profile.avatar" alt="Avatar" />
               </div>
-              <svg v-if="!profile.avatar" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
+              <IconProfile v-if="!profile.avatar" />
             </div>
             <span class="user-name">
               {{ profile.first_name || profile.last_name ? `${profile.first_name} ${profile.last_name}`.trim() : profile.email ? `${profile.email}` : 'User' }}

@@ -1,4 +1,4 @@
-@import './base.css';
+@import url("./styles/base.css");
 
 #app {
   height: 100vh;

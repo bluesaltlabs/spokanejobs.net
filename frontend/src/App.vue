@@ -6,14 +6,10 @@ import Sidebar from '@/layout/Sidebar.vue'
 import Footer from '@/layout/Footer.vue'
 import { useProfileStore } from '@/stores/profile'
 
-const isSidebarOpen = ref(false)
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value
-}
-
 const profile = useProfileStore()
 const themeClass = computed(() => (profile.dark_mode ? 'dark' : 'light'))
 
+// todo: isn't there a more standardized way to accomplish this?
 const applyDarkMode = (val) => {
   if (val) {
     document.documentElement.classList.add('dark')
@@ -29,7 +25,7 @@ const applyDarkMode = (val) => {
 onMounted(async () => {
   // Load profile data first
   await profile.loadProfile()
-  
+
   // Apply the saved theme
   applyDarkMode(profile.dark_mode)
 })
@@ -41,11 +37,10 @@ watch(() => profile.dark_mode, (val) => {
 
 <template>
   <div :class="['app-layout', themeClass]">
-    <!-- todo: update this so it uses state pinia app state store instead of this inline thing  -->
-    <Header @toggle-sidebar="toggleSidebar" />
+    <Header />
 
     <div class="main-content">
-      <Sidebar :is-open="isSidebarOpen" />
+      <Sidebar />
       <main class="content-area">
         <RouterView />
       </main>

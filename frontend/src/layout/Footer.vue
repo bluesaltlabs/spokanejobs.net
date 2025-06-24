@@ -1,27 +1,10 @@
-<template>
-  <footer class="mobile-footer">
-    <nav class="footer-nav">
-      <button class="btn btn-ghost footer-btn" @click="goHome">
-        <span class="icon">🏠</span>
-        <span class="label">Home</span>
-      </button>
-      <button class="btn btn-ghost footer-btn" @click="goCompanies">
-        <span class="icon">🏢</span>
-        <span class="label">Companies</span>
-      </button>
-      <button class="btn btn-ghost footer-btn" @click="goJobs">
-        <span class="icon">💼</span>
-        <span class="label">Jobs</span>
-      </button>
-      <button class="btn btn-ghost footer-btn" @click="goAbout">
-        <span class="icon">ℹ️</span>
-        <span class="label">About</span>
-      </button>
-    </nav>
-  </footer>
-</template>
-
 <script setup>
+import IconAbout from '@/components/icons/About.vue'
+import IconCompanies from '@/components/icons/Companies.vue'
+import IconHome from '@/components/icons/Home.vue'
+import IconJobs from '@/components/icons/Jobs.vue'
+//import IconProfile from '@/components/icons/Profile.vue'
+
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
@@ -38,6 +21,30 @@ function goAbout() {
   router.push({ name: 'about' })
 }
 </script>
+
+<template>
+  <footer class="mobile-footer">
+    <nav class="footer-nav">
+      <button class="btn btn-ghost footer-btn" @click="goHome">
+        <IconHome />
+        <span class="label">Home</span>
+      </button>
+      <button class="btn btn-ghost footer-btn" @click="goCompanies">
+        <IconCompanies />
+        <span class="label">Companies</span>
+      </button>
+      <button class="btn btn-ghost footer-btn" @click="goJobs">
+        <IconJobs />
+        <span class="label">Jobs</span>
+      </button>
+      <button class="btn btn-ghost footer-btn" @click="goAbout">
+        <IconAbout />
+        <span class="label">About</span>
+      </button>
+    </nav>
+  </footer>
+</template>
+
 
 <style scoped>
 .mobile-footer {
@@ -85,7 +92,7 @@ function goAbout() {
   margin-top: 2px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .mobile-footer {
     display: block;
   }
