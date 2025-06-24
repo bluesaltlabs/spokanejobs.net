@@ -16,6 +16,7 @@ go run ./cmd
 
 ## To Do
 
+- [ ] set up a portion of this script to dump data to the associated github repo.
 - [ ] set up a portion of this app to connect to supabase and upsert values into the database.
 - [ ] This will need to use an SDK, so figure out how to get that set up and connected.
 
