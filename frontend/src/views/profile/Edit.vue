@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
-import BaseButton from '@/components/BaseButton.vue'
+import { UiButton, UiTextInput, UiTextareaInput, UiDateInput, UiForm, UiFormGroup } from '@/components/ui'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -293,34 +293,6 @@ function goToView() {
   font-size: 1.5rem;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.themed-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #b3c6e0;
-  border-radius: var(--border-radius-small);
-  font-size: 1rem;
-  background: #fafdff;
-  color: #222;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-
-.themed-input:focus {
-  border: 1.5px solid #4f8cff;
-  outline: none;
-  box-shadow: 0 0 0 2px #4f8cff22;
-}
-
 .avatar-preview {
   text-align: center;
   margin-top: 1rem;
@@ -388,14 +360,6 @@ function goToView() {
   background: #f5f7fa;
   border-radius: var(--border-radius-small);
   border: 1px solid var(--color-border);
-}
-
-.resume-form input, .resume-form textarea {
-  width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: var(--border-radius-small);
 }
 
 .resume-entry {
@@ -486,14 +450,6 @@ function goToView() {
   border: 1px solid var(--color-border);
 }
 
-.education-form input, .education-form textarea {
-  width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: var(--border-radius-small);
-}
-
 .education-entry {
   border: 1.5px solid var(--color-border);
   border-radius: var(--border-radius-medium);
@@ -561,27 +517,13 @@ function goToView() {
     <div class="profile-header">
       <h1>Edit Profile</h1>
       <div class="header-actions">
-        <BaseButton @click="exportProfile" variant="secondary" size="small">
-          Export Profile
-        </BaseButton>
-        <BaseButton @click="$refs.fileInput.click()" variant="secondary" size="small">
-          Import Profile
-        </BaseButton>
-        <BaseButton @click="goToView" variant="secondary">View Profile</BaseButton>
+        <UiButton @click="exportProfile" variant="secondary">Export Profile</UiButton>
+        <UiButton @click="$refs.fileInput.click()" variant="secondary">Import Profile</UiButton>
+        <UiButton @click="goToView" variant="secondary">View Profile</UiButton>
       </div>
     </div>
-
-    <!-- Hidden file input for import -->
-    <input
-      ref="fileInput"
-      type="file"
-      accept=".json"
-      style="display: none"
-      @change="importProfile"
-    />
-
+    <input ref="fileInput" type="file" accept=".json" style="display: none" @change="importProfile" />
     <div class="profile-edit-content">
-      <!-- Left Column - User Info -->
       <div class="user-info-section">
         <h2>Personal Information</h2>
         <div class="avatar-preview">
@@ -590,123 +532,74 @@ function goToView() {
             <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
           </div>
         </div>
-        <form>
-          <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input
-              id="firstName"
-              v-model="profile.first_name"
-              type="text"
-              class="themed-input"
-              placeholder="Enter your first name"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input
-              id="lastName"
-              v-model="profile.last_name"
-              type="text"
-              class="themed-input"
-              placeholder="Enter your last name"
-            />
-          </div>
-
-          <!-- todo: update this so it's the first option -->
-          <!--       and loads from gravatar when a valid email address is entered -->
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              id="email"
-              v-model="profile.email"
-              type="email"
-              class="themed-input"
-              placeholder="Enter your email address"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="avatar">Avatar URL</label>
-            <input
-              id="avatar"
-              v-model="profile.avatar"
-              type="text"
-              class="themed-input"
-              placeholder="Enter avatar image URL"
-            />
-          </div>
-
-          <div v-if="saved" class="save-indicator saved">
-            ✓ Changes saved automatically
-          </div>
-          <div v-if="importSuccess" class="save-indicator saved">
-            ✓ Profile imported successfully
-          </div>
-        </form>
+        <UiForm>
+          <UiFormGroup label="First Name">
+            <UiTextInput v-model="profile.first_name" placeholder="Enter your first name" />
+          </UiFormGroup>
+          <UiFormGroup label="Last Name">
+            <UiTextInput v-model="profile.last_name" placeholder="Enter your last name" />
+          </UiFormGroup>
+          <UiFormGroup label="Email">
+            <UiTextInput v-model="profile.email" type="email" placeholder="Enter your email address" />
+          </UiFormGroup>
+          <UiFormGroup label="Avatar URL">
+            <UiTextInput v-model="profile.avatar" placeholder="Enter avatar image URL" />
+          </UiFormGroup>
+          <div v-if="saved" class="save-indicator saved">✓ Changes saved automatically</div>
+          <div v-if="importSuccess" class="save-indicator saved">✓ Profile imported successfully</div>
+        </UiForm>
       </div>
-
-      <!-- Right Column - Resume and Education Entries -->
       <div class="entries-section">
-        <!-- Resume Entries -->
         <div class="resume-section">
           <div class="resume-header">
             <h2>Resume Entries</h2>
-            <BaseButton @click="startAddEntry" variant="primary">Add Entry</BaseButton>
+            <UiButton @click="startAddEntry" variant="primary">Add Entry</UiButton>
           </div>
-
           <div v-if="showEntryForm" class="resume-form">
-            <input v-model="newEntry.jobTitle" placeholder="Job Title" class="themed-input" />
-            <input v-model="newEntry.company" placeholder="Company" class="themed-input" />
-            <input v-model="newEntry.startDate" placeholder="Start Date" type="date" class="themed-input" />
-            <input v-model="newEntry.endDate" placeholder="End Date" type="date" class="themed-input" />
-            <textarea v-model="newEntry.description" placeholder="Description" class="themed-input"></textarea>
-            <BaseButton @click="saveEntry" variant="primary">{{ editingId ? 'Update' : 'Add' }} Entry</BaseButton>
-            <BaseButton @click="cancelEntry" variant="secondary">Cancel</BaseButton>
+            <UiTextInput v-model="newEntry.jobTitle" placeholder="Job Title" />
+            <UiTextInput v-model="newEntry.company" placeholder="Company" />
+            <UiDateInput v-model="newEntry.startDate" placeholder="Start Date" />
+            <UiDateInput v-model="newEntry.endDate" placeholder="End Date" />
+            <UiTextareaInput v-model="newEntry.description" placeholder="Description" />
+            <UiButton @click="saveEntry" variant="primary">{{ editingId ? 'Update' : 'Add' }} Entry</UiButton>
+            <UiButton @click="cancelEntry" variant="secondary">Cancel</UiButton>
           </div>
-
           <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
             <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
             <div class="resume-entry-actions">
-              <BaseButton @click="startEditEntry(entry)" variant="primary" size="small">Edit</BaseButton>
-              <BaseButton @click="removeEntry(entry.id)" variant="danger" size="small">Delete</BaseButton>
+              <UiButton @click="startEditEntry(entry)" variant="primary" size="small">Edit</UiButton>
+              <UiButton @click="removeEntry(entry.id)" variant="danger" size="small">Delete</UiButton>
             </div>
           </div>
-
           <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
             <p>No resume entries yet. Click "Add Entry" to get started.</p>
           </div>
         </div>
-
-        <!-- Education History Section -->
         <div class="education-section">
           <div class="education-header">
             <h2>Education History</h2>
-            <BaseButton @click="startAddEducationEntry" variant="primary">Add Education</BaseButton>
+            <UiButton @click="startAddEducationEntry" variant="primary">Add Education</UiButton>
           </div>
-
           <div v-if="showEducationForm" class="education-form">
-            <input v-model="newEducationEntry.degree" placeholder="Degree" class="themed-input" />
-            <input v-model="newEducationEntry.institution" placeholder="Institution" class="themed-input" />
-            <input v-model="newEducationEntry.startDate" placeholder="Start Date" type="date" class="themed-input" />
-            <input v-model="newEducationEntry.endDate" placeholder="End Date" type="date" class="themed-input" />
-            <textarea v-model="newEducationEntry.description" placeholder="Description" class="themed-input"></textarea>
-            <BaseButton @click="saveEducationEntry" variant="primary">{{ editingEducationId ? 'Update' : 'Add' }} Education</BaseButton>
-            <BaseButton @click="cancelEducationEntry" variant="secondary">Cancel</BaseButton>
+            <UiTextInput v-model="newEducationEntry.degree" placeholder="Degree" />
+            <UiTextInput v-model="newEducationEntry.institution" placeholder="Institution" />
+            <UiDateInput v-model="newEducationEntry.startDate" placeholder="Start Date" />
+            <UiDateInput v-model="newEducationEntry.endDate" placeholder="End Date" />
+            <UiTextareaInput v-model="newEducationEntry.description" placeholder="Description" />
+            <UiButton @click="saveEducationEntry" variant="primary">{{ editingEducationId ? 'Update' : 'Add' }} Education</UiButton>
+            <UiButton @click="cancelEducationEntry" variant="secondary">Cancel</UiButton>
           </div>
-
           <div v-for="entry in profile.educationEntries" :key="entry.id" class="education-entry">
             <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
             <div class="education-entry-actions">
-              <BaseButton @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</BaseButton>
-              <BaseButton @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</BaseButton>
+              <UiButton @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</UiButton>
+              <UiButton @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</UiButton>
             </div>
           </div>
-
           <div v-if="profile.educationEntries.length === 0" class="empty-education">
             <p>No education entries yet. Click "Add Education" to get started.</p>
           </div>

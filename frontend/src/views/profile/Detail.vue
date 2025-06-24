@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
-import BaseButton from '@/components/BaseButton.vue'
+import { UiButton } from '@/components/ui'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -326,7 +326,7 @@ function goToEdit() {
   <div class="profile-view">
     <div class="profile-header">
       <h1>Profile</h1>
-      <BaseButton @click="goToEdit" variant="primary">Edit Profile</BaseButton>
+      <UiButton @click="goToEdit" variant="primary">Edit Profile</UiButton>
     </div>
 
     <div class="profile-content">
@@ -372,7 +372,7 @@ function goToEdit() {
           </div>
 
           <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
-            <p>No resume entries yet. <BaseButton @click="goToEdit" variant="primary" size="small">Add your first entry</BaseButton></p>
+            <p>No resume entries yet. <UiButton @click="goToEdit" variant="primary" size="small">Add your first entry</UiButton></p>
           </div>
         </div>
 
@@ -389,7 +389,7 @@ function goToEdit() {
           </div>
 
           <div v-if="profile.educationEntries.length === 0" class="empty-education">
-            <p>No education entries yet. <BaseButton @click="goToEdit" variant="primary" size="small">Add your first entry</BaseButton></p>
+            <p>No education entries yet. <UiButton @click="goToEdit" variant="primary" size="small">Add your first entry</UiButton></p>
           </div>
         </div>
       </div>

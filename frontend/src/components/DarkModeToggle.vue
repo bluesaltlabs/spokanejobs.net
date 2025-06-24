@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
 import { useProfileStore } from '@/stores/profile'
-import BaseButton from '@/components/BaseButton.vue'
 
 const profile = useProfileStore()
 
