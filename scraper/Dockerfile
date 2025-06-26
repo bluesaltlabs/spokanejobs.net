@@ -3,14 +3,14 @@ FROM golang:1-alpine
 # Set working directory for COPY
 WORKDIR /app
 
-# Download Go modules
-COPY go.mod go.sum ./
+# Copy source code
+COPY . .
+
+# Install Go Dependencies
 RUN go mod download
 
-# Copy source code
-COPY . ./
 
 # Build
-RUN go build -o app .
+RUN go build -o scraper .
 
-CMD ["./app"]
+CMD ["./scraper"]
