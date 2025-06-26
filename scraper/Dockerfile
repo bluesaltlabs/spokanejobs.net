@@ -9,8 +9,5 @@ COPY . .
 # Install Go Dependencies
 RUN go mod download
 
-
-# Build
-RUN go build -o scraper .
-
-CMD ["./scraper"]
+# Run
+CMD ["go run ./cmd"]
