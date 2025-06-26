@@ -1,7 +1,7 @@
 FROM golang:1-alpine
 
 # Set working directory for COPY
-WORKDIR /
+WORKDIR /scraper
 
 # Copy source code
 COPY . .
