@@ -1,7 +1,7 @@
 <script setup>
-import SkeletonText from './Text.vue'
-import SkeletonImage from './Image.vue'
-import SkeletonButton from './Button.vue'
+import SkeletonText from '../Text/Text.vue'
+import SkeletonImage from '../Image/Image.vue'
+import SkeletonButton from '../Button/Button.vue'
 
 defineProps({
   showImage: {

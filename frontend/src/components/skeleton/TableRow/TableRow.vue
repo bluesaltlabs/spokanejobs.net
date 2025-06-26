@@ -1,5 +1,5 @@
 <script setup>
-import SkeletonText from './Text.vue'
+import SkeletonText from '../Text/Text.vue'
 
 const props = defineProps({
   columns: {
@@ -31,6 +31,7 @@ const getColumnWidth = (columnIndex) => {
 
 <style scoped>
 .skeleton-table-row {
+
   border-bottom: 1px solid var(--color-border);
 }
 

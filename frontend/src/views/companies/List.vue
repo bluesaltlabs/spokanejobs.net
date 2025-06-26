@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useCompanies } from '@/stores/companies'
-import SkeletonTableRow from '@/components/skeleton/TableRow.vue'
+import { SkeletonTableRow } from '@/components/skeleton'
 
 // setup
 const companiesStore = useCompanies()

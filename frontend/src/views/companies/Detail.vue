@@ -2,9 +2,7 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCompany } from '@/stores/company'
-import SkeletonText from '@/components/skeleton/Text.vue'
-import SkeletonImage from '@/components/skeleton/Image.vue'
-import SkeletonButton from '@/components/skeleton/Button.vue'
+import { SkeletonText, SkeletonImage, SkeletonButton } from '@/components/skeleton'
 
 // Setup
 const companyStore = useCompany()
