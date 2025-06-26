@@ -1,7 +1,7 @@
 FROM golang:1-alpine
 
 # Set working directory for COPY
-WORKDIR /app
+WORKDIR /
 
 # Copy source code
 COPY . .
