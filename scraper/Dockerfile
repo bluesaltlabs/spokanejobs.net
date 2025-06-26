@@ -10,4 +10,4 @@ COPY . .
 RUN go mod download
 
 # Run
-CMD ["go run ./cmd"]
+CMD ["go", "run", "./cmd/main.go"]
