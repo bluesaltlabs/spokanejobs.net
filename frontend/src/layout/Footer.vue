@@ -1,19 +1,11 @@
 <script setup>
-import navLinks from '@/lib/navLinks.json'
+import navLinks from '@/config/navLinks.json'
+import iconMap from '@/config/iconMap.js'
 import { useRouter, useRoute } from 'vue-router'
-import { computed, defineAsyncComponent } from 'vue'
+import { computed } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
-
-// Map icon names to components
-const iconMap = {
-  About: defineAsyncComponent(() => import('@/components/icons/About.vue')),
-  Resources: defineAsyncComponent(() => import('@/components/icons/Resources.vue')),
-  Companies: defineAsyncComponent(() => import('@/components/icons/Companies.vue')),
-  Jobs: defineAsyncComponent(() => import('@/components/icons/Jobs.vue')),
-  Contact: defineAsyncComponent(() => import('@/components/icons/Contact.vue')),
-}
 
 // Flatten nav items for the footer (no sections)
 const footerLinks = computed(() => {

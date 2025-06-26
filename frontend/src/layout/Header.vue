@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
-import IconProfile from '@/components/icons/Profile.vue'
+import { ProfileIcon } from '@/components/icons'
 import { useProfileStore } from '@/stores/profile'
 
 const appName = import.meta.env.VITE_APP_NAME
@@ -37,14 +37,11 @@ const profile = useProfileStore()
               <div v-if="profile.avatar">
                 <img :src="profile.avatar" alt="Avatar" />
               </div>
-              <IconProfile v-if="!profile.avatar" />
+              <ProfileIcon v-if="!profile.avatar" />
             </div>
             <span class="user-name">
               {{ profile.first_name || profile.last_name ? `${profile.first_name} ${profile.last_name}`.trim() : profile.email ? `${profile.email}` : 'User' }}
             </span>
-            <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="6,9 12,15 18,9"></polyline>
-            </svg>
           </RouterLink>
         </div>
       </div>
@@ -113,24 +110,6 @@ const profile = useProfileStore()
   color: var(--color-heading);
 }
 
-.sidebar-toggle {
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  border-radius: var(--border-radius-medium);
-  cursor: pointer;
-  color: var(--color-text-subtle);
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sidebar-toggle:hover {
-  background: var(--color-surface-hover);
-  color: var(--color-text);
-}
-
 .user-menu {
   display: flex;
   align-items: center;
@@ -173,14 +152,6 @@ const profile = useProfileStore()
 .user-name {
   font-weight: 500;
   color: var(--color-text);
-}
-
-.dropdown-arrow {
-  transition: transform 0.2s ease;
-}
-
-.user-menu-button:hover .dropdown-arrow {
-  transform: rotate(180deg);
 }
 
 @media (max-width: 768px) {

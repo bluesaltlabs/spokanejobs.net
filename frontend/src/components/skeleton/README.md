@@ -1,6 +1,8 @@
 # Skeleton Components
 
 A collection of reusable Vue components for displaying loading placeholders with animated skeleton effects.
+- [ ] todo: add these to storybook instead of using this readme file.
+
 
 ## Components
 
@@ -81,7 +83,7 @@ A composite component that combines multiple skeleton elements for card-like lay
 
 **Usage:**
 ```vue
-<SkeletonCard 
+<SkeletonCard
   :show-image="true"
   :show-title="true"
   :show-description="true"
@@ -120,9 +122,9 @@ A composite component that combines multiple skeleton elements for card-like lay
       </tr>
     </thead>
     <tbody>
-      <SkeletonTableRow 
-        v-if="loading" 
-        v-for="i in 8" 
+      <SkeletonTableRow
+        v-if="loading"
+        v-for="i in 8"
         :key="`skeleton-${i}`"
         :columns="3"
         :column-widths="['40%', '30%', '30%']"
@@ -139,8 +141,8 @@ A composite component that combines multiple skeleton elements for card-like lay
 ```vue
 <template>
   <div v-if="loading" class="companies-grid">
-    <SkeletonCard 
-      v-for="i in 6" 
+    <SkeletonCard
+      v-for="i in 6"
       :key="i"
       :show-image="true"
       :show-title="true"
@@ -160,4 +162,4 @@ All skeleton components use CSS custom properties for consistent theming:
 - `--border-radius` - Default border radius
 - `--border-radius-small` - Small border radius for buttons
 
-The components automatically adapt to light/dark themes based on your CSS custom properties. 
+The components automatically adapt to light/dark themes based on your CSS custom properties.

@@ -32,14 +32,22 @@ npm run build
 ```
 
 
+### Storybook
+
+To start storybook, run the following:
+
+```sh
+npm run storybook
+```
+
+
 ---
 
 ## To Do
 
 - [ ] determine what to add to the home page (just list jobs? )
 - [ ] add resources, events, etc (plan out how to add these things)
-- [ ] clean up the pages and components so there are less extra files
-- [ ] set up as PWA
+
 
 
 ---

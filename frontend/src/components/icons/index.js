@@ -1,0 +1,12 @@
+export { default as AboutIcon } from './About/About.vue';
+export { default as CompaniesIcon } from './Companies/Companies.vue';
+export { default as ContactIcon } from './Contact/Contact.vue';
+export { default as ExportIcon } from './Export/Export.vue';
+export { default as HomeIcon } from './Home/Home.vue';
+export { default as ImportIcon } from './Import/Import.vue';
+export { default as JobsIcon } from './Jobs/Jobs.vue';
+export { default as MoonIcon } from './Moon/Moon.vue';
+export { default as ProfileIcon } from './Profile/Profile.vue';
+export { default as ResourcesIcon } from './Resources/Resources.vue';
+export { default as SunIcon } from './Sun/Sun.vue';
+export { default as ViewIcon } from './View/View.vue';

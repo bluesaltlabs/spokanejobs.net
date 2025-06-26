@@ -3,9 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import { UiButton, UiTextInput, UiTextareaInput, UiDateInput, UiForm, UiFormGroup } from '@/components/ui'
-import ExportIcon from '@/components/icons/Export.vue'
-import ImportIcon from '@/components/icons/Import.vue'
-import ViewIcon from '@/components/icons/View.vue'
+import { ExportIcon, ImportIcon, ViewIcon } from '@/components/icons'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -44,10 +42,10 @@ const exportProfile = () => {
     educationEntries: profile.educationEntries,
     exportedAt: new Date().toISOString()
   }
-  
+
   const dataStr = JSON.stringify(profileData, null, 2)
   const dataBlob = new Blob([dataStr], { type: 'application/json' })
-  
+
   const link = document.createElement('a')
   link.href = URL.createObjectURL(dataBlob)
   link.download = `profile-${profile.first_name || 'user'}-${new Date().toISOString().split('T')[0]}.json`
@@ -58,17 +56,17 @@ const exportProfile = () => {
 const importProfile = (event) => {
   const file = event.target.files[0]
   if (!file) return
-  
+
   const reader = new FileReader()
   reader.onload = async (e) => {
     try {
       const importedData = JSON.parse(e.target.result)
-      
+
       // Validate the imported data structure
       if (typeof importedData !== 'object' || importedData === null) {
         throw new Error('Invalid JSON structure')
       }
-      
+
       // Update profile with imported data
       if (importedData.first_name !== undefined) profile.first_name = importedData.first_name
       if (importedData.last_name !== undefined) profile.last_name = importedData.last_name
@@ -77,22 +75,22 @@ const importProfile = (event) => {
       if (importedData.dark_mode !== undefined) profile.dark_mode = importedData.dark_mode
       if (Array.isArray(importedData.resumeEntries)) profile.resumeEntries = importedData.resumeEntries
       if (Array.isArray(importedData.educationEntries)) profile.educationEntries = importedData.educationEntries
-      
+
       // Save the imported profile
       await profile.saveProfile()
-      
+
       // Show success message
       importSuccess.value = true
       setTimeout(() => (importSuccess.value = false), 3000)
-      
+
     } catch (error) {
       console.error('Error importing profile:', error)
       alert('Error importing profile data. Please check the file format.')
     }
   }
-  
+
   reader.readAsText(file)
-  
+
   // Reset the file input
   event.target.value = ''
 }
@@ -539,7 +537,7 @@ function goToView() {
   justify-content: flex-end;
   margin-bottom: 1rem;
   gap: 1rem;
-  
+
 }
 
 .header-actions svg {

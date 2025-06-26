@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import { UiButton } from '@/components/ui'
-import ProfileIcon from '@/components/icons/Profile.vue'
+import { ProfileIcon } from '@/components/icons'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -342,7 +342,7 @@ function goToEdit() {
     </div>
 
     <div class="profile-content">
-      
+
       <!-- Left Column - User Info -->
       <div class="user-info-section">
         <h2>Personal Information</h2>
