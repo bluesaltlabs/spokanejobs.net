@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useJobs } from '@/stores/jobs'
-import SkeletonTableRow from '@/components/skeleton/TableRow.vue'
+import { SkeletonTableRow } from '@/components/skeleton'
 
 // setup
 const jobsStore = useJobs()

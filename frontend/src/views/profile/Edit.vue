@@ -2,10 +2,8 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
-import { UiButton, UiTextInput, UiTextareaInput, UiDateInput, UiForm, UiFormGroup } from '@/components/ui'
-import ExportIcon from '@/components/icons/Export.vue'
-import ImportIcon from '@/components/icons/Import.vue'
-import ViewIcon from '@/components/icons/View.vue'
+import { Button, TextInput, TextareaInput, DateInput, Form, FormGroup } from '@/components/ui'
+import { ExportIcon, ImportIcon, ViewIcon } from '@/components/icons'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -44,10 +42,10 @@ const exportProfile = () => {
     educationEntries: profile.educationEntries,
     exportedAt: new Date().toISOString()
   }
-  
+
   const dataStr = JSON.stringify(profileData, null, 2)
   const dataBlob = new Blob([dataStr], { type: 'application/json' })
-  
+
   const link = document.createElement('a')
   link.href = URL.createObjectURL(dataBlob)
   link.download = `profile-${profile.first_name || 'user'}-${new Date().toISOString().split('T')[0]}.json`
@@ -58,17 +56,17 @@ const exportProfile = () => {
 const importProfile = (event) => {
   const file = event.target.files[0]
   if (!file) return
-  
+
   const reader = new FileReader()
   reader.onload = async (e) => {
     try {
       const importedData = JSON.parse(e.target.result)
-      
+
       // Validate the imported data structure
       if (typeof importedData !== 'object' || importedData === null) {
         throw new Error('Invalid JSON structure')
       }
-      
+
       // Update profile with imported data
       if (importedData.first_name !== undefined) profile.first_name = importedData.first_name
       if (importedData.last_name !== undefined) profile.last_name = importedData.last_name
@@ -77,22 +75,22 @@ const importProfile = (event) => {
       if (importedData.dark_mode !== undefined) profile.dark_mode = importedData.dark_mode
       if (Array.isArray(importedData.resumeEntries)) profile.resumeEntries = importedData.resumeEntries
       if (Array.isArray(importedData.educationEntries)) profile.educationEntries = importedData.educationEntries
-      
+
       // Save the imported profile
       await profile.saveProfile()
-      
+
       // Show success message
       importSuccess.value = true
       setTimeout(() => (importSuccess.value = false), 3000)
-      
+
     } catch (error) {
       console.error('Error importing profile:', error)
       alert('Error importing profile data. Please check the file format.')
     }
   }
-  
+
   reader.readAsText(file)
-  
+
   // Reset the file input
   event.target.value = ''
 }
@@ -539,7 +537,7 @@ function goToView() {
   justify-content: flex-end;
   margin-bottom: 1rem;
   gap: 1rem;
-  
+
 }
 
 .header-actions svg {
@@ -567,18 +565,18 @@ function goToView() {
       <h1>Edit Profile</h1>
     </div>
     <div class="header-actions">
-      <UiButton @click="exportProfile" variant="success" aria-label="Export Profile">
+      <Button @click="exportProfile" variant="success" aria-label="Export Profile">
           <ExportIcon  />
           <span class="button-tooltip">Export Profile</span>
-        </UiButton>
-        <UiButton @click="$refs.fileInput.click()" variant="info" aria-label="Import Profile">
+        </Button>
+        <Button @click="$refs.fileInput.click()" variant="info" aria-label="Import Profile">
           <ImportIcon  />
           <span class="button-tooltip">Import Profile</span>
-        </UiButton>
-        <UiButton @click="goToView" variant="primary" aria-label="View Profile">
+        </Button>
+        <Button @click="goToView" variant="primary" aria-label="View Profile">
           <ViewIcon  />
           <span class="button-tooltip">View Profile</span>
-        </UiButton>
+        </Button>
 
     </div>
     <input ref="fileInput" type="file" accept=".json" style="display: none" @change="importProfile" />
@@ -591,38 +589,38 @@ function goToView() {
             <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
           </div>
         </div>
-        <UiForm>
-          <UiFormGroup label="First Name">
-            <UiTextInput v-model="profile.first_name" placeholder="Enter your first name" />
-          </UiFormGroup>
-          <UiFormGroup label="Last Name">
-            <UiTextInput v-model="profile.last_name" placeholder="Enter your last name" />
-          </UiFormGroup>
-          <UiFormGroup label="Email">
-            <UiTextInput v-model="profile.email" type="email" placeholder="Enter your email address" />
-          </UiFormGroup>
-          <UiFormGroup label="Avatar URL">
-            <UiTextInput v-model="profile.avatar" placeholder="Enter avatar image URL" />
-          </UiFormGroup>
+        <Form>
+          <FormGroup label="First Name">
+            <TextInput v-model="profile.first_name" placeholder="Enter your first name" />
+          </FormGroup>
+          <FormGroup label="Last Name">
+            <TextInput v-model="profile.last_name" placeholder="Enter your last name" />
+          </FormGroup>
+          <FormGroup label="Email">
+            <TextInput v-model="profile.email" type="email" placeholder="Enter your email address" />
+          </FormGroup>
+          <FormGroup label="Avatar URL">
+            <TextInput v-model="profile.avatar" placeholder="Enter avatar image URL" />
+          </FormGroup>
           <div v-if="saved" class="save-indicator saved">✓ Changes saved automatically</div>
           <div v-if="importSuccess" class="save-indicator saved">✓ Profile imported successfully</div>
-        </UiForm>
+        </Form>
       </div>
       <div class="entries-section">
         <div class="resume-section">
           <div class="resume-header">
             <h2>Resume Entries</h2>
-            <UiButton @click="startAddEntry" variant="primary">Add Entry</UiButton>
+            <Button @click="startAddEntry" variant="primary">Add Entry</Button>
           </div>
           <div v-if="showEntryForm" class="resume-form">
-            <UiTextInput v-model="newEntry.jobTitle" placeholder="Job Title" />
-            <UiTextInput v-model="newEntry.company" placeholder="Company" />
-            <UiDateInput v-model="newEntry.startDate" placeholder="Start Date" />
-            <UiDateInput v-model="newEntry.endDate" placeholder="End Date" />
-            <UiTextareaInput v-model="newEntry.description" placeholder="Description" />
+            <TextInput v-model="newEntry.jobTitle" placeholder="Job Title" />
+            <TextInput v-model="newEntry.company" placeholder="Company" />
+            <DateInput v-model="newEntry.startDate" placeholder="Start Date" />
+            <DateInput v-model="newEntry.endDate" placeholder="End Date" />
+            <TextareaInput v-model="newEntry.description" placeholder="Description" />
             <div class="form-action-row">
-              <UiButton @click="saveEntry" variant="primary" class="form-action-btn">{{ editingId ? 'Update' : 'Add' }} Entry</UiButton>
-              <UiButton @click="cancelEntry" variant="secondary" class="form-action-btn">Cancel</UiButton>
+              <Button @click="saveEntry" variant="primary" class="form-action-btn">{{ editingId ? 'Update' : 'Add' }} Entry</Button>
+              <Button @click="cancelEntry" variant="secondary" class="form-action-btn">Cancel</Button>
             </div>
           </div>
           <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
@@ -630,8 +628,8 @@ function goToView() {
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
             <div class="resume-entry-actions">
-              <UiButton @click="startEditEntry(entry)" variant="primary" size="small">Edit</UiButton>
-              <UiButton @click="removeEntry(entry.id)" variant="danger" size="small">Delete</UiButton>
+              <Button @click="startEditEntry(entry)" variant="primary" size="small">Edit</Button>
+              <Button @click="removeEntry(entry.id)" variant="danger" size="small">Delete</Button>
             </div>
           </div>
           <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
@@ -641,17 +639,17 @@ function goToView() {
         <div class="education-section">
           <div class="education-header">
             <h2>Education History</h2>
-            <UiButton @click="startAddEducationEntry" variant="primary">Add Education</UiButton>
+            <Button @click="startAddEducationEntry" variant="primary">Add Education</Button>
           </div>
           <div v-if="showEducationForm" class="education-form">
-            <UiTextInput v-model="newEducationEntry.degree" placeholder="Degree" />
-            <UiTextInput v-model="newEducationEntry.institution" placeholder="Institution" />
-            <UiDateInput v-model="newEducationEntry.startDate" placeholder="Start Date" />
-            <UiDateInput v-model="newEducationEntry.endDate" placeholder="End Date" />
-            <UiTextareaInput v-model="newEducationEntry.description" placeholder="Description" />
+            <TextInput v-model="newEducationEntry.degree" placeholder="Degree" />
+            <TextInput v-model="newEducationEntry.institution" placeholder="Institution" />
+            <DateInput v-model="newEducationEntry.startDate" placeholder="Start Date" />
+            <DateInput v-model="newEducationEntry.endDate" placeholder="End Date" />
+            <TextareaInput v-model="newEducationEntry.description" placeholder="Description" />
             <div class="form-action-row">
-              <UiButton @click="saveEducationEntry" variant="primary" class="form-action-btn">{{ editingEducationId ? 'Update' : 'Add' }} Education</UiButton>
-              <UiButton @click="cancelEducationEntry" variant="secondary" class="form-action-btn">Cancel</UiButton>
+              <Button @click="saveEducationEntry" variant="primary" class="form-action-btn">{{ editingEducationId ? 'Update' : 'Add' }} Education</Button>
+              <Button @click="cancelEducationEntry" variant="secondary" class="form-action-btn">Cancel</Button>
             </div>
           </div>
           <div v-for="entry in profile.educationEntries" :key="entry.id" class="education-entry">
@@ -659,8 +657,8 @@ function goToView() {
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
             <div class="education-entry-actions">
-              <UiButton @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</UiButton>
-              <UiButton @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</UiButton>
+              <Button @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</Button>
+              <Button @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</Button>
             </div>
           </div>
           <div v-if="profile.educationEntries.length === 0" class="empty-education">

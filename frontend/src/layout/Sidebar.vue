@@ -1,22 +1,8 @@
 <script setup>
-import navLinks from '@/lib/navLinks.json'
+import navLinks from '@/config/navLinks.json'
+import iconMap from '@/config/iconMap.js'
 import { RouterLink } from 'vue-router'
-import { defineAsyncComponent } from 'vue'
-import IconAbout from '@/components/icons/About.vue'
-import IconCompanies from '@/components/icons/Companies.vue'
-import IconResources from '@/components/icons/Resources.vue'
-import IconHome from '@/components/icons/Home.vue'
-import IconJobs from '@/components/icons/Jobs.vue'
-import IconProfile from '@/components/icons/Profile.vue'
 
-// Map icon names to components
-const iconMap = {
-  About: defineAsyncComponent(() => import('@/components/icons/About.vue')),
-  Resources: defineAsyncComponent(() => import('@/components/icons/Resources.vue')),
-  Companies: defineAsyncComponent(() => import('@/components/icons/Companies.vue')),
-  Jobs: defineAsyncComponent(() => import('@/components/icons/Jobs.vue')),
-  Contact: defineAsyncComponent(() => import('@/components/icons/Contact.vue')),
-}
 </script>
 
 <template>

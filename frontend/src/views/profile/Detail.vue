@@ -2,8 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
-import { UiButton } from '@/components/ui'
-import ProfileIcon from '@/components/icons/Profile.vue'
+import { Button } from '@/components/ui'
+import { ProfileIcon } from '@/components/icons'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -335,14 +335,14 @@ function goToEdit() {
       <h1>Profile</h1>
     </div>
     <div class="profile-actions">
-      <UiButton @click="goToEdit" variant="primary">
+      <Button @click="goToEdit" variant="primary">
         <ProfileIcon style="margin-right: 0.5em; vertical-align: middle;" />
         Edit Profile
-      </UiButton>
+      </Button>
     </div>
 
     <div class="profile-content">
-      
+
       <!-- Left Column - User Info -->
       <div class="user-info-section">
         <h2>Personal Information</h2>
@@ -385,7 +385,7 @@ function goToEdit() {
           </div>
 
           <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
-            <p>No resume entries yet. <UiButton @click="goToEdit" variant="primary" size="small">Add your first entry</UiButton></p>
+            <p>No resume entries yet. <Button @click="goToEdit" variant="primary" size="small">Add your first entry</Button></p>
           </div>
         </div>
 
@@ -402,7 +402,7 @@ function goToEdit() {
           </div>
 
           <div v-if="profile.educationEntries.length === 0" class="empty-education">
-            <p>No education entries yet. <UiButton @click="goToEdit" variant="primary" size="small">Add your first entry</UiButton></p>
+            <p>No education entries yet. <Button @click="goToEdit" variant="primary" size="small">Add your first entry</Button></p>
           </div>
         </div>
       </div>
