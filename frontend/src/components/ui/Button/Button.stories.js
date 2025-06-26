@@ -1,8 +1,8 @@
-import UiButton from './UiButton.vue';
+import Button from './Button.vue';
 
 export default {
-  title: 'UI/UiButton',
-  component: UiButton,
+  title: 'UI/Button',
+  component: Button,
   argTypes: {
     variant: { control: 'select', options: ['primary', 'secondary'] },
     loading: { control: 'boolean' },
@@ -11,9 +11,9 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiButton },
+  components: { Button },
   setup() { return { args }; },
-  template: '<UiButton v-bind="args">Button</UiButton>',
+  template: '<Button v-bind="args">Button</Button>',
 });
 
 export const Primary = Template.bind({});
@@ -26,4 +26,4 @@ export const Loading = Template.bind({});
 Loading.args = { loading: true };
 
 export const Disabled = Template.bind({});
-Disabled.args = { disabled: true }; 
+Disabled.args = { disabled: true };

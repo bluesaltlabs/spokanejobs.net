@@ -1,8 +1,8 @@
-import UiTextareaInput from './UiTextareaInput.vue';
+import TextareaInput from './TextareaInput.vue';
 
 export default {
-  title: 'UI/UiTextareaInput',
-  component: UiTextareaInput,
+  title: 'UI/TextareaInput',
+  component: TextareaInput,
   argTypes: {
     modelValue: { control: 'text' },
     placeholder: { control: 'text' },
@@ -12,13 +12,13 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiTextareaInput },
+  components: { TextareaInput },
   setup() { return { args }; },
-  template: '<UiTextareaInput v-bind="args" />',
+  template: '<TextareaInput v-bind="args" />',
 });
 
 export const Default = Template.bind({});
 Default.args = { placeholder: 'Enter text...', rows: 3 };
 
 export const Disabled = Template.bind({});
-Disabled.args = { disabled: true, placeholder: 'Disabled textarea' }; 
+Disabled.args = { disabled: true, placeholder: 'Disabled textarea' };

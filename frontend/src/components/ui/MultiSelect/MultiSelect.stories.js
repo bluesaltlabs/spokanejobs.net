@@ -1,9 +1,9 @@
-import UiMultiSelect from './UiMultiSelect.vue';
+import MultiSelect from './MultiSelect.vue';
 import { ref } from 'vue';
 
 export default {
-  title: 'UI/UiMultiSelect',
-  component: UiMultiSelect,
+  title: 'UI/MultiSelect',
+  component: MultiSelect,
   argTypes: {
     modelValue: { control: 'object' },
     options: { control: 'object' },
@@ -13,12 +13,12 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiMultiSelect },
+  components: { MultiSelect },
   setup() {
     const value = ref(args.modelValue || []);
     return { args, value };
   },
-  template: '<UiMultiSelect v-bind="args" v-model:modelValue="value" />',
+  template: '<MultiSelect v-bind="args" v-model:modelValue="value" />',
 });
 
 export const Default = Template.bind({});
@@ -36,4 +36,4 @@ export const Disabled = Template.bind({});
 Disabled.args = {
   ...Default.args,
   disabled: true,
-}; 
+};

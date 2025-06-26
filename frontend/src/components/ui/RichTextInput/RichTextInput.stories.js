@@ -1,8 +1,8 @@
-import UiRichTextInput from './UiRichTextInput.vue';
+import RichTextInput from './RichTextInput.vue';
 
 export default {
-  title: 'UI/UiRichTextInput',
-  component: UiRichTextInput,
+  title: 'UI/RichTextInput',
+  component: RichTextInput,
   argTypes: {
     modelValue: { control: 'text' },
     mode: { control: 'select', options: ['markdown', 'json', 'html'] },
@@ -12,9 +12,9 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiRichTextInput },
+  components: { RichTextInput },
   setup() { return { args }; },
-  template: '<UiRichTextInput v-bind="args" />',
+  template: '<RichTextInput v-bind="args" />',
 });
 
 export const Markdown = Template.bind({});
@@ -27,4 +27,4 @@ export const HTML = Template.bind({});
 HTML.args = { mode: 'html', placeholder: 'Write HTML...' };
 
 export const Disabled = Template.bind({});
-Disabled.args = { mode: 'markdown', disabled: true, placeholder: 'Disabled rich text' }; 
+Disabled.args = { mode: 'markdown', disabled: true, placeholder: 'Disabled rich text' };

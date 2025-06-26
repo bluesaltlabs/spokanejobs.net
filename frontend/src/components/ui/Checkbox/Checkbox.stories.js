@@ -1,8 +1,8 @@
-import UiCheckbox from './UiCheckbox.vue';
+import Checkbox from './Checkbox.vue';
 
 export default {
-  title: 'UI/UiCheckbox',
-  component: UiCheckbox,
+  title: 'UI/Checkbox',
+  component: Checkbox,
   argTypes: {
     modelValue: { control: 'boolean' },
     label: { control: 'text' },
@@ -11,9 +11,9 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiCheckbox },
+  components: { Checkbox },
   setup() { return { args }; },
-  template: '<UiCheckbox v-bind="args" />',
+  template: '<Checkbox v-bind="args" />',
 });
 
 export const Default = Template.bind({});
@@ -23,4 +23,4 @@ export const Checked = Template.bind({});
 Checked.args = { label: 'Accept terms', modelValue: true };
 
 export const Disabled = Template.bind({});
-Disabled.args = { label: 'Accept terms', modelValue: false, disabled: true }; 
+Disabled.args = { label: 'Accept terms', modelValue: false, disabled: true };

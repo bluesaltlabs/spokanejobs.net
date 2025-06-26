@@ -1,8 +1,8 @@
-import UiSwitch from './UiSwitch.vue';
+import Switch from './Switch.vue';
 
 export default {
-  title: 'UI/UiSwitch',
-  component: UiSwitch,
+  title: 'UI/Switch',
+  component: Switch,
   argTypes: {
     modelValue: { control: 'boolean' },
     label: { control: 'text' },
@@ -11,9 +11,9 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiSwitch },
+  components: { Switch },
   setup() { return { args }; },
-  template: '<UiSwitch v-bind="args" />',
+  template: '<Switch v-bind="args" />',
 });
 
 export const Default = Template.bind({});
@@ -23,4 +23,4 @@ export const Checked = Template.bind({});
 Checked.args = { label: 'Enable feature', modelValue: true };
 
 export const Disabled = Template.bind({});
-Disabled.args = { label: 'Enable feature', modelValue: false, disabled: true }; 
+Disabled.args = { label: 'Enable feature', modelValue: false, disabled: true };

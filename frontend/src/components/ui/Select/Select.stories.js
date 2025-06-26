@@ -1,9 +1,9 @@
-import UiSelect from './UiSelect.vue';
+import Select from './Select.vue';
 import { ref } from 'vue';
 
 export default {
-  title: 'UI/UiSelect',
-  component: UiSelect,
+  title: 'UI/Select',
+  component: Select,
   argTypes: {
     modelValue: { control: 'text' },
     options: { control: 'object' },
@@ -13,12 +13,12 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiSelect },
+  components: { Select },
   setup() {
     const value = ref(args.modelValue || '');
     return { args, value };
   },
-  template: '<UiSelect v-bind="args" v-model:modelValue="value" />',
+  template: '<Select v-bind="args" v-model:modelValue="value" />',
 });
 
 export const Default = Template.bind({});
@@ -36,4 +36,4 @@ export const Disabled = Template.bind({});
 Disabled.args = {
   ...Default.args,
   disabled: true,
-}; 
+};

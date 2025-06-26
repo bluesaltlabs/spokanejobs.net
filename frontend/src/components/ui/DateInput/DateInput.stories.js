@@ -1,8 +1,8 @@
-import UiDateInput from './UiDateInput.vue';
+import DateInput from './DateInput.vue';
 
 export default {
-  title: 'UI/UiDateInput',
-  component: UiDateInput,
+  title: 'UI/DateInput',
+  component: DateInput,
   argTypes: {
     modelValue: { control: 'text' },
     withTime: { control: 'boolean' },
@@ -13,9 +13,9 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiDateInput },
+  components: { DateInput },
   setup() { return { args }; },
-  template: '<UiDateInput v-bind="args" />',
+  template: '<DateInput v-bind="args" />',
 });
 
 export const DateOnly = Template.bind({});
@@ -25,4 +25,4 @@ export const DateTime = Template.bind({});
 DateTime.args = { modelValue: '', withTime: true };
 
 export const Disabled = Template.bind({});
-Disabled.args = { modelValue: '', disabled: true }; 
+Disabled.args = { modelValue: '', disabled: true };

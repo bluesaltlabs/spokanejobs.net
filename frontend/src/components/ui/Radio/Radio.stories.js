@@ -1,8 +1,8 @@
-import UiRadio from './UiRadio.vue';
+import Radio from './Radio.vue';
 
 export default {
-  title: 'UI/UiRadio',
-  component: UiRadio,
+  title: 'UI/Radio',
+  component: Radio,
   argTypes: {
     modelValue: { control: 'boolean' },
     label: { control: 'text' },
@@ -12,9 +12,9 @@ export default {
 };
 
 const Template = (args) => ({
-  components: { UiRadio },
+  components: { Radio },
   setup() { return { args }; },
-  template: '<UiRadio v-bind="args" />',
+  template: '<Radio v-bind="args" />',
 });
 
 export const Default = Template.bind({});
@@ -24,4 +24,4 @@ export const Checked = Template.bind({});
 Checked.args = { label: 'Option A', name: 'group1', modelValue: true };
 
 export const Disabled = Template.bind({});
-Disabled.args = { label: 'Option A', name: 'group1', modelValue: false, disabled: true }; 
+Disabled.args = { label: 'Option A', name: 'group1', modelValue: false, disabled: true };
