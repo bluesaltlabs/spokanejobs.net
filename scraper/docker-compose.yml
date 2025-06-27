@@ -7,6 +7,7 @@ services:
       - DATA_REPO_PATH=${DATA_REPO_PATH:-/repo_data}
       - DATA_REPO_SUBDIR=${DATA_REPO_SUBDIR:-/api/}
       - GIT_SSH_PATH=${GIT_SSH_PATH:-~/.ssh/}
+      - SCRAPER_ARGS=${SCRAPER_ARGS:-}
     volumes:
       - ${DATA_REPO_PATH:-/root/projects/repo_data}:/repo_data
       - ${GIT_SSH_PATH:-/root/.ssh}:/root/.ssh:ro
