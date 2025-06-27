@@ -2,140 +2,192 @@ package scrapers
 
 import (
 	"log"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/avista"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/city_of_spokane"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/codespeed"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/cvsd"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/egnyte"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/enhanced_software_products"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/f5"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/gestalt_diagnostics"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/gravity_jack"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/huntwood"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/intellitect"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/itron"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/kaiser_aluminum"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/limelyte"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/numerica"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/openeye"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/paytrace"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/providence"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/risklens"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/scld"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/sel"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/spokane_computer"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/spokane_library"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/sps"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/stcu"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/synergisticit"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/treasury4"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/two_barrels"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/urm"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/wagstaff"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/winco"
+
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/companies"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
 
-// Run all registered scrapers
-func RunAll() {
-	avista.ScrapeJobs()
-	city_of_spokane.ScrapeJobs()
-	codespeed.ScrapeJobs()
-	cvsd.ScrapeJobs()
-	egnyte.ScrapeJobs()
-	enhanced_software_products.ScrapeJobs()
-	f5.ScrapeJobs()
-	gestalt_diagnostics.ScrapeJobs()
-	gravity_jack.ScrapeJobs()
-	huntwood.ScrapeJobs()
-	intellitect.ScrapeJobs()
-	itron.ScrapeJobs()
-	kaiser_aluminum.ScrapeJobs()
-	limelyte.ScrapeJobs()
-	numerica.ScrapeJobs()
-	openeye.ScrapeJobs()
-	paytrace.ScrapeJobs()
-	providence.ScrapeJobs()
-	risklens.ScrapeJobs()
-	scld.ScrapeJobs()
-	sel.ScrapeJobs()
-	spokane_computer.ScrapeJobs()
-	spokane_library.ScrapeJobs()
-	sps.ScrapeJobs()
-	stcu.ScrapeJobs()
-	synergisticit.ScrapeJobs()
-	treasury4.ScrapeJobs()
-	two_barrels.ScrapeJobs()
-	urm.ScrapeJobs()
-	wagstaff.ScrapeJobs()
-	winco.ScrapeJobs()
+// scraperInstances holds all active scraper instances
+var scraperInstances map[string]types.Scraper
+
+// InitializeScrapers loads all scrapers from configuration
+func InitializeScrapers() error {
+	// Initialize the scraper instances map
+	scraperInstances = make(map[string]types.Scraper)
+
+	// TODO: The Avista scraper is incomplete and causes a runtime panic. Fix before re-enabling.
+	// if avista, err := companies.NewAvistaScraper(); err == nil {
+	// 	scraperInstances["avista"] = avista
+	// } else {
+	// 	log.Printf("Failed to initialize avista scraper: %v", err)
+	// }
+
+	// TODO: City of Spokane scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["city_of_spokane"] = companies.NewCityOfSpokaneScraper()
+
+	// TODO: Codespeed scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["codespeed"] = companies.NewCodespeedScraper()
+
+	// TODO: CVSD scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["cvsd"] = companies.NewCVSDScraper()
+
+	// TODO: Egnyte scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["egnyte"] = companies.NewEgnyteScraper()
+
+	// TODO: Enhanced Software Products scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["enhanced_software_products"] = companies.NewEnhancedSoftwareProductsScraper()
+
+	// TODO: F5 scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["f5"] = companies.NewF5Scraper()
+
+	// TODO: Gestalt Diagnostics scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["gestalt_diagnostics"] = companies.NewGestaltDiagnosticsScraper()
+
+	// TODO: Gravity Jack scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["gravity_jack"] = companies.NewGravityJackScraper()
+
+	// TODO: Huntwood scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["huntwood"] = companies.NewHuntwoodScraper()
+
+	// TODO: Intellitect scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["intellitect"] = companies.NewIntellitectScraper()
+
+	// TODO: Itron scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["itron"] = companies.NewItronScraper()
+
+	// TODO: Kaiser Aluminum scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["kaiser_aluminum"] = companies.NewKaiserAluminumScraper()
+
+	// TODO: Limelyte scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["limelyte"] = companies.NewLimelyteScraper()
+
+	// TODO: Numerica scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["numerica"] = companies.NewNumericaScraper()
+
+	// Working scraper - successfully finds jobs
+	scraperInstances["openeye"] = companies.NewOpenEyeScraper()
+
+	// TODO: Paytrace scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["paytrace"] = companies.NewPaytraceScraper()
+
+	// TODO: Providence scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["providence"] = companies.NewProvidenceScraper()
+
+	// TODO: RiskLens scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["risklens"] = companies.NewRisklensScraper()
+
+	// TODO: SCLD scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["scld"] = companies.NewScldScraper()
+
+	// TODO: SEL scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["sel"] = companies.NewSelScraper()
+
+	// TODO: Spokane Computer scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["spokane_computer"] = companies.NewSpokaneComputerScraper()
+
+	// TODO: Spokane Library scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["spokane_library"] = companies.NewSpokaneLibraryScraper()
+
+	// TODO: SPS scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["sps"] = companies.NewSpsScraper()
+
+	// TODO: STCU scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["stcu"] = companies.NewStcuScraper()
+
+	// TODO: SynergisticIT scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["synergisticit"] = companies.NewSynergisticitScraper()
+
+	// TODO: Treasury4 scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["treasury4"] = companies.NewTreasury4Scraper()
+
+	// TODO: Two Barrels scraper times out after 10 seconds. Increase timeout or investigate site performance.
+	// scraperInstances["two_barrels"] = companies.NewTwoBarrelsScraper()
+
+	// TODO: URM scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["urm"] = companies.NewUrmScraper()
+
+	// TODO: Wagstaff scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["wagstaff"] = companies.NewWagstaffScraper()
+
+	// TODO: Winco scraper returns 403 Forbidden error. Site may be blocking automated access. Consider different user agent or approach.
+	// scraperInstances["winco"] = companies.NewWincoScraper()
+
+	log.Printf("Initialized %d scrapers from configuration (with company scrapers)", len(scraperInstances))
+	return nil
 }
 
-func RunScraper(name string) {
-	switch name {
-		case "avista":
-			avista.ScrapeJobs()
-		case "city_of_spokane":
-			city_of_spokane.ScrapeJobs()
-		case "codespeed":
-			codespeed.ScrapeJobs()
-		case "cvsd":
-			cvsd.ScrapeJobs()
-		case "egnyte":
-			egnyte.ScrapeJobs()
-		case "enhanced_software_products":
-			enhanced_software_products.ScrapeJobs()
-		case "f5":
-			f5.ScrapeJobs()
-		case "gestalt_diagnostics":
-			gestalt_diagnostics.ScrapeJobs()
-		case "gravity_jack":
-			gravity_jack.ScrapeJobs()
-		case "huntwood":
-			huntwood.ScrapeJobs()
-		case "intellitect":
-			intellitect.ScrapeJobs()
-		case "itron":
-			itron.ScrapeJobs()
-		case "kaiser_aluminum":
-			kaiser_aluminum.ScrapeJobs()
-		case "limelyte":
-			limelyte.ScrapeJobs()
-		case "numerica":
-			numerica.ScrapeJobs()
-		case "openeye":
-			openeye.ScrapeJobs()
-		case "paytrace":
-			paytrace.ScrapeJobs()
-		case "providence":
-			providence.ScrapeJobs()
-		case "risklens":
-			risklens.ScrapeJobs()
-		case "scld":
-			scld.ScrapeJobs()
-		case "sel":
-			sel.ScrapeJobs()
-		case "spokane_computer":
-			spokane_computer.ScrapeJobs()
-		case "spokane_library":
-			spokane_library.ScrapeJobs()
-		case "sps":
-			sps.ScrapeJobs()
-		case "stcu":
-			stcu.ScrapeJobs()
-		case "synergisticit":
-			synergisticit.ScrapeJobs()
-		case "treasury4":
-			treasury4.ScrapeJobs()
-		case "two_barrels":
-			two_barrels.ScrapeJobs()
-		case "urm":
-			urm.ScrapeJobs()
-		case "wagstaff":
-			wagstaff.ScrapeJobs()
-		case "winco":
-			winco.ScrapeJobs()
-		default:
-			//log.Errorf("Scraper %s not found\n", name)
-			log.Printf("Scraper %s not found\n", name)
+// RunAll runs all registered scrapers using CompanySlugs
+func RunAll() {
+	if scraperInstances == nil {
+		if err := InitializeScrapers(); err != nil {
+			log.Printf("Failed to initialize scrapers: %v", err)
+			return
+		}
 	}
+
+	// Run each scraper instance
+	for _, scraper := range scraperInstances {
+		log.Printf("Running scraper: %s", scraper.GetName())
+		_ = scraper.ScrapedJobs()
+
+		// Save output to JSON file
+		if err := scraper.SaveOutput("scraper_output"); err != nil {
+			log.Printf("Error saving output for %s: %v", scraper.GetName(), err)
+		}
+
+		log.Printf("Completed scraper: %s", scraper.GetName())
+	}
+}
+
+// RunScraper runs a single scraper by slug
+func RunScraper(name string) {
+	if scraperInstances == nil {
+		if err := InitializeScrapers(); err != nil {
+			log.Printf("Failed to initialize scrapers: %v", err)
+			return
+		}
+	}
+
+	if scraper, ok := scraperInstances[name]; ok {
+		log.Printf("Running scraper: %s", name)
+		_ = scraper.ScrapedJobs()
+
+		// Save output to JSON file
+		if err := scraper.SaveOutput("scraper_output"); err != nil {
+			log.Printf("Error saving output for %s: %v", name, err)
+		}
+
+		log.Printf("Completed scraper: %s", name)
+	} else {
+		log.Printf("Scraper %s not found in configuration", name)
+	}
+}
+
+// GetScraper returns a scraper instance by name
+func GetScraper(name string) (types.Scraper, bool) {
+	if scraperInstances == nil {
+		if err := InitializeScrapers(); err != nil {
+			log.Printf("Failed to initialize scrapers: %v", err)
+			return nil, false
+		}
+	}
+
+	scraper, exists := scraperInstances[name]
+	return scraper, exists
+}
+
+// GetAllScrapers returns all scraper instances as a slice
+func GetAllScrapers() []types.Scraper {
+	if scraperInstances == nil {
+		if err := InitializeScrapers(); err != nil {
+			log.Printf("Failed to initialize scrapers: %v", err)
+			return nil
+		}
+	}
+
+	scrapers := make([]types.Scraper, 0, len(scraperInstances))
+	for _, scraper := range scraperInstances {
+		scrapers = append(scrapers, scraper)
+	}
+	return scrapers
 }

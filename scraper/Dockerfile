@@ -8,6 +8,7 @@ COPY . .
 
 # Install Go Dependencies
 RUN go mod download
+RUN apk add --no-cache git openssh
 
 # Run
 CMD ["go", "run", "./cmd/main.go"]
