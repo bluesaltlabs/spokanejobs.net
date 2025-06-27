@@ -116,9 +116,15 @@ func ConsolidateJobsToJSON() error {
 	log.Printf("Successfully consolidated %d total jobs into %s", len(allJobs), jobsFilePath)
 
 	// Sync consolidated jobs.json to data repo if configured
-	dataRepoPath := os.Getenv("DATA_REPO_PATH")
+	// Use hard-coded path for Docker container consistency
+	dataRepoPath := "/repo_data"
 	dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR")
-	if dataRepoPath != "" {
+	if dataRepoSubdir == "" {
+		dataRepoSubdir = "api" // Default fallback
+	}
+
+	// Check if the data repo path exists (only sync if it does)
+	if _, err := os.Stat(dataRepoPath); err == nil {
 		// Initialize git sync for the consolidated file
 		gs := git.NewGitSync(dataRepoPath, "consolidated", dataRepoSubdir)
 		if err := gs.SyncJobs(allJobs); err != nil {
@@ -126,6 +132,8 @@ func ConsolidateJobsToJSON() error {
 		} else {
 			log.Printf("[GitSync] Successfully synced consolidated jobs.json to data repo")
 		}
+	} else {
+		log.Printf("[GitSync] Data repo path %s not found, skipping git sync", dataRepoPath)
 	}
 
 	return nil

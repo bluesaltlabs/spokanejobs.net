@@ -49,9 +49,15 @@ func (b *BaseScraperWrapper) SaveOutput() error {
 	err := utils.SaveJobsToJSON(b.Jobs, b.Name)
 
 	// Optionally sync to data repo if configured
-	dataRepoPath := os.Getenv("DATA_REPO_PATH")
+	// Use hard-coded path for Docker container consistency
+	dataRepoPath := "/repo_data"
 	dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR")
-	if dataRepoPath != "" {
+	if dataRepoSubdir == "" {
+		dataRepoSubdir = "api" // Default fallback
+	}
+
+	// Check if the data repo path exists (only sync if it does)
+	if _, err := os.Stat(dataRepoPath); err == nil {
 		gs := git.NewGitSync(dataRepoPath, b.Name, dataRepoSubdir)
 		err2 := gs.SyncJobs(b.Jobs)
 		if err2 != nil {
@@ -59,6 +65,8 @@ func (b *BaseScraperWrapper) SaveOutput() error {
 		} else {
 			log.Printf("[GitSync] Successfully synced jobs for %s to data repo", b.Name)
 		}
+	} else {
+		log.Printf("[GitSync] Data repo path %s not found, skipping git sync for %s", dataRepoPath, b.Name)
 	}
 
 	return err

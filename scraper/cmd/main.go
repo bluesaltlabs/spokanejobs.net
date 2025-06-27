@@ -31,16 +31,10 @@ func main() {
 	}
 
 	// Log environment variables for debugging
-	if dataRepoPath := os.Getenv("DATA_REPO_PATH"); dataRepoPath != "" {
-		log.Printf("DATA_REPO_PATH: %s", dataRepoPath)
-	} else {
-		log.Printf("DATA_REPO_PATH not set")
-	}
-
 	if dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR"); dataRepoSubdir != "" {
 		log.Printf("DATA_REPO_SUBDIR: %s", dataRepoSubdir)
 	} else {
-		log.Printf("DATA_REPO_SUBDIR not set")
+		log.Printf("DATA_REPO_SUBDIR not set, will use default 'api'")
 	}
 
 	// Check for SCRAPER_ARGS environment variable
