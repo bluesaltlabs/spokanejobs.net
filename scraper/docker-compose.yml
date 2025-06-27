@@ -1,3 +1,6 @@
 services:
   scraper:
     build: .
+    volumes:
+      - ${REPO_DATA_PATH:-/root/projects/repo_data}:/repo_data
+      - /root/.ssh:/root/.ssh:ro
