@@ -7,7 +7,7 @@ import (
 	"log"
 	"strings"
 	"github.com/gocolly/colly"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
 
 // Set the base URL to scrape
@@ -15,10 +15,10 @@ var scrapeUrlPrefix string 	= "https://recruiting2.ultipro.com/AVI1000AMAST/JobB
 var scrapeUrl string 				= scrapeUrlPrefix + "?o=postedDateDesc&f4=ITpN1FEJvlWudZe0AayqWA"
 var JobUrlPrefix string 		= scrapeUrlPrefix + "/OpportunityDetail?opportunityId="
 
-func ScrapeJobs() []*models.ScrapedJob {
+func ScrapeJobs() []*types.ScrapedJob {
 
 	// Create the Jobs collector
-	jobs := make([]*models.ScrapedJob, 0)
+	jobs := make([]*types.ScrapedJob, 0)
 
 	// Create a new collector
 	c := getCollector()
@@ -32,7 +32,7 @@ func ScrapeJobs() []*models.ScrapedJob {
 
   // Process Job Line
   c.OnHTML("div.opportunity", func(h *colly.HTMLElement) {
- 	  j := &models.ScrapedJob{}
+ 	  j := &types.ScrapedJob{}
     selection := h.DOM
 
     // Retrieve attributes available

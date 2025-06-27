@@ -7,17 +7,17 @@ import (
   "log"
   "strings"
   "github.com/gocolly/colly"
-  "gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
+  "gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
 
 // Set the base URL to scrape
 var scrapeUrl string		= "https://www.f5.com/company/careers/locations/spokane"
 var JobUrlPrefix string = scrapeUrl + ""
 
-func ScrapeJobs() []*models.ScrapedJob {
+func ScrapeJobs() []*types.ScrapedJob {
 
   // Create the Jobs collector
-  jobs := make([]*models.ScrapedJob, 0)
+  jobs := make([]*types.ScrapedJob, 0)
 
   // Create a new collector
   c := getCollector()
