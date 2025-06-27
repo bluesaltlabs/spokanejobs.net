@@ -28,7 +28,7 @@ func NewGitSync(repoPath, company, dataSubdir string) *GitSync {
 		RepoPath:      repoPath,
 		Company:       company,
 		DataSubdir:    dataSubdir,
-		CommitMessage: fmt.Sprintf("Update job data for %s on %s", company, time.Now().Format("2006-01-02 15:04:05")),
+		CommitMessage: fmt.Sprintf("Update job data for %s on %s", company, time.Now().Format("yyyy-mm-dd HH:mm:ss")),
 	}
 }
 

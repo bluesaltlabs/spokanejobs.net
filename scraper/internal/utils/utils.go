@@ -24,7 +24,7 @@ func SaveJobsToJSON(jobs []types.ScrapedJob, scraperName, outputDir string) erro
 	}
 
 	// Create filename with timestamp
-	timestamp := time.Now().Format("2006-01-02_15-04-05")
+	timestamp := time.Now().Format("yyyy-mm-dd HH:mm:ss")
 	filename := fmt.Sprintf("%s_%s.json", scraperName, timestamp)
 	filepath := filepath.Join(outputDir, filename)
 
