@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/git"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
 
@@ -113,5 +114,19 @@ func ConsolidateJobsToJSON() error {
 	}
 
 	log.Printf("Successfully consolidated %d total jobs into %s", len(allJobs), jobsFilePath)
+
+	// Sync consolidated jobs.json to data repo if configured
+	dataRepoPath := os.Getenv("DATA_REPO_PATH")
+	dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR")
+	if dataRepoPath != "" {
+		// Initialize git sync for the consolidated file
+		gs := git.NewGitSync(dataRepoPath, "consolidated", dataRepoSubdir)
+		if err := gs.SyncJobs(allJobs); err != nil {
+			log.Printf("[GitSync] Failed to sync consolidated jobs.json: %v", err)
+		} else {
+			log.Printf("[GitSync] Successfully synced consolidated jobs.json to data repo")
+		}
+	}
+
 	return nil
 }

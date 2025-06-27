@@ -3,7 +3,6 @@ package git
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -14,8 +13,9 @@ import (
 
 // GitSync handles syncing job data to a git repo
 // Example usage:
-//   gs := NewGitSync("/path/to/spokanejobs_data", "openeye")
-//   err := gs.SyncJobs(jobs)
+//
+//	gs := NewGitSync("/path/to/repo_data", "company_slug")
+//	err := gs.SyncJobs(jobs)
 type GitSync struct {
 	RepoPath      string
 	Company       string
@@ -63,17 +63,26 @@ func (gs *GitSync) pullLatest() error {
 }
 
 func (gs *GitSync) writeJobsFile(jobs []types.ScrapedJob) error {
-	// Write to e.g. <repo>/jobs/openeye.json
+	// Write to e.g. <repo>/api/companies/company.json or <repo>/api/jobs.json for consolidated
 	jobsDir := filepath.Join(gs.RepoPath, gs.DataSubdir)
 	if err := os.MkdirAll(jobsDir, 0755); err != nil {
 		return err
 	}
-	filePath := filepath.Join(jobsDir, gs.Company+".json")
+
+	var filePath string
+	if gs.Company == "consolidated" {
+		// For consolidated jobs, write directly as jobs.json
+		filePath = filepath.Join(jobsDir, "jobs.json")
+	} else {
+		// For individual companies, write as company.json
+		filePath = filepath.Join(jobsDir, gs.Company+".json")
+	}
+
 	data, err := json.MarshalIndent(jobs, "", "  ")
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(filePath, data, 0644)
+	return os.WriteFile(filePath, data, 0644)
 }
 
 func (gs *GitSync) gitAddCommitPush() error {
