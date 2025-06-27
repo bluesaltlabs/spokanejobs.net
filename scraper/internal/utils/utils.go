@@ -49,7 +49,7 @@ func SaveJobsToJSON(jobs []types.ScrapedJob, scraperName string) error {
 
 // ConsolidateJobsToJSON reads all company JSON files and combines them into a single jobs.json file
 func ConsolidateJobsToJSON() error {
-	companiesDir := filepath.Join("companies")
+	companiesDir := filepath.Join("scraper_output", "companies")
 
 	// Check if companies directory exists
 	if _, err := os.Stat(companiesDir); os.IsNotExist(err) {
@@ -96,7 +96,7 @@ func ConsolidateJobsToJSON() error {
 	}
 
 	// Create the consolidated jobs.json file
-	jobsFilePath := filepath.Join("jobs.json")
+	jobsFilePath := filepath.Join("scraper_output", "jobs.json")
 	file, err := os.Create(jobsFilePath)
 	if err != nil {
 		return fmt.Errorf("failed to create jobs.json file: %w", err)
