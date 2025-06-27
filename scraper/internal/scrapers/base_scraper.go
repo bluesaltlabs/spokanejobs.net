@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/engine"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/git"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
@@ -74,32 +73,21 @@ func (b *BaseScraperWrapper) SetEngine(engine interface{}) {
 func (b *BaseScraperWrapper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
 
-	// Get the engine from the base scraper
-	scraperEngine, ok := b.Engine.(engine.ScraperEngine)
-	if !ok {
-		log.Printf("Error: Engine is not properly configured for %s", b.Name)
-		return jobs
+	// The base scraper doesn't implement scraping logic
+	// Individual scrapers should override this method or implement their own scraping
+	log.Printf("Base scraper scrapeJobs called for %s - this should be overridden by individual scrapers", b.Name)
+
+	// Save jobs to JSON file
+	if err := utils.SaveJobsToJSON(jobs, b.Name, "scraper_output"); err != nil {
+		log.Printf("Error saving jobs to JSON for %s: %v", b.Name, err)
+	} else {
+		log.Printf("Saved %d jobs to JSON file for %s", len(jobs), b.Name)
 	}
 
-	// Save jobs to JSON file after scraping completes
-	scraperEngine.OnScraped(func() {
-		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, b.Name, "scraper_output"); err != nil {
-			log.Printf("Error saving jobs to JSON for %s: %v", b.Name, err)
-		} else {
-			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), b.Name)
-		}
-
-		// Also print to stdout for backward compatibility
-		enc := json.NewEncoder(os.Stdout)
-		enc.SetIndent("", "  ")
-		enc.Encode(jobs)
-	})
-
-	// Visit the configured URL
-	if err := scraperEngine.Visit(b.Config.BaseURL); err != nil {
-		log.Printf("Error visiting %s: %v", b.Config.BaseURL, err)
-	}
+	// Also print to stdout for backward compatibility
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	enc.Encode(jobs)
 
 	log.Printf("\n-----\n\nScraping completed for %s\n\n", b.Name)
 

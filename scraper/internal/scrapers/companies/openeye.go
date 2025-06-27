@@ -13,8 +13,6 @@ var scrapeUrl string = "https://job-boards.greenhouse.io/openeye"
 var jobUrlPrefix string = scrapeUrl + "/jobs/"
 
 // OpenEyeScraper implements a scraper for OpenEye
-// This is a drop-in replacement for the config-driven version, but with custom logic
-// for job and detail extraction.
 type OpenEyeScraper struct {
 	*types.BaseScraper
 }
