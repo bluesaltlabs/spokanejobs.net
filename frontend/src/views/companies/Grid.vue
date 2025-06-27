@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompanies } from '@/stores/companies'
+import { Container } from '@/components/ui'
 
 // setup
 const router = useRouter()
@@ -14,7 +15,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main>
+  <Container>
     <h1>Companies</h1>
     <hr class="my-4" />
 
@@ -69,7 +70,7 @@ onMounted(() => {
         <p>Companies will appear here once they are added to the system.</p>
       </div>
     </div>
-  </main>
+  </Container>
 </template>
 
 

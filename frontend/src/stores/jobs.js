@@ -13,8 +13,19 @@ export const useJobs = defineStore('jobs', {
       return state.jobs?.length ?? 0
     },
     sortedJobs(state) {
-      // return the jobs sorted by name
-      return state.jobs?.sort((a, b) => a.name.localeCompare(b.name))
+      // Defensive: sort by title if present, fallback to job_id
+      return [...(state.jobs ?? [])].sort((a, b) => {
+        if (a.title && b.title) {
+          return a.title.localeCompare(b.title)
+        }
+        if (a.title) return -1
+        if (b.title) return 1
+        // fallback to job_id string compare
+        if (a.job_id && b.job_id) {
+          return a.job_id.localeCompare(b.job_id)
+        }
+        return 0
+      })
     }
   },
   actions: {

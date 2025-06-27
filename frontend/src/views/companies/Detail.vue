@@ -3,6 +3,8 @@ import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCompany } from '@/stores/company'
 import { SkeletonText, SkeletonImage, SkeletonButton } from '@/components/skeleton'
+import { Container } from '@/components/ui'
+import { CompaniesIcon, ViewIcon } from '@/components/icons'
 
 // Setup
 const companyStore = useCompany()
@@ -19,11 +21,14 @@ const loading = computed(() => companyStore.loading)
 </script>
 
 <template>
-  <main>
+  <Container>
     <div>
       <!-- todo: back to companies grid header -->
       <div class="back-button">
-        <router-link class="back-button-link" to="/companies">🏢 All Companies</router-link>
+        <router-link class="back-button-link" to="/companies">
+          <CompaniesIcon class="back-icon" />
+          All Companies
+        </router-link>
       </div>
     </div>
 
@@ -46,8 +51,18 @@ const loading = computed(() => companyStore.loading)
     <div v-else-if="company">
       <h1 class="company-name">{{ company.name }}</h1>
       <div class="company-links-container">
-        <span v-if="company.website"><a :href="company.website" target="_blank" :alt="company.website">🌐 Website</a></span>
-        <span v-if="company.job_board_url"><a :href="company.job_board_url" target="_blank" :alt="company.job_board_url">💼 Jobs</a></span>
+        <span v-if="company.website">
+          <a :href="company.website" target="_blank" :alt="company.website">
+            <ViewIcon class="link-icon" />
+            Website
+          </a>
+        </span>
+        <span v-if="company.job_board_url">
+          <a :href="company.job_board_url" target="_blank" :alt="company.job_board_url">
+            <ViewIcon class="link-icon" />
+            Jobs
+          </a>
+        </span>
       </div>
 
       <div class="spacer"></div>
@@ -60,10 +75,33 @@ const loading = computed(() => companyStore.loading)
     <div v-else>
       <p>Company not found.</p>
     </div>
-  </main>
+  </Container>
 </template>
 
 <style scoped>
+.back-button {
+  margin-bottom: 2rem;
+}
+
+.back-button-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.back-button-link:hover {
+  color: var(--color-primary);
+}
+
+.back-icon {
+  width: 20px;
+  height: 20px;
+}
+
 .company-name {
   margin-top: 25px;
   margin-bottom: 15px;
@@ -79,17 +117,6 @@ img.company-logo {
   border-radius: var(--border-radius);
   padding: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.back-button-link {
-  color: var(--color-text);
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.back-button-link:hover {
-  color: var(--color-primary);
 }
 
 .spacer {
@@ -110,21 +137,29 @@ img.company-logo {
 .company-links-container {
   margin-top: 15px;
   margin-bottom: 15px;
+}
 
-  a {
-    border-radius: var(--border-radius-small);
-    padding: 5px 10px;
-    margin: 5px 8px;
-    background: var(--color-primary-700);
-    color: var(--color-text);
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2rem;
+.company-links-container a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--border-radius-small);
+  padding: 5px 10px;
+  margin: 5px 8px;
+  background: var(--color-primary-700);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
 
-    &:hover {
-      background: var(--color-primary-500);
-      color: var(--color-white);
-    }
-  }
+.company-links-container a:hover {
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+.link-icon {
+  width: 16px;
+  height: 16px;
 }
 </style>
