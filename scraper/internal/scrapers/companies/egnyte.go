@@ -1,11 +1,10 @@
 package companies
 
 import (
-	"encoding/json"
 	"log"
-	"os"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 	"github.com/gocolly/colly"
 )
 
@@ -49,9 +48,12 @@ func (e *EgnyteScraper) scrapeJobs() []types.ScrapedJob {
 	c := e.getCollector()
 
 	c.OnScraped(func(r *colly.Response) {
-		enc := json.NewEncoder(os.Stdout)
-		enc.SetIndent("", "  ")
-		enc.Encode(jobs)
+		// Save to file instead of just printing to stdout
+		if err := utils.SaveJobsToJSON(jobs, e.Name, "scraper_output"); err != nil {
+			log.Printf("Error saving jobs to JSON for %s: %v", e.Name, err)
+		} else {
+			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), e.Name)
+		}
 	})
 
 	// Process Job Line - TODO: Add proper selectors
@@ -81,4 +83,12 @@ func (e *EgnyteScraper) getCollector() *colly.Collector {
 	})
 
 	return c
+}
+
+func (e *EgnyteScraper) GetScheduleHour() int {
+	return e.ScheduleHour
+}
+
+func (e *EgnyteScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(e.Jobs, e.Name, outputDir)
 }

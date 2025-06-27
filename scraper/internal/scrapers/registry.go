@@ -16,37 +16,37 @@ func InitializeScrapers() error {
 	scraperInstances = make(map[string]types.Scraper)
 
 	// Map company slugs to scrapers.
-	scraperInstances["openeye"] = companies.NewOpenEyeScraper()
 	scraperInstances["avista"] = companies.NewAvistaScraper()
-	scraperInstances["f5"] = companies.NewF5Scraper()
-	scraperInstances["numerica"] = companies.NewNumericaScraper()
-	scraperInstances["gravity_jack"] = companies.NewGravityJackScraper()
-	scraperInstances["egnyte"] = companies.NewEgnyteScraper()
 	scraperInstances["city_of_spokane"] = companies.NewCityOfSpokaneScraper()
 	scraperInstances["codespeed"] = companies.NewCodespeedScraper()
 	scraperInstances["cvsd"] = companies.NewCVSDScraper()
+	scraperInstances["egnyte"] = companies.NewEgnyteScraper()
 	scraperInstances["enhanced_software_products"] = companies.NewEnhancedSoftwareProductsScraper()
+	scraperInstances["f5"] = companies.NewF5Scraper()
+	scraperInstances["gestalt_diagnostics"] = companies.NewGestaltDiagnosticsScraper()
+	scraperInstances["gravity_jack"] = companies.NewGravityJackScraper()
 	scraperInstances["huntwood"] = companies.NewHuntwoodScraper()
+	scraperInstances["intellitect"] = companies.NewIntellitectScraper()
+	scraperInstances["itron"] = companies.NewItronScraper()
 	scraperInstances["kaiser_aluminum"] = companies.NewKaiserAluminumScraper()
 	scraperInstances["limelyte"] = companies.NewLimelyteScraper()
-	scraperInstances["itron"] = companies.NewItronScraper()
-	scraperInstances["two_barrels"] = companies.NewTwoBarrelsScraper()
-	scraperInstances["treasury4"] = companies.NewTreasury4Scraper()
+	scraperInstances["numerica"] = companies.NewNumericaScraper()
+	scraperInstances["openeye"] = companies.NewOpenEyeScraper()
+	scraperInstances["paytrace"] = companies.NewPaytraceScraper()
+	scraperInstances["providence"] = companies.NewProvidenceScraper()
+	scraperInstances["risklens"] = companies.NewRisklensScraper()
 	scraperInstances["scld"] = companies.NewScldScraper()
 	scraperInstances["sel"] = companies.NewSelScraper()
-	scraperInstances["urm"] = companies.NewUrmScraper()
-	scraperInstances["paytrace"] = companies.NewPaytraceScraper()
-	scraperInstances["winco"] = companies.NewWincoScraper()
-	scraperInstances["intellitect"] = companies.NewIntellitectScraper()
-	scraperInstances["risklens"] = companies.NewRisklensScraper()
 	scraperInstances["spokane_computer"] = companies.NewSpokaneComputerScraper()
-	scraperInstances["providence"] = companies.NewProvidenceScraper()
-	scraperInstances["wagstaff"] = companies.NewWagstaffScraper()
-	scraperInstances["gestalt_diagnostics"] = companies.NewGestaltDiagnosticsScraper()
-	scraperInstances["synergisticit"] = companies.NewSynergisticitScraper()
 	scraperInstances["spokane_library"] = companies.NewSpokaneLibraryScraper()
-	scraperInstances["stcu"] = companies.NewStcuScraper()
 	scraperInstances["sps"] = companies.NewSpsScraper()
+	scraperInstances["stcu"] = companies.NewStcuScraper()
+	scraperInstances["synergisticit"] = companies.NewSynergisticitScraper()
+	scraperInstances["treasury4"] = companies.NewTreasury4Scraper()
+	scraperInstances["two_barrels"] = companies.NewTwoBarrelsScraper()
+	scraperInstances["urm"] = companies.NewUrmScraper()
+	scraperInstances["wagstaff"] = companies.NewWagstaffScraper()
+	scraperInstances["winco"] = companies.NewWincoScraper()
 
 	log.Printf("Initialized %d scrapers from configuration (with company scrapers)", len(scraperInstances))
 	return nil
@@ -65,6 +65,12 @@ func RunAll() {
 	for _, scraper := range scraperInstances {
 		log.Printf("Running scraper: %s", scraper.GetName())
 		_ = scraper.ScrapedJobs()
+
+		// Save output to JSON file
+		if err := scraper.SaveOutput("scraper_output"); err != nil {
+			log.Printf("Error saving output for %s: %v", scraper.GetName(), err)
+		}
+
 		log.Printf("Completed scraper: %s", scraper.GetName())
 	}
 }
@@ -81,6 +87,12 @@ func RunScraper(name string) {
 	if scraper, ok := scraperInstances[name]; ok {
 		log.Printf("Running scraper: %s", name)
 		_ = scraper.ScrapedJobs()
+
+		// Save output to JSON file
+		if err := scraper.SaveOutput("scraper_output"); err != nil {
+			log.Printf("Error saving output for %s: %v", name, err)
+		}
+
 		log.Printf("Completed scraper: %s", name)
 	} else {
 		log.Printf("Scraper %s not found in configuration", name)

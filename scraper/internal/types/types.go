@@ -15,30 +15,24 @@ type Scraper interface {
 	GetScheduleHour() int
 	ScrapedJobs() []ScrapedJob
 	ScrapeJobDetails(job *ScrapedJob)
+	SaveOutput(outputDir string) error
+	// SetEngine is optional - scrapers can implement it if they want to use the new engine interface
+	// Default implementation is provided in BaseScraper
 }
 
-// New configuration-driven types
+// ScraperConfig is kept minimal for backward compatibility
 type ScraperConfig struct {
-	AllowedDomains []string     `json:"allowedDomains"`
-	BaseURL        string       `json:"baseURL"`
-	JobURLPrefix   string       `json:"jobURLPrefix"`
-	Selectors      JobSelectors `json:"selectors"`
-}
-
-type JobSelectors struct {
-	JobContainer string `json:"jobContainer"`
-	Title        string `json:"title"`
-	URL          string `json:"url"`
-	Description  string `json:"description"`
-	City         string `json:"city"`
-	State        string `json:"state"`
+	AllowedDomains []string `json:"allowedDomains"`
+	BaseURL        string   `json:"baseURL"`
+	JobURLPrefix   string   `json:"jobURLPrefix"`
 }
 
 type BaseScraper struct {
 	Jobs         []ScrapedJob
 	Name         string
 	Config       ScraperConfig
-	ScheduleHour int // Hour of day when this scraper should run (0-23)
+	ScheduleHour int         // Hour of day when this scraper should run (0-23)
+	Engine       interface{} // New field for the engine
 }
 
 // GetScheduleHour returns the hour when this scraper should run
@@ -46,7 +40,7 @@ func (b *BaseScraper) GetScheduleHour() int {
 	return b.ScheduleHour
 }
 
-// ConfigDrivenScraper implements the Scraper interface using configuration
-type ConfigDrivenScraper struct {
-	BaseScraper
+// SetEngine provides a default implementation for the optional SetEngine method
+func (b *BaseScraper) SetEngine(engine interface{}) {
+	b.Engine = engine
 }

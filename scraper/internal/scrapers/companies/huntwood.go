@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 	"github.com/gocolly/colly"
 )
 
@@ -46,6 +47,16 @@ func (h *HuntwoodScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
 	collector := h.getCollector()
 
+	collector.OnScraped(func(r *colly.Response) {
+		// Save to file instead of just printing to stdout
+		if err := utils.SaveJobsToJSON(jobs, h.Name, "scraper_output"); err != nil {
+			log.Printf("Error saving jobs to JSON for %s: %v", h.Name, err)
+		} else {
+			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), h.Name)
+		}
+		// Removed: debug print to stdout
+	})
+
 	// Process Job Line - TODO: Add proper selectors
 	collector.OnHTML("", func(h *colly.HTMLElement) {
 		// todo: implement job extraction
@@ -77,4 +88,12 @@ func (h *HuntwoodScraper) getCollector() *colly.Collector {
 
 func (h *HuntwoodScraper) trimSpaces(s string) string {
 	return strings.TrimSpace(s)
+}
+
+func (h *HuntwoodScraper) GetScheduleHour() int {
+	return h.ScheduleHour
+}
+
+func (h *HuntwoodScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(h.Jobs, h.Name, outputDir)
 }

@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"strings"
 
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/engine"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/git"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
-	"github.com/gocolly/colly"
 )
 
 // BaseScraperWrapper wraps the BaseScraper type to allow method definitions
@@ -23,6 +23,7 @@ func NewBaseScraper(name string, config types.ScraperConfig) types.Scraper {
 		Name:   name,
 		Config: config,
 	}
+
 	return &BaseScraperWrapper{BaseScraper: base}
 }
 
@@ -44,75 +45,63 @@ func (b *BaseScraperWrapper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden by custom scrapers
 }
 
+// SaveOutput saves the scraped jobs to a JSON file
+func (b *BaseScraperWrapper) SaveOutput(outputDir string) error {
+	err := utils.SaveJobsToJSON(b.Jobs, b.Name, outputDir)
+
+	// Optionally sync to data repo if configured
+	dataRepoPath := os.Getenv("DATA_REPO_PATH")
+	dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR")
+	if dataRepoPath != "" {
+		gs := git.NewGitSync(dataRepoPath, b.Name, dataRepoSubdir)
+		err2 := gs.SyncJobs(b.Jobs)
+		if err2 != nil {
+			log.Printf("[GitSync] Failed to sync jobs for %s: %v", b.Name, err2)
+		} else {
+			log.Printf("[GitSync] Successfully synced jobs for %s to data repo", b.Name)
+		}
+	}
+
+	return err
+}
+
+// SetEngine sets the scraping engine for this scraper
+func (b *BaseScraperWrapper) SetEngine(engine interface{}) {
+	b.Engine = engine
+}
+
 // scrapeJobs performs the actual scraping using the configuration
 func (b *BaseScraperWrapper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
-	c := utils.NewCollector(b.Config)
 
-	// Display all jobs after scraping completes as json to the standard output
-	c.OnScraped(func(r *colly.Response) {
+	// Get the engine from the base scraper
+	scraperEngine, ok := b.Engine.(engine.ScraperEngine)
+	if !ok {
+		log.Printf("Error: Engine is not properly configured for %s", b.Name)
+		return jobs
+	}
+
+	// Save jobs to JSON file after scraping completes
+	scraperEngine.OnScraped(func() {
+		// Save to file instead of just printing to stdout
+		if err := utils.SaveJobsToJSON(jobs, b.Name, "scraper_output"); err != nil {
+			log.Printf("Error saving jobs to JSON for %s: %v", b.Name, err)
+		} else {
+			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), b.Name)
+		}
+
+		// Also print to stdout for backward compatibility
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		enc.Encode(jobs)
 	})
 
-	// Process job elements using configured selectors
-	c.OnHTML(b.Config.Selectors.JobContainer, func(h *colly.HTMLElement) {
-		job := b.extractJobFromElement(h)
-		if job != nil {
-			jobs = append(jobs, *job)
-		}
-	})
-
 	// Visit the configured URL
-	c.Visit(b.Config.BaseURL)
+	if err := scraperEngine.Visit(b.Config.BaseURL); err != nil {
+		log.Printf("Error visiting %s: %v", b.Config.BaseURL, err)
+	}
 
-	log.Printf("\n-----\n\nColly instance done for %s: %+v\n\n", b.Name, c)
+	log.Printf("\n-----\n\nScraping completed for %s\n\n", b.Name)
 
 	return jobs
-}
-
-// extractJobFromElement extracts job data from an HTML element using configured selectors
-func (b *BaseScraperWrapper) extractJobFromElement(h *colly.HTMLElement) *types.ScrapedJob {
-	job := &types.ScrapedJob{}
-	selection := h.DOM
-
-	// Extract title
-	if b.Config.Selectors.Title != "" {
-		job.Title = strings.TrimSpace(selection.Find(b.Config.Selectors.Title).Text())
-	}
-
-	// Extract URL
-	if b.Config.Selectors.URL != "" {
-		url, exists := selection.Find(b.Config.Selectors.URL).Attr("href")
-		if exists {
-			job.Url = url
-			// Extract job ID from URL if prefix is configured
-			if b.Config.JobURLPrefix != "" && strings.HasPrefix(url, b.Config.JobURLPrefix) {
-				job.JobId = strings.TrimPrefix(url, b.Config.JobURLPrefix)
-			}
-		}
-	}
-
-	// Extract description
-	if b.Config.Selectors.Description != "" {
-		job.Description = strings.TrimSpace(selection.Find(b.Config.Selectors.Description).Text())
-	}
-
-	// Extract city
-	if b.Config.Selectors.City != "" {
-		job.City = strings.TrimSpace(selection.Find(b.Config.Selectors.City).Text())
-	}
-
-	// Extract state
-	if b.Config.Selectors.State != "" {
-		job.State = strings.TrimSpace(selection.Find(b.Config.Selectors.State).Text())
-	}
-
-	// Only return job if we have at least a title or URL
-	if job.Title != "" || job.Url != "" {
-		return job
-	}
-
-	return nil
 }

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 	"github.com/gocolly/colly"
 )
 
@@ -45,11 +46,23 @@ func (e *EnhancedSoftwareProductsScraper) ScrapeJobDetails(job *types.ScrapedJob
 	// Default implementation - can be overridden if needed
 }
 
+func (e *EnhancedSoftwareProductsScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(e.Jobs, e.Name, outputDir)
+}
+
 func (e *EnhancedSoftwareProductsScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
 	collector := e.getCollector()
 
 	collector.OnScraped(func(r *colly.Response) {
+		// Save to file instead of just printing to stdout
+		if err := utils.SaveJobsToJSON(jobs, e.Name, "scraper_output"); err != nil {
+			log.Printf("Error saving jobs to JSON for %s: %v", e.Name, err)
+		} else {
+			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), e.Name)
+		}
+
+		// Also print to stdout for backward compatibility
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		enc.Encode(jobs)

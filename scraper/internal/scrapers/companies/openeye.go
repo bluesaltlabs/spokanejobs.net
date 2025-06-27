@@ -1,14 +1,12 @@
 package companies
 
 import (
-	"encoding/json"
 	"log"
-	"os"
 	"strings"
 
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/engine"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
-	"github.com/gocolly/colly"
 )
 
 var scrapeUrl string = "https://job-boards.greenhouse.io/openeye"
@@ -22,14 +20,29 @@ type OpenEyeScraper struct {
 }
 
 func NewOpenEyeScraper() *OpenEyeScraper {
+	config := types.ScraperConfig{
+		BaseURL: "https://openeye.net/careers",
+	}
+
+	base := &types.BaseScraper{
+		Name:         "openeye",
+		ScheduleHour: 15,
+		Config:       config,
+	}
+
+	// Create the engine
+	factory := engine.NewEngineFactory()
+	scraperEngine, err := factory.CreateEngine(engine.EngineColly, config)
+	if err != nil {
+		log.Printf("Error creating engine for openeye: %v", err)
+		// Fallback to colly engine
+		scraperEngine, _ = factory.CreateEngine(engine.EngineColly, config)
+	}
+
+	base.Engine = scraperEngine
+
 	return &OpenEyeScraper{
-		BaseScraper: &types.BaseScraper{
-			Name:         "openeye",
-			ScheduleHour: 15,
-			Config: types.ScraperConfig{
-				BaseURL: "https://openeye.net/careers",
-			},
-		},
+		BaseScraper: base,
 	}
 }
 
@@ -48,75 +61,93 @@ func (o *OpenEyeScraper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden if needed
 }
 
+func (o *OpenEyeScraper) GetScheduleHour() int {
+	return o.ScheduleHour
+}
+
 func (o *OpenEyeScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
-	c := getCollector()
 
-	c.OnScraped(func(r *colly.Response) {
-		enc := json.NewEncoder(os.Stdout)
-		enc.SetIndent("", "  ")
-		enc.Encode(jobs)
+	// Get the engine from the base scraper
+	scraperEngine, ok := o.Engine.(engine.ScraperEngine)
+	if !ok {
+		log.Printf("Error: Engine is not properly configured for %s", o.Name)
+		return jobs
+	}
+
+	scraperEngine.OnScraped(func() {
+		if err := utils.SaveJobsToJSON(jobs, o.Name, "scraper_output"); err != nil {
+			log.Printf("Error saving jobs to JSON for %s: %v", o.Name, err)
+		} else {
+			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), o.Name)
+		}
 	})
 
-	c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
+	scraperEngine.OnHTML("div.job-posts--table tr.job-post a", func(e engine.Element) {
 		j := &types.ScrapedJob{}
-		url := h.Attr("href")
-		selection := h.DOM
+		url := e.Attr("href")
 
 		job_id := strings.TrimPrefix(url, jobUrlPrefix)
-		title := utils.TrimSpaces(selection.Find("p.body.body--medium").Text())
+		titleElement := e.Find("p.body.body--medium")
+		title := ""
+		if titleElement != nil {
+			title = utils.TrimSpaces(titleElement.Text())
+		}
 
 		j.JobId = job_id
 		j.Url = url
 		j.Title = title
 
-		getJobDetails(j)
+		getJobDetails(j, scraperEngine)
 		jobs = append(jobs, *j)
 	})
 
-	c.Visit(scrapeUrl)
-	log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+	if err := scraperEngine.Visit(scrapeUrl); err != nil {
+		log.Printf("Error visiting %s: %v", scrapeUrl, err)
+	}
+
+	log.Printf("\n-----\n\nScraping completed for %s\n\n", o.Name)
 	return jobs
 }
 
-func getJobDetails(j *types.ScrapedJob) {
-	c := getCollector()
+func getJobDetails(j *types.ScrapedJob, scraperEngine engine.ScraperEngine) {
+	// Create a new engine for job details
+	factory := engine.NewEngineFactory()
+	config := types.ScraperConfig{
+		BaseURL: "https://openeye.net/careers",
+	}
 
-	c.OnHTML("h1.section-header", func(h *colly.HTMLElement) {
-		if j.Title == "" || strings.EqualFold(j.Title, h.Text) {
-			j.Title = h.Text
+	detailEngine, err := factory.CreateEngine(engine.EngineColly, config)
+	if err != nil {
+		log.Printf("Error creating detail engine: %v", err)
+		return
+	}
+
+	detailEngine.OnHTML("h1.section-header", func(e engine.Element) {
+		if j.Title == "" || strings.EqualFold(j.Title, e.Text()) {
+			j.Title = e.Text()
 		}
 	})
 
-	c.OnHTML("div.job__location", func(h *colly.HTMLElement) {
-		location := h.DOM.Text()
+	detailEngine.OnHTML("div.job__location", func(e engine.Element) {
+		location := e.Text()
 		j.City, j.State, _ = strings.Cut(location, ", ")
 		j.City = utils.TrimSpaces(j.City)
 		j.State = utils.TrimSpaces(j.State)
 	})
 
-	c.OnHTML("div.job__description", func(h *colly.HTMLElement) {
-		j.Description = h.DOM.Text()
+	detailEngine.OnHTML("div.job__description", func(e engine.Element) {
+		j.Description = e.Text()
 	})
 
-	c.Visit(j.Url)
+	if err := detailEngine.Visit(j.Url); err != nil {
+		log.Printf("Error visiting job details %s: %v", j.Url, err)
+	}
+
+	// Close the detail engine
+	detailEngine.Close()
 }
 
-func getCollector() *colly.Collector {
-	c := colly.NewCollector(
-		colly.AllowedDomains("job-boards.greenhouse.io"),
-		colly.CacheDir("./scraper_cache"),
-	)
-
-	c.OnRequest(func(r *colly.Request) {
-		r.Headers.Set("Accept-Language", "en-US")
-		r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.10 Safari/605.1.1")
-		log.Printf("visiting: %s\n", r.URL.String())
-	})
-
-	c.OnError(func(r *colly.Response, e error) {
-		log.Printf("Error while scraping: %s\n", e.Error())
-	})
-
-	return c
+func (o *OpenEyeScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(o.Jobs, o.Name, outputDir)
 }

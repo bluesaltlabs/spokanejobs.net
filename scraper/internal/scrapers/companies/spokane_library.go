@@ -1,6 +1,9 @@
 package companies
 
 import (
+	"encoding/json"
+	"log"
+	"os"
 	"strings"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
@@ -27,6 +30,20 @@ func NewSpokaneLibraryScraper() *SpokaneLibraryScraper {
 func (scraper *SpokaneLibraryScraper) ScrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
+
+	c.OnScraped(func(r *colly.Response) {
+		// Save to file instead of just printing to stdout
+		if err := utils.SaveJobsToJSON(jobs, scraper.Name, "scraper_output"); err != nil {
+			log.Printf("Error saving jobs to JSON for %s: %v", scraper.Name, err)
+		} else {
+			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), scraper.Name)
+		}
+
+		// Also print to stdout for backward compatibility
+		enc := json.NewEncoder(os.Stdout)
+		enc.SetIndent("", "  ")
+		enc.Encode(jobs)
+	})
 
 	c.OnHTML(".job-posting", func(h *colly.HTMLElement) {
 		title := strings.TrimSpace(h.DOM.Find(".job-title").Text())
@@ -65,4 +82,8 @@ func (scraper *SpokaneLibraryScraper) ScrapedJobs() []types.ScrapedJob {
 
 func (scraper *SpokaneLibraryScraper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden if needed
+}
+
+func (scraper *SpokaneLibraryScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
 }

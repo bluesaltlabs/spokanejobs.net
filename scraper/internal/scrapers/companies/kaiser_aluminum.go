@@ -2,9 +2,9 @@ package companies
 
 import (
 	"log"
-	"strings"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 	"github.com/gocolly/colly"
 )
 
@@ -46,6 +46,16 @@ func (k *KaiserAluminumScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
 	collector := k.getCollector()
 
+	collector.OnScraped(func(r *colly.Response) {
+		// Save to file instead of just printing to stdout
+		if err := utils.SaveJobsToJSON(jobs, k.Name, "scraper_output"); err != nil {
+			log.Printf("Error saving jobs to JSON for %s: %v", k.Name, err)
+		} else {
+			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), k.Name)
+		}
+		// Removed: debug print to stdout
+	})
+
 	// Process Job Line - TODO: Add proper selectors
 	collector.OnHTML("", func(h *colly.HTMLElement) {
 		// todo: implement job extraction
@@ -75,6 +85,10 @@ func (k *KaiserAluminumScraper) getCollector() *colly.Collector {
 	return collector
 }
 
-func (k *KaiserAluminumScraper) trimSpaces(s string) string {
-	return strings.TrimSpace(s)
+func (k *KaiserAluminumScraper) GetScheduleHour() int {
+	return k.ScheduleHour
+}
+
+func (k *KaiserAluminumScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(k.Jobs, k.Name, outputDir)
 }
