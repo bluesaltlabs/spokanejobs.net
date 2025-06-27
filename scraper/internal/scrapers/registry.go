@@ -2,6 +2,7 @@ package scrapers
 
 import (
 	"log"
+
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/avista"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/city_of_spokane"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/codespeed"
@@ -35,107 +36,57 @@ import (
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/winco"
 )
 
-// Run all registered scrapers
-func RunAll() {
-	avista.ScrapeJobs()
-	city_of_spokane.ScrapeJobs()
-	codespeed.ScrapeJobs()
-	cvsd.ScrapeJobs()
-	egnyte.ScrapeJobs()
-	enhanced_software_products.ScrapeJobs()
-	f5.ScrapeJobs()
-	gestalt_diagnostics.ScrapeJobs()
-	gravity_jack.ScrapeJobs()
-	huntwood.ScrapeJobs()
-	intellitect.ScrapeJobs()
-	itron.ScrapeJobs()
-	kaiser_aluminum.ScrapeJobs()
-	limelyte.ScrapeJobs()
-	numerica.ScrapeJobs()
-	openeye.ScrapeJobs()
-	paytrace.ScrapeJobs()
-	providence.ScrapeJobs()
-	risklens.ScrapeJobs()
-	scld.ScrapeJobs()
-	sel.ScrapeJobs()
-	spokane_computer.ScrapeJobs()
-	spokane_library.ScrapeJobs()
-	sps.ScrapeJobs()
-	stcu.ScrapeJobs()
-	synergisticit.ScrapeJobs()
-	treasury4.ScrapeJobs()
-	two_barrels.ScrapeJobs()
-	urm.ScrapeJobs()
-	wagstaff.ScrapeJobs()
-	winco.ScrapeJobs()
+// scraperFuncs maps company slugs to their ScrapeJobs functions
+var scraperFuncs = map[string]func(){
+	"avista":                   func() { avista.ScrapeJobs() },
+	"city_of_spokane":          func() { city_of_spokane.ScrapeJobs() },
+	"codespeed":                func() { codespeed.ScrapeJobs() },
+	"cvsd":                     func() { cvsd.ScrapeJobs() },
+	"egnyte":                   func() { egnyte.ScrapeJobs() },
+	"enhanced_software_products": func() { enhanced_software_products.ScrapeJobs() },
+	"f5":                       func() { f5.ScrapeJobs() },
+	"gestalt_diagnostics":      func() { gestalt_diagnostics.ScrapeJobs() },
+	"gravity_jack":             func() { gravity_jack.ScrapeJobs() },
+	"huntwood":                 func() { huntwood.ScrapeJobs() },
+	"intellitect":              func() { intellitect.ScrapeJobs() },
+	"itron":                    func() { itron.ScrapeJobs() },
+	"kaiser_aluminum":          func() { kaiser_aluminum.ScrapeJobs() },
+	"limelyte":                 func() { limelyte.ScrapeJobs() },
+	"numerica":                 func() { numerica.ScrapeJobs() },
+	"openeye":                  func() { openeye.ScrapeJobs() },
+	"paytrace":                 func() { paytrace.ScrapeJobs() },
+	"providence":               func() { providence.ScrapeJobs() },
+	"risklens":                 func() { risklens.ScrapeJobs() },
+	"scld":                     func() { scld.ScrapeJobs() },
+	"sel":                      func() { sel.ScrapeJobs() },
+	"spokane_computer":         func() { spokane_computer.ScrapeJobs() },
+	"spokane_library":          func() { spokane_library.ScrapeJobs() },
+	"sps":                      func() { sps.ScrapeJobs() },
+	"stcu":                     func() { stcu.ScrapeJobs() },
+	"synergisticit":            func() { synergisticit.ScrapeJobs() },
+	"treasury4":                func() { treasury4.ScrapeJobs() },
+	"two_barrels":              func() { two_barrels.ScrapeJobs() },
+	"urm":                      func() { urm.ScrapeJobs() },
+	"wagstaff":                 func() { wagstaff.ScrapeJobs() },
+	"winco":                    func() { winco.ScrapeJobs() },
 }
 
+// RunAll runs all registered scrapers using CompanySlugs
+func RunAll() {
+	for _, slug := range CompanySlugs {
+		if fn, ok := scraperFuncs[slug]; ok {
+			fn()
+		} else {
+			log.Printf("Scraper for %s not found\n", slug)
+		}
+	}
+}
+
+// RunScraper runs a single scraper by slug
 func RunScraper(name string) {
-	switch name {
-		case "avista":
-			avista.ScrapeJobs()
-		case "city_of_spokane":
-			city_of_spokane.ScrapeJobs()
-		case "codespeed":
-			codespeed.ScrapeJobs()
-		case "cvsd":
-			cvsd.ScrapeJobs()
-		case "egnyte":
-			egnyte.ScrapeJobs()
-		case "enhanced_software_products":
-			enhanced_software_products.ScrapeJobs()
-		case "f5":
-			f5.ScrapeJobs()
-		case "gestalt_diagnostics":
-			gestalt_diagnostics.ScrapeJobs()
-		case "gravity_jack":
-			gravity_jack.ScrapeJobs()
-		case "huntwood":
-			huntwood.ScrapeJobs()
-		case "intellitect":
-			intellitect.ScrapeJobs()
-		case "itron":
-			itron.ScrapeJobs()
-		case "kaiser_aluminum":
-			kaiser_aluminum.ScrapeJobs()
-		case "limelyte":
-			limelyte.ScrapeJobs()
-		case "numerica":
-			numerica.ScrapeJobs()
-		case "openeye":
-			openeye.ScrapeJobs()
-		case "paytrace":
-			paytrace.ScrapeJobs()
-		case "providence":
-			providence.ScrapeJobs()
-		case "risklens":
-			risklens.ScrapeJobs()
-		case "scld":
-			scld.ScrapeJobs()
-		case "sel":
-			sel.ScrapeJobs()
-		case "spokane_computer":
-			spokane_computer.ScrapeJobs()
-		case "spokane_library":
-			spokane_library.ScrapeJobs()
-		case "sps":
-			sps.ScrapeJobs()
-		case "stcu":
-			stcu.ScrapeJobs()
-		case "synergisticit":
-			synergisticit.ScrapeJobs()
-		case "treasury4":
-			treasury4.ScrapeJobs()
-		case "two_barrels":
-			two_barrels.ScrapeJobs()
-		case "urm":
-			urm.ScrapeJobs()
-		case "wagstaff":
-			wagstaff.ScrapeJobs()
-		case "winco":
-			winco.ScrapeJobs()
-		default:
-			//log.Errorf("Scraper %s not found\n", name)
-			log.Printf("Scraper %s not found\n", name)
+	if fn, ok := scraperFuncs[name]; ok {
+		fn()
+	} else {
+		log.Printf("Scraper %s not found\n", name)
 	}
 }
