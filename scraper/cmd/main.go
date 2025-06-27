@@ -9,12 +9,38 @@ import (
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scheduler"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	fmt.Printf("=== Scraper Init ===\n")
 	now := time.Now()
 	fmt.Printf("Current time: %v\n", now)
+
+	// Load environment variables from .env file if it exists
+	if err := godotenv.Load(); err != nil {
+		// Try .env.local for local development
+		if err := godotenv.Load(".env.local"); err != nil {
+			log.Printf("No .env or .env.local file found, using system environment variables")
+		} else {
+			log.Printf("Loaded environment variables from .env.local")
+		}
+	} else {
+		log.Printf("Loaded environment variables from .env")
+	}
+
+	// Log environment variables for debugging
+	if dataRepoPath := os.Getenv("DATA_REPO_PATH"); dataRepoPath != "" {
+		log.Printf("DATA_REPO_PATH: %s", dataRepoPath)
+	} else {
+		log.Printf("DATA_REPO_PATH not set")
+	}
+
+	if dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR"); dataRepoSubdir != "" {
+		log.Printf("DATA_REPO_SUBDIR: %s", dataRepoSubdir)
+	} else {
+		log.Printf("DATA_REPO_SUBDIR not set")
+	}
 
 	// Define command line flags
 	runAll := flag.Bool("all", false, "Run all scrapers")
