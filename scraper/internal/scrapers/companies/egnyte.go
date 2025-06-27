@@ -49,7 +49,7 @@ func (e *EgnyteScraper) scrapeJobs() []types.ScrapedJob {
 
 	c.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, e.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, e.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", e.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), e.Name)
@@ -87,8 +87,4 @@ func (e *EgnyteScraper) getCollector() *colly.Collector {
 
 func (e *EgnyteScraper) GetScheduleHour() int {
 	return e.ScheduleHour
-}
-
-func (e *EgnyteScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(e.Jobs, e.Name, outputDir)
 }

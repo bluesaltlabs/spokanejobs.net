@@ -49,7 +49,7 @@ func (h *HuntwoodScraper) scrapeJobs() []types.ScrapedJob {
 
 	collector.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, h.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, h.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", h.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), h.Name)
@@ -92,8 +92,4 @@ func (h *HuntwoodScraper) trimSpaces(s string) string {
 
 func (h *HuntwoodScraper) GetScheduleHour() int {
 	return h.ScheduleHour
-}
-
-func (h *HuntwoodScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(h.Jobs, h.Name, outputDir)
 }

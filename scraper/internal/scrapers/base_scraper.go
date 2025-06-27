@@ -45,8 +45,8 @@ func (b *BaseScraperWrapper) ScrapeJobDetails(job *types.ScrapedJob) {
 }
 
 // SaveOutput saves the scraped jobs to a JSON file
-func (b *BaseScraperWrapper) SaveOutput(outputDir string) error {
-	err := utils.SaveJobsToJSON(b.Jobs, b.Name, outputDir)
+func (b *BaseScraperWrapper) SaveOutput() error {
+	err := utils.SaveJobsToJSON(b.Jobs, b.Name)
 
 	// Optionally sync to data repo if configured
 	dataRepoPath := os.Getenv("DATA_REPO_PATH")
@@ -78,7 +78,7 @@ func (b *BaseScraperWrapper) scrapeJobs() []types.ScrapedJob {
 	log.Printf("Base scraper scrapeJobs called for %s - this should be overridden by individual scrapers", b.Name)
 
 	// Save jobs to JSON file
-	if err := utils.SaveJobsToJSON(jobs, b.Name, "scraper_output"); err != nil {
+	if err := utils.SaveJobsToJSON(jobs, b.Name); err != nil {
 		log.Printf("Error saving jobs to JSON for %s: %v", b.Name, err)
 	} else {
 		log.Printf("Saved %d jobs to JSON file for %s", len(jobs), b.Name)

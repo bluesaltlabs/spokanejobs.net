@@ -45,9 +45,7 @@ func (n *NumericaScraper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden if needed
 }
 
-func (n *NumericaScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(n.Jobs, n.Name, outputDir)
-}
+
 
 func (n *NumericaScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
@@ -55,7 +53,7 @@ func (n *NumericaScraper) scrapeJobs() []types.ScrapedJob {
 
 	c.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, n.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, n.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", n.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), n.Name)

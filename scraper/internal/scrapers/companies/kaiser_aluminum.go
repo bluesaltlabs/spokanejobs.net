@@ -48,7 +48,7 @@ func (k *KaiserAluminumScraper) scrapeJobs() []types.ScrapedJob {
 
 	collector.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, k.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, k.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", k.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), k.Name)
@@ -87,8 +87,4 @@ func (k *KaiserAluminumScraper) getCollector() *colly.Collector {
 
 func (k *KaiserAluminumScraper) GetScheduleHour() int {
 	return k.ScheduleHour
-}
-
-func (k *KaiserAluminumScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(k.Jobs, k.Name, outputDir)
 }

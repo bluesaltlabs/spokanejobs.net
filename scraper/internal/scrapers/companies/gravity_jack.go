@@ -45,9 +45,6 @@ func (g *GravityJackScraper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden if needed
 }
 
-func (g *GravityJackScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(g.Jobs, g.Name, outputDir)
-}
 
 func (g *GravityJackScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
@@ -55,7 +52,7 @@ func (g *GravityJackScraper) scrapeJobs() []types.ScrapedJob {
 
 	c.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, g.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, g.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", g.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), g.Name)

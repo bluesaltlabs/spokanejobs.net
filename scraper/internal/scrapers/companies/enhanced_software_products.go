@@ -46,9 +46,6 @@ func (e *EnhancedSoftwareProductsScraper) ScrapeJobDetails(job *types.ScrapedJob
 	// Default implementation - can be overridden if needed
 }
 
-func (e *EnhancedSoftwareProductsScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(e.Jobs, e.Name, outputDir)
-}
 
 func (e *EnhancedSoftwareProductsScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
@@ -56,7 +53,7 @@ func (e *EnhancedSoftwareProductsScraper) scrapeJobs() []types.ScrapedJob {
 
 	collector.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, e.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, e.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", e.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), e.Name)

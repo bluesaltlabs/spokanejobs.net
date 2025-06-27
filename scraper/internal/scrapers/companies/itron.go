@@ -42,9 +42,6 @@ func (scraper *ItronScraper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden if needed
 }
 
-func (scraper *ItronScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
-}
 
 func (scraper *ItronScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
@@ -52,7 +49,7 @@ func (scraper *ItronScraper) scrapeJobs() []types.ScrapedJob {
 
 	c.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, scraper.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, scraper.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", scraper.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), scraper.Name)

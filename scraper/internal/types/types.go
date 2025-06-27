@@ -1,5 +1,12 @@
 package types
 
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+)
+
 type ScrapedJob struct {
 	JobId       string `json:"job_id"`
 	Title       string `json:"title"`
@@ -7,6 +14,7 @@ type ScrapedJob struct {
 	City        string `json:"city"`
 	State       string `json:"state"`
 	Url         string `json:"url"`
+	Company     string `json:"company"`
 	// todo: needs more attributes, need to state which ones are optional, etc.
 }
 
@@ -15,7 +23,7 @@ type Scraper interface {
 	GetScheduleHour() int
 	ScrapedJobs() []ScrapedJob
 	ScrapeJobDetails(job *ScrapedJob)
-	SaveOutput(outputDir string) error
+	SaveOutput() error
 	// SetEngine is optional - scrapers can implement it if they want to use the new engine interface
 	// Default implementation is provided in BaseScraper
 }
@@ -43,4 +51,35 @@ func (b *BaseScraper) GetScheduleHour() int {
 // SetEngine provides a default implementation for the optional SetEngine method
 func (b *BaseScraper) SetEngine(engine interface{}) {
 	b.Engine = engine
+}
+
+// SaveOutput saves the scraped jobs to a JSON file
+func (b *BaseScraper) SaveOutput() error {
+	// Create companies directory within the output directory
+	companiesDir := filepath.Join("scraper_output/companies")
+	if err := os.MkdirAll(companiesDir, 0755); err != nil {
+		return fmt.Errorf("failed to create companies directory: %w", err)
+	}
+
+	// Create filename without timestamp for consistency
+	filename := fmt.Sprintf("%s.json", b.Name)
+	filepath := filepath.Join(companiesDir, filename)
+
+	// Create the file
+	file, err := os.Create(filepath)
+	if err != nil {
+		return fmt.Errorf("failed to create file %s: %w", filepath, err)
+	}
+	defer file.Close()
+
+	// Create JSON encoder with indentation
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+
+	// Encode the jobs
+	if err := encoder.Encode(b.Jobs); err != nil {
+		return fmt.Errorf("failed to encode JSON: %w", err)
+	}
+
+	return nil
 }
