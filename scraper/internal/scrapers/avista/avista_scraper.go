@@ -77,7 +77,3 @@ func getCollector() colly.Collector {
 
 	return *c
 }
-
-func trimSpaces(s string) string {
-  return strings.TrimSpace(s)
-}

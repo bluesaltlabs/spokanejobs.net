@@ -2,12 +2,12 @@
 package egnyte
 
 import (
-		"os"
-		"encoding/json"
-		"log"
-		"strings"
-		"github.com/gocolly/colly"
-		"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"encoding/json"
+	"log"
+	"os"
+
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"github.com/gocolly/colly"
 )
 
 // Set the base URL to scrape
@@ -61,8 +61,4 @@ func getCollector() colly.Collector {
   })
 
 			return *c
-}
-
-func trimSpaces(s string) string {
-  return strings.TrimSpace(s)
 }

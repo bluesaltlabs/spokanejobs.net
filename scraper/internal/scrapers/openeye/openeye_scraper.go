@@ -2,12 +2,14 @@
 package openeye
 
 import (
-	"os"
 	"encoding/json"
 	"log"
+	"os"
 	"strings"
-	"github.com/gocolly/colly"
+
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
+	"github.com/gocolly/colly"
 )
 
 // Set the base URL to scrape
@@ -39,7 +41,7 @@ func ScrapeJobs() []*types.ScrapedJob {
 
     // Retrieve attributes available
     job_id := strings.TrimPrefix(url, JobUrlPrefix)
-    title := trimSpaces(selection.Find("p.body.body--medium").Text())
+    title := utils.TrimSpaces(selection.Find("p.body.body--medium").Text())
 
     // Set the attribute values
     j.JobId = job_id
@@ -80,8 +82,8 @@ func getJobDetails(j *types.ScrapedJob) {
 		location := h.DOM.Text()
 
 		j.City, j.State, _ = strings.Cut(location, ", ")
-		j.City = trimSpaces(j.City)
-		j.State = trimSpaces(j.State)
+		j.City = utils.TrimSpaces(j.City)
+		j.State = utils.TrimSpaces(j.State)
 
 	})
 
@@ -117,9 +119,4 @@ func getCollector() colly.Collector {
   })
 
 	return *c
-}
-
-// todo: move this to a helper function
-func trimSpaces(s string) string {
-  return strings.TrimSpace(s)
 }

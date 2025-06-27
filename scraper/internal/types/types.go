@@ -1,6 +1,5 @@
 package types
 
-
 type ScrapedJob struct {
 	JobId 			string `json:"job_id"`
 	Title 			string `json:"title"`
@@ -9,4 +8,10 @@ type ScrapedJob struct {
 	State 			string `json:"state"`
 	Url 				string `json:"url"`
 	// todo: needs more attributes, need to state which ones are optional, etc.
+}
+
+type Scraper interface {
+	GetName() 			string
+  ScrapedJobs() 	[]ScrapedJob
+  ScrapeJobDetails(job *ScrapedJob)
 }
