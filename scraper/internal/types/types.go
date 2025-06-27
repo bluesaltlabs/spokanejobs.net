@@ -15,10 +15,6 @@ type ScrapedJob struct {
 	State       string `json:"state"`
 	Url         string `json:"url"`
 	Company     string `json:"company"`
-	// New fields for enhanced content
-	RichDescription string `json:"rich_description,omitempty"`
-	PostingDate     string `json:"posting_date,omitempty"`
-	SalaryRange     string `json:"salary_range,omitempty"`
 	// todo: needs more attributes, need to state which ones are optional, etc.
 }
 
