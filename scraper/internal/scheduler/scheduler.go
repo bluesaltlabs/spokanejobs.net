@@ -28,7 +28,12 @@ func RunScheduledScrapers() error {
 	var scrapersToRun []string
 	for _, scraper := range config.Scrapers {
 		if scraper.Hour == currentHour {
-			scrapersToRun = append(scrapersToRun, scraper.Slug)
+			// Validate that the scraper exists
+			if scrapers.IsValidCompanySlug(scraper.Slug) {
+				scrapersToRun = append(scrapersToRun, scraper.Slug)
+			} else {
+				log.Printf("Warning: Invalid scraper slug '%s' in configuration, skipping", scraper.Slug)
+			}
 		}
 	}
 

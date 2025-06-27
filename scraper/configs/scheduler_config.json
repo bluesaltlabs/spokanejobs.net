@@ -2,99 +2,99 @@
   "scrapers": [
     {
       "slug": "avista",
-      "hour": 9
+      "hour": 0
     },
     {
-      "slug": "numerica",
-      "hour": 14
+      "slug": "city_of_spokane",
+      "hour": 1
+    },
+    {
+      "slug": "codespeed",
+      "hour": 2
+    },
+    {
+      "slug": "cvsd",
+      "hour": 3
+    },
+    {
+      "slug": "egnyte",
+      "hour": 4
+    },
+    {
+      "slug": "enhanced_software_products",
+      "hour": 5
     },
     {
       "slug": "f5",
       "hour": 6
     },
     {
-      "slug": "city_of_spokane",
-      "hour": 8
-    },
-    {
-      "slug": "codespeed",
-      "hour": 10
-    },
-    {
-      "slug": "cvsd",
-      "hour": 11
-    },
-    {
-      "slug": "egnyte",
-      "hour": 12
-    },
-    {
-      "slug": "enhanced_software_products",
-      "hour": 13
-    },
-    {
       "slug": "gestalt_diagnostics",
-      "hour": 15
+      "hour": 7
     },
     {
       "slug": "gravity_jack",
-      "hour": 16
+      "hour": 8
     },
     {
       "slug": "huntwood",
-      "hour": 17
+      "hour": 9
     },
     {
       "slug": "intellitect",
-      "hour": 18
+      "hour": 10
     },
     {
       "slug": "itron",
-      "hour": 19
+      "hour": 11
     },
     {
       "slug": "kaiser_aluminum",
-      "hour": 20
+      "hour": 12
     },
     {
       "slug": "limelyte",
       "hour": 21
     },
     {
+      "slug": "numerica",
+      "hour": 14
+    },
+    {
       "slug": "openeye",
-      "hour": 22
+      "hour": 15
     },
     {
       "slug": "paytrace",
-      "hour": 23
+      "hour": 16
     },
     {
       "slug": "providence",
-      "hour": 0
+      "hour": 17
     },
     {
       "slug": "risklens",
-      "hour": 1
+      "hour": 18
     },
     {
       "slug": "scld",
-      "hour": 2
+      "hour": 19
     },
     {
       "slug": "sel",
-      "hour": 3
+      "hour": 20
     },
     {
       "slug": "spokane_computer",
-      "hour": 4
+      "hour": 21
     },
     {
       "slug": "spokane_library",
-      "hour": 5
+      "hour": 22
     },
     {
       "slug": "sps",
-      "hour": 7
+      "hour": 23
     },
     {
       "slug": "stcu",
@@ -125,4 +125,4 @@
       "hour": 6
     }
   ]
-} 
+}
