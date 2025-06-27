@@ -3,10 +3,10 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
@@ -17,16 +17,16 @@ func TrimSpaces(s string) string {
 }
 
 // SaveJobsToJSON saves scraped jobs to a JSON file
-func SaveJobsToJSON(jobs []types.ScrapedJob, scraperName, outputDir string) error {
-	// Create output directory if it doesn't exist
-	if err := os.MkdirAll(outputDir, 0755); err != nil {
-		return fmt.Errorf("failed to create output directory: %w", err)
+func SaveJobsToJSON(jobs []types.ScrapedJob, scraperName string) error {
+	// Create companies directory within the output directory
+	companiesDir := filepath.Join("scraper_output/companies")
+	if err := os.MkdirAll(companiesDir, 0755); err != nil {
+		return fmt.Errorf("failed to create companies directory: %w", err)
 	}
 
-	// Create filename with timestamp
-	timestamp := time.Now().Format("yyyy-mm-dd HH:mm:ss")
-	filename := fmt.Sprintf("%s_%s.json", scraperName, timestamp)
-	filepath := filepath.Join(outputDir, filename)
+	// Create filename without timestamp for consistency
+	filename := fmt.Sprintf("%s.json", scraperName)
+	filepath := filepath.Join(companiesDir, filename)
 
 	// Create the file
 	file, err := os.Create(filepath)
@@ -44,5 +44,74 @@ func SaveJobsToJSON(jobs []types.ScrapedJob, scraperName, outputDir string) erro
 		return fmt.Errorf("failed to encode JSON: %w", err)
 	}
 
+	return nil
+}
+
+// ConsolidateJobsToJSON reads all company JSON files and combines them into a single jobs.json file
+func ConsolidateJobsToJSON() error {
+	companiesDir := filepath.Join("companies")
+
+	// Check if companies directory exists
+	if _, err := os.Stat(companiesDir); os.IsNotExist(err) {
+		return fmt.Errorf("companies directory does not exist: %s", companiesDir)
+	}
+
+	// Read all JSON files in the companies directory
+	files, err := os.ReadDir(companiesDir)
+	if err != nil {
+		return fmt.Errorf("failed to read companies directory: %w", err)
+	}
+
+	allJobs := make([]types.ScrapedJob, 0)
+
+	// Process each company file
+	for _, file := range files {
+		if file.IsDir() || !strings.HasSuffix(file.Name(), ".json") {
+			continue
+		}
+
+		filePath := filepath.Join(companiesDir, file.Name())
+		fileData, err := os.ReadFile(filePath)
+		if err != nil {
+			log.Printf("Warning: failed to read file %s: %v", filePath, err)
+			continue
+		}
+
+		var companyJobs []types.ScrapedJob
+		if err := json.Unmarshal(fileData, &companyJobs); err != nil {
+			log.Printf("Warning: failed to parse JSON from %s: %v", filePath, err)
+			continue
+		}
+
+		// Add company name to each job if not already present
+		companyName := strings.TrimSuffix(file.Name(), ".json")
+		for i := range companyJobs {
+			if companyJobs[i].Company == "" {
+				companyJobs[i].Company = companyName
+			}
+		}
+
+		allJobs = append(allJobs, companyJobs...)
+		log.Printf("Added %d jobs from %s", len(companyJobs), file.Name())
+	}
+
+	// Create the consolidated jobs.json file
+	jobsFilePath := filepath.Join("jobs.json")
+	file, err := os.Create(jobsFilePath)
+	if err != nil {
+		return fmt.Errorf("failed to create jobs.json file: %w", err)
+	}
+	defer file.Close()
+
+	// Create JSON encoder with indentation
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+
+	// Encode all jobs
+	if err := encoder.Encode(allJobs); err != nil {
+		return fmt.Errorf("failed to encode consolidated jobs JSON: %w", err)
+	}
+
+	log.Printf("Successfully consolidated %d total jobs into %s", len(allJobs), jobsFilePath)
 	return nil
 }

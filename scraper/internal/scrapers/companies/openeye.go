@@ -2,11 +2,9 @@ package companies
 
 import (
 	"log"
-	"os"
 	"strings"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/engine"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/git"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 )
@@ -76,7 +74,7 @@ func (o *OpenEyeScraper) scrapeJobs() []types.ScrapedJob {
 	}
 
 	scraperEngine.OnScraped(func() {
-		if err := utils.SaveJobsToJSON(jobs, o.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, o.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", o.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), o.Name)
@@ -146,23 +144,4 @@ func getJobDetails(j *types.ScrapedJob, scraperEngine engine.ScraperEngine) {
 
 	// Close the detail engine
 	detailEngine.Close()
-}
-
-func (o *OpenEyeScraper) SaveOutput(outputDir string) error {
-	err := utils.SaveJobsToJSON(o.Jobs, o.Name, outputDir)
-
-	// Git sync logic
-	dataRepoPath := os.Getenv("DATA_REPO_PATH")
-	dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR")
-	if dataRepoPath != "" {
-		gs := git.NewGitSync(dataRepoPath, o.Name, dataRepoSubdir)
-		err2 := gs.SyncJobs(o.Jobs)
-		if err2 != nil {
-			log.Printf("[GitSync] Failed to sync jobs for %s: %v", o.Name, err2)
-		} else {
-			log.Printf("[GitSync] Successfully synced jobs for %s to data repo", o.Name)
-		}
-	}
-
-	return err
 }

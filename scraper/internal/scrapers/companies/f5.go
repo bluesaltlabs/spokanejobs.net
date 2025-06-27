@@ -45,9 +45,6 @@ func (f *F5Scraper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden if needed
 }
 
-func (f *F5Scraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(f.Jobs, f.Name, outputDir)
-}
 
 func (f *F5Scraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
@@ -55,7 +52,7 @@ func (f *F5Scraper) scrapeJobs() []types.ScrapedJob {
 
 	c.OnScraped(func(r *colly.Response) {
 		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, f.Name, "scraper_output"); err != nil {
+		if err := utils.SaveJobsToJSON(jobs, f.Name); err != nil {
 			log.Printf("Error saving jobs to JSON for %s: %v", f.Name, err)
 		} else {
 			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), f.Name)

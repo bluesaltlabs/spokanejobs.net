@@ -5,6 +5,7 @@ import (
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/companies"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 )
 
 // scraperInstances holds all active scraper instances
@@ -131,11 +132,18 @@ func RunAll() {
 		_ = scraper.ScrapedJobs()
 
 		// Save output to JSON file
-		if err := scraper.SaveOutput("scraper_output"); err != nil {
+		if err := scraper.SaveOutput(); err != nil {
 			log.Printf("Error saving output for %s: %v", scraper.GetName(), err)
 		}
 
 		log.Printf("Completed scraper: %s", scraper.GetName())
+	}
+
+	// Consolidate all company jobs into a single jobs.json file
+	if err := utils.ConsolidateJobsToJSON(); err != nil {
+		log.Printf("Error consolidating jobs: %v", err)
+	} else {
+		log.Printf("Successfully consolidated all jobs into jobs.json")
 	}
 }
 
@@ -153,7 +161,7 @@ func RunScraper(name string) {
 		_ = scraper.ScrapedJobs()
 
 		// Save output to JSON file
-		if err := scraper.SaveOutput("scraper_output"); err != nil {
+		if err := scraper.SaveOutput(); err != nil {
 			log.Printf("Error saving output for %s: %v", name, err)
 		}
 

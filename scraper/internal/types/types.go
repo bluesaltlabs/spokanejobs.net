@@ -7,6 +7,7 @@ type ScrapedJob struct {
 	City        string `json:"city"`
 	State       string `json:"state"`
 	Url         string `json:"url"`
+	Company     string `json:"company"`
 	// todo: needs more attributes, need to state which ones are optional, etc.
 }
 
@@ -15,7 +16,7 @@ type Scraper interface {
 	GetScheduleHour() int
 	ScrapedJobs() []ScrapedJob
 	ScrapeJobDetails(job *ScrapedJob)
-	SaveOutput(outputDir string) error
+	SaveOutput() error
 	// SetEngine is optional - scrapers can implement it if they want to use the new engine interface
 	// Default implementation is provided in BaseScraper
 }

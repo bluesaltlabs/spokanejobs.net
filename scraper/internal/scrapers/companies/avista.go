@@ -57,10 +57,6 @@ func (a *AvistaScraper) ScrapeJobDetails(job *types.ScrapedJob) {
 	// Default implementation - can be overridden if needed
 }
 
-func (a *AvistaScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(a.Jobs, a.Name, outputDir)
-}
-
 func (a *AvistaScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
 
@@ -124,7 +120,7 @@ func (a *AvistaScraper) scrapeJobs() []types.ScrapedJob {
 	}
 
 	// Save to file
-	if err := utils.SaveJobsToJSON(jobs, a.Name, "scraper_output"); err != nil {
+	if err := utils.SaveJobsToJSON(jobs, a.Name); err != nil {
 		log.Printf("Error saving jobs to JSON for %s: %v", a.Name, err)
 	} else {
 		log.Printf("Saved %d jobs to JSON file for %s", len(jobs), a.Name)
