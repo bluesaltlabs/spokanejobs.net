@@ -5,21 +5,16 @@ import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { LocationIcon } from '@/components/icons'
 
-// setup
 const jobsStore = useJobs()
 
-// Fetch jobs on component mount
 onMounted(() => {
   jobsStore.fetchJobs()
 })
 
 const loading = computed(() => jobsStore.loading)
 
-// Helper function to format company name
 function formatCompanyName(companySlug) {
   if (!companySlug) return 'Unknown Company'
-  
-  // Convert slug to readable name
   return companySlug
     .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -30,11 +25,11 @@ function formatCompanyName(companySlug) {
 <template>
   <Container>
     <h1>Jobs</h1>
-    <hr class="my-4" />
+    <hr class="divider" />
 
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading jobs...</div>
-      <table class="jobs-table">
+      <table class="jobs-table desktop-only">
         <thead>
           <tr>
             <th>Title</th>
@@ -43,20 +38,25 @@ function formatCompanyName(companySlug) {
           </tr>
         </thead>
         <tbody>
-          <SkeletonTableRow
-            v-for="i in 8"
-            :key="`skeleton-${i}`"
-            :columns="3"
-            :column-widths="['40%', '30%', '30%']"
-          />
+          <SkeletonTableRow v-for="i in 8" :key="`skeleton-${i}`" :columns="3" :column-widths="['40%', '30%', '30%']" />
         </tbody>
       </table>
+      <div class="jobs-grid mobile-only">
+        <div v-for="i in 6" :key="`skeleton-card-${i}`" class="job-card skeleton-card">
+          <div class="job-header">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-company"></div>
+          </div>
+          <div class="job-meta">
+            <div class="skeleton-location"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div v-else-if="jobsStore.sortedJobs.length > 0" class="jobs-results">
       <div class="results-count">{{ jobsStore.countJobs }} jobs found</div>
-      
-      <table class="jobs-table">
+      <table class="jobs-table desktop-only">
         <thead>
           <tr>
             <th>Title</th>
@@ -65,16 +65,9 @@ function formatCompanyName(companySlug) {
           </tr>
         </thead>
         <tbody>
-          <tr 
-            v-for="job in jobsStore.sortedJobs" 
-            :key="job.id || job.job_id"
-            class="job-row"
-          >
+          <tr v-for="job in jobsStore.sortedJobs" :key="job.id || job.job_id" class="job-row">
             <td class="job-title-cell">
-              <router-link 
-                :to="{ name: 'job-detail', params: { id: job.id || job.job_id } }"
-                class="job-title-link"
-              >
+              <router-link :to="{ name: 'job-detail', params: { id: job.id || job.job_id } }" class="job-title-link">
                 {{ job.title }}
               </router-link>
             </td>
@@ -90,6 +83,27 @@ function formatCompanyName(companySlug) {
           </tr>
         </tbody>
       </table>
+      <div class="jobs-grid mobile-only">
+        <div v-for="job in jobsStore.sortedJobs" :key="job.id || job.job_id" class="job-card">
+          <router-link :to="{ name: 'job-detail', params: { id: job.id || job.job_id } }" class="job-link">
+            <div class="job-header">
+              <h3 class="job-title">{{ job.title }}</h3>
+              <div class="job-company">
+                <span class="company-name">{{ formatCompanyName(job.company) }}</span>
+              </div>
+            </div>
+            <div class="job-meta">
+              <div class="job-location">
+                <LocationIcon class="location-icon" />
+                {{ job.city }}{{ job.state ? ', ' + job.state : '' }}
+              </div>
+            </div>
+            <div class="job-actions">
+              <span class="view-details">View Details →</span>
+            </div>
+          </router-link>
+        </div>
+      </div>
     </div>
 
     <div v-else class="empty-state">
@@ -105,9 +119,10 @@ function formatCompanyName(companySlug) {
 </template>
 
 <style scoped>
-hr {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+.divider {
+  margin: 1.5rem 0 2rem 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
 }
 
 .loading-state {
@@ -164,9 +179,9 @@ td {
   background: var(--color-surface-hover);
 }
 
-.job-title-cell {
-  width: 40%;
-}
+.job-title-cell { width: 40%; }
+.job-company-cell { width: 30%; }
+.job-location-cell { width: 30%; }
 
 .job-title-link {
   color: var(--color-link);
@@ -182,17 +197,9 @@ td {
   text-decoration: underline;
 }
 
-.job-company-cell {
-  width: 30%;
-}
-
 .company-name {
   font-weight: 500;
   color: var(--color-text);
-}
-
-.job-location-cell {
-  width: 30%;
 }
 
 .location {
@@ -209,27 +216,150 @@ td {
   color: var(--color-text-muted);
 }
 
+.jobs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.job-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px var(--color-shadow);
+  margin-bottom: 0;
+  width: 100%;
+  min-height: 120px;
+}
+
+.job-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-shadow-elevated);
+  border-color: var(--color-border-hover);
+}
+
+.job-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 1rem;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.job-header { margin-bottom: 0.75rem; }
+.job-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin: 0 0 0.25rem 0;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.job-company { margin-bottom: 0.5rem; }
+.job-meta { margin-bottom: 0.75rem; }
+.job-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+.job-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+.view-details {
+  font-size: 0.875rem;
+  color: var(--color-primary-600);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.job-card:hover .view-details { color: var(--color-primary-700); }
+.skeleton-card { pointer-events: none; }
+.skeleton-title {
+  height: 1.25rem;
+  background: var(--color-background-soft);
+  border-radius: var(--border-radius-small);
+  margin-bottom: 0.5rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.skeleton-company {
+  height: 1rem;
+  background: var(--color-background-soft);
+  border-radius: var(--border-radius-small);
+  margin-bottom: 0.5rem;
+  width: 60%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.skeleton-location {
+  height: 1rem;
+  background: var(--color-background-soft);
+  border-radius: var(--border-radius-small);
+  width: 40%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
   color: var(--color-text-muted);
 }
-
 .empty-icon {
   margin-bottom: 1rem;
   color: var(--color-text-subtle);
 }
-
 .empty-state h3 {
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-heading);
   margin: 0 0 0.5rem 0;
 }
-
 .empty-state p {
   font-size: 1rem;
   margin: 0;
   line-height: 1.5;
+}
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+  .jobs-results .jobs-grid.mobile-only {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    width: 100%;
+  }
+  .jobs-results .job-card {
+    margin-bottom: 0;
+    width: 100%;
+    display: block;
+  }
+  .job-link { padding: 0.875rem; }
+  .job-title { font-size: 0.95rem; }
+}
+@media (min-width: 769px) {
+  .desktop-only { display: table; }
+  .mobile-only { display: none; }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .jobs-table { font-size: 0.9rem; }
+  th, td { padding: 0.875rem 1.25rem; }
+  .jobs-grid { gap: 1.25rem; }
+}
+@media (min-width: 1025px) {
+  .jobs-grid { gap: 1.75rem; }
 }
 </style>
