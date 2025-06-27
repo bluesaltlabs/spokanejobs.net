@@ -7,33 +7,24 @@ import (
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers"
 )
 
-// RunScheduledScrapers runs scrapers based on the current hour and configuration
+// RunScheduledScrapers runs scrapers based on the current hour and their individual schedule settings
 func RunScheduledScrapers() error {
-	// Load configuration
-	config, err := LoadConfig()
-	if err != nil {
-		log.Printf("Error loading scheduler config: %v", err)
-		return err
-	}
-
 	// Get current hour
 	now := time.Now()
 	currentHour := now.Hour()
 
 	log.Printf("Scheduler mode enabled")
-	log.Printf("Loaded %d scraper configurations", len(config.Scrapers))
 	log.Printf("Current hour: %d", currentHour)
+
+	// Get all available scrapers
+	allScrapers := scrapers.GetAllScrapers()
+	log.Printf("Loaded %d scrapers", len(allScrapers))
 
 	// Find scrapers scheduled for current hour
 	var scrapersToRun []string
-	for _, scraper := range config.Scrapers {
-		if scraper.Hour == currentHour {
-			// Validate that the scraper exists
-			if scrapers.IsValidCompanySlug(scraper.Slug) {
-				scrapersToRun = append(scrapersToRun, scraper.Slug)
-			} else {
-				log.Printf("Warning: Invalid scraper slug '%s' in configuration, skipping", scraper.Slug)
-			}
+	for _, scraper := range allScrapers {
+		if scraper.GetScheduleHour() == currentHour {
+			scrapersToRun = append(scrapersToRun, scraper.GetName())
 		}
 	}
 
