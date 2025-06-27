@@ -7,17 +7,17 @@ import (
 	"log"
 	"strings"
 	"github.com/gocolly/colly"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
 
 // Set the base URL to scrape
 var ScrapeUrl string = "https://job-boards.greenhouse.io/openeye"
 var JobUrlPrefix string = ScrapeUrl + "/jobs/"
 
-func ScrapeJobs() []*models.ScrapedJob {
+func ScrapeJobs() []*types.ScrapedJob {
 
 	// Create the Jobs collector
-	jobs := make([]*models.ScrapedJob, 0)
+	jobs := make([]*types.ScrapedJob, 0)
 
 	// Create a new collector
 	c := getCollector()
@@ -33,7 +33,7 @@ func ScrapeJobs() []*models.ScrapedJob {
   c.OnHTML("div.job-posts--table tr.job-post a", func(h *colly.HTMLElement) {
     //log.Printf("\n-----\n\nopeneye-scraper-pass: %+v\n-----\n", h)
     // Create the scraped_job struct instance
-    j := &models.ScrapedJob{}
+    j := &types.ScrapedJob{}
     url := h.Attr("href")
     selection := h.DOM
 
@@ -61,7 +61,7 @@ func ScrapeJobs() []*models.ScrapedJob {
   return jobs
 }
 
-func getJobDetails(j *models.ScrapedJob) {
+func getJobDetails(j *types.ScrapedJob) {
 	// Create a new collector
 	c := getCollector()
 

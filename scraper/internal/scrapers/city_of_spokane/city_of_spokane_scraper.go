@@ -7,7 +7,7 @@ import (
 	"log"
 	"strings"
 	"github.com/gocolly/colly"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
 
 // Set the base URL to scrape
@@ -15,10 +15,10 @@ var scrapeUrlPrefix string 	= "https://www.governmentjobs.com/careers/spokanecit
 var scrapeUrl string 				= scrapeUrlPrefix + "?sort=PostingDate%7CDescendingz"
 var JobUrlPrefix string 		= scrapeUrlPrefix + "/jobs/"
 
-func ScrapeJobs() []*models.ScrapedJob {
+func ScrapeJobs() []*types.ScrapedJob {
 
 	// Create the Jobs collector
-	jobs := make([]*models.ScrapedJob, 0)
+	jobs := make([]*types.ScrapedJob, 0)
 
 	// Create a new collector
 	c := getCollector()
@@ -35,7 +35,7 @@ func ScrapeJobs() []*models.ScrapedJob {
   log.Printf("\n-----\n\ncity_of_spokane-pass: %+v\n-----\n", h)  // debug
 
  		// Create the scraped_job struct instance
-    j := &models.ScrapedJob{}
+    j := &types.ScrapedJob{}
     url := h.Attr("href")
     selection := h.DOM
 

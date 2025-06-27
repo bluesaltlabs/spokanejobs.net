@@ -5,12 +5,12 @@ import (
 	"log"
 	"strings"
 	"github.com/gocolly/colly"
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/models"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
 
-func ScrapeJobs() []*models.ScrapedJob {
+func ScrapeJobs() []*types.ScrapedJob {
 	// Create the Jobs collector
-	jobs := make([]*models.ScrapedJob, 0)
+	jobs := make([]*types.ScrapedJob, 0)
 
 	scrapeUrl := "https://itron.wd5.myworkdayjobs.com/Itron"
 
