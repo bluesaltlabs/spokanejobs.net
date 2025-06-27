@@ -2,9 +2,11 @@ package companies
 
 import (
 	"log"
+	"os"
 	"strings"
 
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/engine"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/git"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 )
@@ -147,5 +149,20 @@ func getJobDetails(j *types.ScrapedJob, scraperEngine engine.ScraperEngine) {
 }
 
 func (o *OpenEyeScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(o.Jobs, o.Name, outputDir)
+	err := utils.SaveJobsToJSON(o.Jobs, o.Name, outputDir)
+
+	// Git sync logic
+	dataRepoPath := os.Getenv("DATA_REPO_PATH")
+	dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR")
+	if dataRepoPath != "" {
+		gs := git.NewGitSync(dataRepoPath, o.Name, dataRepoSubdir)
+		err2 := gs.SyncJobs(o.Jobs)
+		if err2 != nil {
+			log.Printf("[GitSync] Failed to sync jobs for %s: %v", o.Name, err2)
+		} else {
+			log.Printf("[GitSync] Successfully synced jobs for %s to data repo", o.Name)
+		}
+	}
+
+	return err
 }
