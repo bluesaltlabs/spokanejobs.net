@@ -15,38 +15,102 @@ func InitializeScrapers() error {
 	// Initialize the scraper instances map
 	scraperInstances = make(map[string]types.Scraper)
 
-	// Map company slugs to scrapers.
-	scraperInstances["avista"] = companies.NewAvistaScraper()
-	scraperInstances["city_of_spokane"] = companies.NewCityOfSpokaneScraper()
-	scraperInstances["codespeed"] = companies.NewCodespeedScraper()
-	scraperInstances["cvsd"] = companies.NewCVSDScraper()
-	scraperInstances["egnyte"] = companies.NewEgnyteScraper()
-	scraperInstances["enhanced_software_products"] = companies.NewEnhancedSoftwareProductsScraper()
-	scraperInstances["f5"] = companies.NewF5Scraper()
-	scraperInstances["gestalt_diagnostics"] = companies.NewGestaltDiagnosticsScraper()
-	scraperInstances["gravity_jack"] = companies.NewGravityJackScraper()
-	scraperInstances["huntwood"] = companies.NewHuntwoodScraper()
-	scraperInstances["intellitect"] = companies.NewIntellitectScraper()
-	scraperInstances["itron"] = companies.NewItronScraper()
-	scraperInstances["kaiser_aluminum"] = companies.NewKaiserAluminumScraper()
-	scraperInstances["limelyte"] = companies.NewLimelyteScraper()
-	scraperInstances["numerica"] = companies.NewNumericaScraper()
+	// TODO: The Avista scraper is incomplete and causes a runtime panic. Fix before re-enabling.
+	// if avista, err := companies.NewAvistaScraper(); err == nil {
+	// 	scraperInstances["avista"] = avista
+	// } else {
+	// 	log.Printf("Failed to initialize avista scraper: %v", err)
+	// }
+
+	// TODO: City of Spokane scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["city_of_spokane"] = companies.NewCityOfSpokaneScraper()
+
+	// TODO: Codespeed scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["codespeed"] = companies.NewCodespeedScraper()
+
+	// TODO: CVSD scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["cvsd"] = companies.NewCVSDScraper()
+
+	// TODO: Egnyte scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["egnyte"] = companies.NewEgnyteScraper()
+
+	// TODO: Enhanced Software Products scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["enhanced_software_products"] = companies.NewEnhancedSoftwareProductsScraper()
+
+	// TODO: F5 scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["f5"] = companies.NewF5Scraper()
+
+	// TODO: Gestalt Diagnostics scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["gestalt_diagnostics"] = companies.NewGestaltDiagnosticsScraper()
+
+	// TODO: Gravity Jack scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["gravity_jack"] = companies.NewGravityJackScraper()
+
+	// TODO: Huntwood scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["huntwood"] = companies.NewHuntwoodScraper()
+
+	// TODO: Intellitect scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["intellitect"] = companies.NewIntellitectScraper()
+
+	// TODO: Itron scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["itron"] = companies.NewItronScraper()
+
+	// TODO: Kaiser Aluminum scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["kaiser_aluminum"] = companies.NewKaiserAluminumScraper()
+
+	// TODO: Limelyte scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["limelyte"] = companies.NewLimelyteScraper()
+
+	// TODO: Numerica scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["numerica"] = companies.NewNumericaScraper()
+
+	// Working scraper - successfully finds jobs
 	scraperInstances["openeye"] = companies.NewOpenEyeScraper()
-	scraperInstances["paytrace"] = companies.NewPaytraceScraper()
-	scraperInstances["providence"] = companies.NewProvidenceScraper()
-	scraperInstances["risklens"] = companies.NewRisklensScraper()
-	scraperInstances["scld"] = companies.NewScldScraper()
-	scraperInstances["sel"] = companies.NewSelScraper()
-	scraperInstances["spokane_computer"] = companies.NewSpokaneComputerScraper()
-	scraperInstances["spokane_library"] = companies.NewSpokaneLibraryScraper()
-	scraperInstances["sps"] = companies.NewSpsScraper()
-	scraperInstances["stcu"] = companies.NewStcuScraper()
-	scraperInstances["synergisticit"] = companies.NewSynergisticitScraper()
-	scraperInstances["treasury4"] = companies.NewTreasury4Scraper()
-	scraperInstances["two_barrels"] = companies.NewTwoBarrelsScraper()
-	scraperInstances["urm"] = companies.NewUrmScraper()
-	scraperInstances["wagstaff"] = companies.NewWagstaffScraper()
-	scraperInstances["winco"] = companies.NewWincoScraper()
+
+	// TODO: Paytrace scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["paytrace"] = companies.NewPaytraceScraper()
+
+	// TODO: Providence scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["providence"] = companies.NewProvidenceScraper()
+
+	// TODO: RiskLens scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["risklens"] = companies.NewRisklensScraper()
+
+	// TODO: SCLD scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["scld"] = companies.NewScldScraper()
+
+	// TODO: SEL scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["sel"] = companies.NewSelScraper()
+
+	// TODO: Spokane Computer scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["spokane_computer"] = companies.NewSpokaneComputerScraper()
+
+	// TODO: Spokane Library scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["spokane_library"] = companies.NewSpokaneLibraryScraper()
+
+	// TODO: SPS scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["sps"] = companies.NewSpsScraper()
+
+	// TODO: STCU scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["stcu"] = companies.NewStcuScraper()
+
+	// TODO: SynergisticIT scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["synergisticit"] = companies.NewSynergisticitScraper()
+
+	// TODO: Treasury4 scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["treasury4"] = companies.NewTreasury4Scraper()
+
+	// TODO: Two Barrels scraper times out after 10 seconds. Increase timeout or investigate site performance.
+	// scraperInstances["two_barrels"] = companies.NewTwoBarrelsScraper()
+
+	// TODO: URM scraper returns zero jobs. Update selectors to match current site structure.
+	// scraperInstances["urm"] = companies.NewUrmScraper()
+
+	// TODO: Wagstaff scraper returns 404 error. Update careers page URL to match current site structure.
+	// scraperInstances["wagstaff"] = companies.NewWagstaffScraper()
+
+	// TODO: Winco scraper returns 403 Forbidden error. Site may be blocking automated access. Consider different user agent or approach.
+	// scraperInstances["winco"] = companies.NewWincoScraper()
 
 	log.Printf("Initialized %d scrapers from configuration (with company scrapers)", len(scraperInstances))
 	return nil
