@@ -5,6 +5,7 @@ export { default as ExportIcon } from './Export/Export.vue';
 export { default as HomeIcon } from './Home/Home.vue';
 export { default as ImportIcon } from './Import/Import.vue';
 export { default as JobsIcon } from './Jobs/Jobs.vue';
+export { default as LocationIcon } from './Location/Location.vue';
 export { default as MoonIcon } from './Moon/Moon.vue';
 export { default as ProfileIcon } from './Profile/Profile.vue';
 export { default as ResourcesIcon } from './Resources/Resources.vue';

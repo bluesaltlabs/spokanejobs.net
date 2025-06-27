@@ -2,6 +2,7 @@
 import { onMounted, computed } from 'vue'
 import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
+import { Container } from '@/components/ui'
 
 // setup
 const companiesStore = useCompanies()
@@ -15,7 +16,7 @@ const loading = computed(() => companiesStore.loading)
 </script>
 
 <template>
-  <main>
+  <Container>
     <h1>Companies</h1>
     <hr />
 
@@ -51,7 +52,7 @@ const loading = computed(() => companiesStore.loading)
         </tr>
       </tbody>
     </table>
-  </main>
+  </Container>
 </template>
 
 
