@@ -27,7 +27,7 @@ func NewTreasury4Scraper() *Treasury4Scraper {
 	}
 }
 
-func (scraper *Treasury4Scraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *Treasury4Scraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 
@@ -75,7 +75,7 @@ func (scraper *Treasury4Scraper) GetName() string {
 
 func (scraper *Treasury4Scraper) ScrapedJobs() []types.ScrapedJob {
 	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
+		scraper.Jobs = scraper.scrapeJobs()
 	}
 	return scraper.Jobs
 }

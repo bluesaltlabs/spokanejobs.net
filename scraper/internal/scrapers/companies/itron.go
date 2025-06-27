@@ -33,7 +33,7 @@ func (scraper *ItronScraper) GetName() string {
 
 func (scraper *ItronScraper) ScrapedJobs() []types.ScrapedJob {
 	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
+		scraper.Jobs = scraper.scrapeJobs()
 	}
 	return scraper.Jobs
 }
@@ -46,7 +46,7 @@ func (scraper *ItronScraper) SaveOutput(outputDir string) error {
 	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
 }
 
-func (scraper *ItronScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *ItronScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 

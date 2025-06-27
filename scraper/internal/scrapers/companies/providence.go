@@ -27,7 +27,7 @@ func NewProvidenceScraper() *ProvidenceScraper {
 	}
 }
 
-func (scraper *ProvidenceScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *ProvidenceScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 
@@ -75,7 +75,7 @@ func (scraper *ProvidenceScraper) GetName() string {
 
 func (scraper *ProvidenceScraper) ScrapedJobs() []types.ScrapedJob {
 	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
+		scraper.Jobs = scraper.scrapeJobs()
 	}
 	return scraper.Jobs
 }

@@ -33,7 +33,7 @@ func (scraper *TwoBarrelsScraper) GetName() string {
 
 func (scraper *TwoBarrelsScraper) ScrapedJobs() []types.ScrapedJob {
 	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
+		scraper.Jobs = scraper.scrapeJobs()
 	}
 	return scraper.Jobs
 }
@@ -46,7 +46,7 @@ func (scraper *TwoBarrelsScraper) SaveOutput(outputDir string) error {
 	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
 }
 
-func (scraper *TwoBarrelsScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *TwoBarrelsScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 

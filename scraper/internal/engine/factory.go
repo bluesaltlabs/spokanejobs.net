@@ -15,7 +15,12 @@ func (f *EngineFactory) CreateEngine(engineType EngineType, config types.Scraper
 	case EngineColly:
 		return NewCollyEngine(config), nil
 	case EngineRod:
-		return NewRodEngine(config)
+		rodEngine, err := NewRodEngine(config)
+		if err != nil {
+			return nil, err
+		}
+		// Wrap RodEngine to implement ScraperEngine interface
+		return &RodEngineWrapper{Engine: rodEngine}, nil
 	case "":
 		// Default to colly if no engine type specified
 		return NewCollyEngine(config), nil

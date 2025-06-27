@@ -1,45 +1,8 @@
 package engine
 
 import (
-	"context"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 )
-
-// ScraperEngine defines the interface for different scraping engines
-type ScraperEngine interface {
-	Visit(url string) error
-	OnHTML(selector string, handler func(Element)) error
-	OnScraped(handler func()) error
-	OnRequest(handler func(Request)) error
-	OnError(handler func(Response, error)) error
-	SetHeaders(headers map[string]string)
-	SetUserAgent(userAgent string)
-	SetAllowedDomains(domains []string)
-	SetCacheDir(dir string)
-	Close() error
-}
-
-// Element represents an HTML element that can be queried
-type Element interface {
-	Attr(name string) string
-	Text() string
-	Find(selector string) Element
-	DOM() interface{} // Returns the underlying DOM element
-	ForEach(selector string, fn func(int, Element)) error
-}
-
-// Request represents an HTTP request
-type Request interface {
-	URL() string
-	SetHeader(name, value string)
-	Context() context.Context
-}
-
-// Response represents an HTTP response
-type Response interface {
-	StatusCode() int
-	Body() []byte
-	URL() string
-}
 
 // EngineType represents the type of scraping engine
 type EngineType string
@@ -48,3 +11,35 @@ const (
 	EngineColly EngineType = "colly"
 	EngineRod   EngineType = "rod"
 )
+
+// Element represents a DOM element for scraping
+type Element interface {
+	Attr(name string) string
+	Text() string
+	Find(selector string) Element
+}
+
+// ScraperEngine provides a common interface for different scraping engines
+type ScraperEngine interface {
+	OnScraped(callback func())
+	OnHTML(selector string, callback func(Element))
+	Visit(url string) error
+	Close()
+}
+
+// BaseEngine provides a minimal common interface for different scraping engines
+type BaseEngine struct {
+	Config types.ScraperConfig
+}
+
+// NewBaseEngine creates a new base engine with the given configuration
+func NewBaseEngine(config types.ScraperConfig) *BaseEngine {
+	return &BaseEngine{
+		Config: config,
+	}
+}
+
+// GetConfig returns the engine configuration
+func (b *BaseEngine) GetConfig() types.ScraperConfig {
+	return b.Config
+}

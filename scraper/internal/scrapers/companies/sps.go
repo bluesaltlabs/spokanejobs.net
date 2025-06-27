@@ -27,7 +27,26 @@ func NewSpsScraper() *SpsScraper {
 	}
 }
 
-func (scraper *SpsScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *SpsScraper) GetName() string {
+	return scraper.Name
+}
+
+func (scraper *SpsScraper) ScrapedJobs() []types.ScrapedJob {
+	if len(scraper.Jobs) == 0 {
+		scraper.Jobs = scraper.scrapeJobs()
+	}
+	return scraper.Jobs
+}
+
+func (scraper *SpsScraper) ScrapeJobDetails(job *types.ScrapedJob) {
+	// Default implementation - can be overridden if needed
+}
+
+func (scraper *SpsScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
+}
+
+func (scraper *SpsScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 
@@ -67,23 +86,4 @@ func (scraper *SpsScraper) ScrapeJobs() []types.ScrapedJob {
 
 	c.Visit(scraper.Config.BaseURL)
 	return jobs
-}
-
-func (scraper *SpsScraper) GetName() string {
-	return scraper.Name
-}
-
-func (scraper *SpsScraper) ScrapedJobs() []types.ScrapedJob {
-	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
-	}
-	return scraper.Jobs
-}
-
-func (scraper *SpsScraper) ScrapeJobDetails(job *types.ScrapedJob) {
-	// Default implementation - can be overridden if needed
-}
-
-func (scraper *SpsScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
 }

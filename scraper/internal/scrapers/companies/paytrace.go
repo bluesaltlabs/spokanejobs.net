@@ -27,7 +27,7 @@ func NewPaytraceScraper() *PaytraceScraper {
 	}
 }
 
-func (scraper *PaytraceScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *PaytraceScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 
@@ -75,7 +75,7 @@ func (scraper *PaytraceScraper) GetName() string {
 
 func (scraper *PaytraceScraper) ScrapedJobs() []types.ScrapedJob {
 	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
+		scraper.Jobs = scraper.scrapeJobs()
 	}
 	return scraper.Jobs
 }

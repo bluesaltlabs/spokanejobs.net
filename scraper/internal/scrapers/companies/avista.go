@@ -6,30 +6,40 @@ import (
 	"os"
 	"strings"
 
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/engine"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
-	"github.com/gocolly/colly"
 )
 
 var avistaScrapeUrlPrefix string = "https://recruiting2.ultipro.com/AVI1000AMAST/JobBoard/362abf68-95c3-4b17-a39d-76a6efe5ff18"
 var avistaScrapeUrl string = avistaScrapeUrlPrefix + "?o=postedDateDesc&f4=ITpN1FEJvlWudZe0AayqWA"
 var avistaJobUrlPrefix string = avistaScrapeUrlPrefix + "/OpportunityDetail?opportunityId="
 
-// AvistaScraper implements a scraper for Avista
+// AvistaScraper implements a scraper for Avista using the simplified engine approach with rod
 type AvistaScraper struct {
 	*types.BaseScraper
+	Engine *engine.RodEngine
 }
 
-func NewAvistaScraper() *AvistaScraper {
+func NewAvistaScraper() (*AvistaScraper, error) {
+	config := types.ScraperConfig{
+		BaseURL:        "https://www.myavista.com/about-us/working-at-avista/careers",
+		AllowedDomains: []string{"recruiting2.ultipro.com"},
+	}
+
+	rodEngine, err := engine.NewRodEngine(config)
+	if err != nil {
+		return nil, err
+	}
+
 	return &AvistaScraper{
 		BaseScraper: &types.BaseScraper{
 			Name:         "avista",
 			ScheduleHour: 0,
-			Config: types.ScraperConfig{
-				BaseURL: "https://www.myavista.com/about-us/working-at-avista/careers",
-			},
+			Config:       config,
 		},
-	}
+		Engine: rodEngine,
+	}, nil
 }
 
 func (a *AvistaScraper) GetName() string {
@@ -53,57 +63,78 @@ func (a *AvistaScraper) SaveOutput(outputDir string) error {
 
 func (a *AvistaScraper) scrapeJobs() []types.ScrapedJob {
 	jobs := make([]types.ScrapedJob, 0)
-	c := a.getCollector()
 
-	c.OnScraped(func(r *colly.Response) {
-		// Save to file instead of just printing to stdout
-		if err := utils.SaveJobsToJSON(jobs, a.Name, "scraper_output"); err != nil {
-			log.Printf("Error saving jobs to JSON for %s: %v", a.Name, err)
-		} else {
-			log.Printf("Saved %d jobs to JSON file for %s", len(jobs), a.Name)
+	// Get the rod page directly from the engine
+	page := a.Engine.GetPage()
+
+	log.Printf("visiting: %s\n", avistaScrapeUrl)
+
+	// Navigate to the page and wait for it to load
+	err := page.Navigate(avistaScrapeUrl)
+	if err != nil {
+		log.Printf("Error navigating to %s: %v", avistaScrapeUrl, err)
+		return jobs
+	}
+
+	// Wait for the page to load completely
+	page.MustWaitLoad()
+
+	// Wait for the job listings to appear (div.opportunity elements)
+	page.MustWait("div.opportunity")
+
+	// Find all job opportunity elements
+	elements := page.MustElements("div.opportunity")
+
+	log.Printf("Found %d job opportunities", len(elements))
+
+	// Process each job element
+	for _, element := range elements {
+		j := &types.ScrapedJob{}
+
+		// Find the link element within this opportunity
+		linkElement, err := element.Element("h3 a.opportunity-link")
+		if err != nil {
+			log.Printf("Error finding link element: %v", err)
+			continue
 		}
 
-		// Also print to stdout for backward compatibility
-		enc := json.NewEncoder(os.Stdout)
-		enc.SetIndent("", "  ")
-		enc.Encode(jobs)
-	})
+		// Get the href attribute
+		url, err := linkElement.Attribute("href")
+		if err != nil || url == nil {
+			log.Printf("Error getting href attribute: %v", err)
+			continue
+		}
 
-	c.OnHTML("div.opportunity", func(h *colly.HTMLElement) {
-		j := &types.ScrapedJob{}
-		selection := h.DOM
+		// Get the text content (job title)
+		title, err := linkElement.Text()
+		if err != nil {
+			log.Printf("Error getting title text: %v", err)
+			continue
+		}
 
-		url, _ := selection.Find("h3 a.opportunity-link").Attr("href")
-		title := selection.Find("h3 a.opportunity-link").Text()
-		job_id := strings.TrimPrefix(url, avistaJobUrlPrefix)
+		// Extract job ID from URL
+		job_id := strings.TrimPrefix(*url, avistaJobUrlPrefix)
 
 		j.JobId = job_id
-		j.Url = url
-		j.Title = title
+		j.Url = *url
+		j.Title = strings.TrimSpace(title)
 
 		jobs = append(jobs, *j)
-	})
+		log.Printf("Found job: %s - %s", j.JobId, j.Title)
+	}
 
-	c.Visit(avistaScrapeUrl)
-	log.Printf("\n-----\n\nColly instance done: %+v\n\n", c)
+	// Save to file
+	if err := utils.SaveJobsToJSON(jobs, a.Name, "scraper_output"); err != nil {
+		log.Printf("Error saving jobs to JSON for %s: %v", a.Name, err)
+	} else {
+		log.Printf("Saved %d jobs to JSON file for %s", len(jobs), a.Name)
+	}
+
+	// Also print to stdout for backward compatibility
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	enc.Encode(jobs)
+
+	log.Printf("\n-----\n\nRod instance done: %+v\n\n", page)
 	return jobs
-}
-
-func (a *AvistaScraper) getCollector() *colly.Collector {
-	c := colly.NewCollector(
-		colly.AllowedDomains("recruiting2.ultipro.com"),
-		colly.CacheDir("./scraper_cache"),
-	)
-
-	c.OnRequest(func(r *colly.Request) {
-		r.Headers.Set("Accept-Language", "en-US")
-		r.Headers.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.10 Safari/605.1.1")
-		log.Printf("visiting: %s\n", r.URL.String())
-	})
-
-	c.OnError(func(r *colly.Response, e error) {
-		log.Printf("Error while scraping: %s\n", e.Error())
-	})
-
-	return c
 }

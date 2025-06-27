@@ -27,7 +27,26 @@ func NewUrmScraper() *UrmScraper {
 	}
 }
 
-func (scraper *UrmScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *UrmScraper) GetName() string {
+	return scraper.Name
+}
+
+func (scraper *UrmScraper) ScrapedJobs() []types.ScrapedJob {
+	if len(scraper.Jobs) == 0 {
+		scraper.Jobs = scraper.scrapeJobs()
+	}
+	return scraper.Jobs
+}
+
+func (scraper *UrmScraper) ScrapeJobDetails(job *types.ScrapedJob) {
+	// Default implementation - can be overridden if needed
+}
+
+func (scraper *UrmScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
+}
+
+func (scraper *UrmScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 
@@ -67,23 +86,4 @@ func (scraper *UrmScraper) ScrapeJobs() []types.ScrapedJob {
 
 	c.Visit(scraper.Config.BaseURL)
 	return jobs
-}
-
-func (scraper *UrmScraper) GetName() string {
-	return scraper.Name
-}
-
-func (scraper *UrmScraper) ScrapedJobs() []types.ScrapedJob {
-	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
-	}
-	return scraper.Jobs
-}
-
-func (scraper *UrmScraper) ScrapeJobDetails(job *types.ScrapedJob) {
-	// Default implementation - can be overridden if needed
-}
-
-func (scraper *UrmScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
 }

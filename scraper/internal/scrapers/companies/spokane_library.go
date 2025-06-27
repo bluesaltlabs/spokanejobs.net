@@ -27,7 +27,26 @@ func NewSpokaneLibraryScraper() *SpokaneLibraryScraper {
 	}
 }
 
-func (scraper *SpokaneLibraryScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *SpokaneLibraryScraper) GetName() string {
+	return scraper.Name
+}
+
+func (scraper *SpokaneLibraryScraper) ScrapedJobs() []types.ScrapedJob {
+	if len(scraper.Jobs) == 0 {
+		scraper.Jobs = scraper.scrapeJobs()
+	}
+	return scraper.Jobs
+}
+
+func (scraper *SpokaneLibraryScraper) ScrapeJobDetails(job *types.ScrapedJob) {
+	// Default implementation - can be overridden if needed
+}
+
+func (scraper *SpokaneLibraryScraper) SaveOutput(outputDir string) error {
+	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
+}
+
+func (scraper *SpokaneLibraryScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 
@@ -67,23 +86,4 @@ func (scraper *SpokaneLibraryScraper) ScrapeJobs() []types.ScrapedJob {
 
 	c.Visit(scraper.Config.BaseURL)
 	return jobs
-}
-
-func (scraper *SpokaneLibraryScraper) GetName() string {
-	return scraper.Name
-}
-
-func (scraper *SpokaneLibraryScraper) ScrapedJobs() []types.ScrapedJob {
-	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
-	}
-	return scraper.Jobs
-}
-
-func (scraper *SpokaneLibraryScraper) ScrapeJobDetails(job *types.ScrapedJob) {
-	// Default implementation - can be overridden if needed
-}
-
-func (scraper *SpokaneLibraryScraper) SaveOutput(outputDir string) error {
-	return utils.SaveJobsToJSON(scraper.Jobs, scraper.Name, outputDir)
 }

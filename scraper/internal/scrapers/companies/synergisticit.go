@@ -27,7 +27,7 @@ func NewSynergisticitScraper() *SynergisticitScraper {
 	}
 }
 
-func (scraper *SynergisticitScraper) ScrapeJobs() []types.ScrapedJob {
+func (scraper *SynergisticitScraper) scrapeJobs() []types.ScrapedJob {
 	var jobs []types.ScrapedJob
 	c := utils.NewCollector(scraper.Config)
 
@@ -75,7 +75,7 @@ func (scraper *SynergisticitScraper) GetName() string {
 
 func (scraper *SynergisticitScraper) ScrapedJobs() []types.ScrapedJob {
 	if len(scraper.Jobs) == 0 {
-		scraper.Jobs = scraper.ScrapeJobs()
+		scraper.Jobs = scraper.scrapeJobs()
 	}
 	return scraper.Jobs
 }
