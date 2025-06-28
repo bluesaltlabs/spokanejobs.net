@@ -1,0 +1,27 @@
+[
+  {
+    "name": "GitHub",
+    "url":  "https://github.com/bluesaltlabs/spokanejobs.net",
+    "icon": "Github"
+  },
+  {
+    "name": "Facebook",
+    "url":  "https://www.facebook.com/groups/spokanejobsnet",
+    "icon": "Facebook"
+  },
+  {
+    "name": "X (Twitter)",
+    "url":  "https://x.com/SpokaneJobsNet",
+    "icon": "X"
+  },
+  {
+    "name": "Bluesky",
+    "url":  "https://bsky.app/profile/spokanejobs.bsky.social",
+    "icon": "Bluesky"
+  },
+  {
+    "name": "Mastodon",
+    "url":  "https://mastodon.social/@SpokaneJobs",
+    "icon": "Mastodon"
+  }
+]
