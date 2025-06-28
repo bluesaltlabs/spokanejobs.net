@@ -2,21 +2,32 @@
 import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useJob } from '@/stores/job'
+import { useCompanies } from '@/stores/companies'
 import { SkeletonText, SkeletonButton } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { JobsIcon, CompaniesIcon, LocationIcon } from '@/components/icons'
 
 // Setup
 const jobStore = useJob()
+const companiesStore = useCompanies()
 const route = useRoute()
 
-// Fetch job on component mount
+// Fetch job and companies on component mount
 onMounted(() => {
   jobStore.fetchJob(route.params.id)
+  companiesStore.fetchCompanies()
 })
 
 const job = computed(() => jobStore.job)
 const loading = computed(() => jobStore.loading)
+
+const companyMap = computed(() => {
+  const map = {}
+  for (const c of companiesStore.companies) {
+    map[c.slug] = c
+  }
+  return map
+})
 
 // Helper function to format job description
 function formatDescription(description) {
@@ -27,6 +38,10 @@ function formatDescription(description) {
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/\n/g, '<br>')
+}
+
+function getCompanyName(slug) {
+  return companyMap.value[slug]?.name || 'Unknown Company'
 }
 </script>
 
@@ -65,7 +80,14 @@ function formatDescription(description) {
         </span>
         <span v-if="job.company" class="job-company">
           <CompaniesIcon class="meta-icon" />
-          {{ job.company }}
+          <router-link
+            v-if="companyMap[job.company]"
+            :to="{ name: 'company-detail', params: { slug: job.company } }"
+            class="company-name"
+          >
+            {{ getCompanyName(job.company) }}
+          </router-link>
+          <span v-else class="company-name">{{ getCompanyName(job.company) }}</span>
         </span>
       </div>
 
@@ -98,7 +120,7 @@ function formatDescription(description) {
         <div v-if="job.url" class="metadata-item">
           <strong>Original Posting:</strong> 
           <a :href="job.url" target="_blank" rel="noopener noreferrer">
-            View on {{ job.company }} Careers
+            View on {{ getCompanyName(job.company) }} Careers
           </a>
         </div>
       </div>

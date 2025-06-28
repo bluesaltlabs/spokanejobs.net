@@ -1,17 +1,32 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useJobs } from '@/stores/jobs'
+import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { LocationIcon } from '@/components/icons'
 
 const jobsStore = useJobs()
+const companiesStore = useCompanies()
 
 onMounted(() => {
   jobsStore.fetchJobs()
+  companiesStore.fetchCompanies()
 })
 
 const loading = computed(() => jobsStore.loading)
+
+const companyMap = computed(() => {
+  const map = {}
+  for (const c of companiesStore.companies) {
+    map[c.slug] = c
+  }
+  return map
+})
+
+function getCompanyName(slug) {
+  return companyMap.value[slug]?.name || 'Unknown Company'
+}
 
 function formatCompanyName(companySlug) {
   if (!companySlug) return 'Unknown Company'
@@ -72,7 +87,14 @@ function formatCompanyName(companySlug) {
               </router-link>
             </td>
             <td class="job-company-cell">
-              <span class="company-name">{{ formatCompanyName(job.company) }}</span>
+              <router-link
+                v-if="companyMap[job.company]"
+                :to="{ name: 'company-detail', params: { slug: job.company } }"
+                class="company-name"
+              >
+                {{ getCompanyName(job.company) }}
+              </router-link>
+              <span v-else class="company-name">{{ getCompanyName(job.company) }}</span>
             </td>
             <td class="job-location-cell">
               <span class="location">
@@ -89,7 +111,14 @@ function formatCompanyName(companySlug) {
             <div class="job-header">
               <h3 class="job-title">{{ job.title }}</h3>
               <div class="job-company">
-                <span class="company-name">{{ formatCompanyName(job.company) }}</span>
+                <router-link
+                  v-if="companyMap[job.company]"
+                  :to="{ name: 'company-detail', params: { slug: job.company } }"
+                  class="company-name"
+                >
+                  {{ getCompanyName(job.company) }}
+                </router-link>
+                <span v-else class="company-name">{{ getCompanyName(job.company) }}</span>
               </div>
             </div>
             <div class="job-meta">
