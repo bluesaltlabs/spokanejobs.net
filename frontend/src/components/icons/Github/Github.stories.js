@@ -1,14 +1,14 @@
-import ProfileIcon from './Profile.vue';
+import GithubIcon from './github.vue';
 
 export default {
-  title: 'Icons/Profile',
-  component: ProfileIcon,
+  title: 'Icons/github',
+  component: GithubIcon,
 };
 
 const Template = (args) => ({
-  components: { ProfileIcon },
+  components: { GithubIcon },
   setup() { return { args }; },
-  template: '<ProfileIcon  v-bind="args"></ProfileIcon>',
+  template: '<GithubIcon v-bind="args"></GithubIcon>',
 });
 
 export const Default = Template.bind({});

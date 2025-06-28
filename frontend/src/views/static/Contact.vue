@@ -1,32 +1,11 @@
 <script setup>
 const appName = import.meta.env.VITE_APP_NAME
 
-import { XIcon, FacebookIcon, BlueskyIcon, MastodonIcon } from '@/components/icons';
+import { Icon } from '@/components/icons';
 import { Container } from '@/components/ui';
 import { ItemContainer, ItemCard } from '@/components/common';
+import socialLinks from '@/config/socialLinks.json'
 
-const socialLinks = [
-  {
-    name: 'Facebook',
-    url: 'https://www.facebook.com/groups/spokanejobsnet',
-    icon: FacebookIcon
-  },
-  {
-    name: 'X (Twitter)',
-    url: 'https://x.com/SpokaneJobsNet',
-    icon: XIcon
-  },
-  {
-    name: 'Bluesky',
-    url: 'https://bsky.app/profile/spokanejobs.bsky.social',
-    icon: BlueskyIcon
-  },
-  {
-    name: 'Mastodon',
-    url: 'https://mastodon.social/@SpokaneJobs',
-    icon: MastodonIcon
-  }
-];
 
 const handleSocialClick = (url) => {
   window.open(url, '_blank', 'noopener,noreferrer');
@@ -51,7 +30,7 @@ const handleSocialClick = (url) => {
       >
         <template #header>
           <div class="social-link-content">
-            <component :is="link.icon" class="social-icon" />
+            <Icon :slug="link.icon" class="social-icon" size="40" color="var(--color-primary-600)" />
             <span>{{ link.name }}</span>
           </div>
         </template>
