@@ -8,7 +8,7 @@ export default {
 const Template = (args) => ({
   components: { HomeIcon },
   setup() { return { args }; },
-  template: '<HomeIcon width="40" height="40" v-bind="args"></HomeIcon>',
+  template: '<HomeIcon v-bind="args"></HomeIcon>',
 });
 
 export const Default = Template.bind({});

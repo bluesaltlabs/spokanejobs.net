@@ -8,7 +8,7 @@ export default {
 const Template = (args) => ({
   components: { MoonIcon },
   setup() { return { args }; },
-  template: '<MoonIcon width="40" height="40" v-bind="args"></MoonIcon>',
+  template: '<MoonIcon  v-bind="args"></MoonIcon>',
 });
 
 export const Default = Template.bind({});
