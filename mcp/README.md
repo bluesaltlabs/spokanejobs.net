@@ -3,7 +3,26 @@
 
 ## Information
 
-I'm following this tutorial: https://gofastmcp.com/tutorials/create-mcp-server
-next step: https://gofastmcp.com/tutorials/rest-api
+This is a work in progress.
+To Add this MCP server to LM Studio, use the following configuration:
 
-learn more about this project: https://github.com/evalstate/fast-agent
+```json
+{
+  "mcpServers": {
+    "bedrock-file": {
+      "command": "~/projects/bedrock/mcp/venv/bin/python",
+      "args": [
+        "~/projects/bedrock/mcp/main.py"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+note: Replace the path arguments with absolute, appropriate paths.
+
+
+## Example
+
+![](lm-studio-example.png)

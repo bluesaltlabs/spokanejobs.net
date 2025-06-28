@@ -3,84 +3,95 @@ const appName = import.meta.env.VITE_APP_NAME
 const appDescription = import.meta.env.VITE_APP_DESCRIPTION
 
 import { CompaniesIcon, JobsIcon } from '@/components/icons';
+import { Container } from '@/components/ui';
+import { ItemContainer, ItemCard } from '@/components/common';
 </script>
 
 <template>
-  <main class="static home landing-container">
-    <h1 class="landing-title">{{ appName }}</h1>
-    <p class="landing-description">
+  <Container>
+    <h1>Home</h1>
+    <hr class="divider" />
+
+    <p class="home-description">
       {{ appDescription ?? `${appName} description`}}
     </p>
-    <nav class="landing-nav">
-      <router-link to="/companies" class="landing-card-link">
-        <CompaniesIcon class="landing-card-icon" />
-        <span>View Companies</span>
-      </router-link>
-      <router-link to="/jobs" class="landing-card-link">
-        <JobsIcon class="landing-card-icon" />
-        <span>View Jobs</span>
-      </router-link>
-    </nav>
-  </main>
+
+    <ItemContainer grid customClass="home-nav">
+      <ItemCard
+        :onClick="() => $router.push('/companies')"
+        customClass="home-card-link"
+      >
+        <template #header>
+          <div class="home-card-content">
+            <CompaniesIcon class="home-card-icon" />
+            <span>View Companies</span>
+          </div>
+        </template>
+      </ItemCard>
+      <ItemCard
+        :onClick="() => $router.push('/jobs')"
+        customClass="home-card-link"
+      >
+        <template #header>
+          <div class="home-card-content">
+            <JobsIcon class="home-card-icon" />
+            <span>View Jobs</span>
+          </div>
+        </template>
+      </ItemCard>
+    </ItemContainer>
+  </Container>
 </template>
 
 <style scoped>
-.landing-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
+.divider {
+  margin: 1.5rem 0 2rem 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
 }
-.landing-title {
-  font-size: 2.5rem;
-  margin-bottom: 0.5em;
-}
-.landing-description {
-  max-width: 500px;
-  text-align: center;
+
+.home-description {
+
   margin-bottom: 2em;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
 }
-.landing-nav {
-  display: flex;
-  gap: 2rem;
+
+.home-nav {
+  gap: 2rem !important;
 }
-.landing-card-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-medium);
-  box-shadow: 0 1px 3px var(--color-shadow);
-  padding: 2rem 2.5rem;
+
+.home-card-link {
+  padding: 2rem 2.5rem !important;
   min-width: 200px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
   font-weight: 600;
   font-size: 1.1rem;
+  text-align: center;
 }
-.landing-card-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-shadow-elevated);
-  border-color: var(--color-border-hover);
+
+.home-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.landing-card-icon {
+
+.home-card-icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   color: var(--color-primary-600);
 }
+
 @media (max-width: 600px) {
-  .landing-nav {
-    flex-direction: column;
-    gap: 1.25rem;
+  .home-nav {
+    flex-direction: column !important;
+    gap: 1.25rem !important;
     width: 100%;
   }
-  .landing-card-link {
+
+  .home-card-link {
     width: 100%;
     min-width: unset;
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem !important;
   }
 }
 </style>

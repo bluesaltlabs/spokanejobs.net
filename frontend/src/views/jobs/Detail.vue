@@ -32,7 +32,7 @@ const companyMap = computed(() => {
 // Helper function to format job description
 function formatDescription(description) {
   if (!description) return ''
-  
+
   // Convert markdown-style formatting
   return description
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -46,7 +46,7 @@ function getCompanyName(slug) {
 </script>
 
 <template>
-  <Container size="default">
+  <Container>
     <!-- Back Navigation -->
     <div class="back-button">
       <router-link class="back-button-link" to="/jobs">
@@ -71,7 +71,7 @@ function getCompanyName(slug) {
     <div v-else-if="job">
       <!-- Job Header -->
       <h1 class="job-title">{{ job.title }}</h1>
-      
+
       <!-- Job Meta -->
       <div class="job-meta">
         <span v-if="job.city" class="job-location">
@@ -93,10 +93,10 @@ function getCompanyName(slug) {
 
       <!-- Apply Button -->
       <div class="job-actions">
-        <a 
-          v-if="job.url" 
-          :href="job.url" 
-          target="_blank" 
+        <a
+          v-if="job.url"
+          :href="job.url"
+          target="_blank"
           rel="noopener noreferrer"
           class="apply-button"
         >
@@ -118,7 +118,7 @@ function getCompanyName(slug) {
           <strong>Job ID:</strong> {{ job.job_id || job.id }}
         </div>
         <div v-if="job.url" class="metadata-item">
-          <strong>Original Posting:</strong> 
+          <strong>Original Posting:</strong>
           <a :href="job.url" target="_blank" rel="noopener noreferrer">
             View on {{ getCompanyName(job.company) }} Careers
           </a>
