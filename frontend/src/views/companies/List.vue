@@ -3,38 +3,23 @@ import { onMounted, computed } from 'vue'
 import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
+import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState } from '@/components/common'
 
 // setup
 const companiesStore = useCompanies()
 
 // Fetch companies on component mount
 onMounted(() => {
-  console.log('Companies component mounted, fetching companies...')
   companiesStore.fetchCompanies()
 })
 
-const loading = computed(() => {
-  console.log('Loading state:', companiesStore.loading)
-  return companiesStore.loading
-})
-
-const companiesCount = computed(() => {
-  console.log('Companies count:', companiesStore.sortedCompanies.length)
-  return companiesStore.sortedCompanies.length
-})
+const loading = computed(() => companiesStore.loading)
 </script>
 
 <template>
   <Container>
     <h1>Companies</h1>
     <hr class="divider" />
-
-    <!-- Debug info -->
-    <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 4px; font-family: monospace;">
-      <div>Loading: {{ loading }}</div>
-      <div>Companies count: {{ companiesCount }}</div>
-      <div>Companies data: {{ companiesStore.companies.length }}</div>
-    </div>
 
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading companies...</div>
@@ -55,17 +40,21 @@ const companiesCount = computed(() => {
           />
         </tbody>
       </table>
-      <div class="companies-grid mobile-only">
-        <div v-for="i in 6" :key="`skeleton-card-${i}`" class="company-card skeleton-card">
-          <div class="company-header">
-            <div class="skeleton-name"></div>
-            <div class="skeleton-slug"></div>
-          </div>
-          <div class="company-meta">
-            <div class="skeleton-website"></div>
-          </div>
-        </div>
-      </div>
+      <ItemContainer grid customClass="mobile-only">
+        <ItemCard v-for="i in 6" :key="`skeleton-card-${i}`" customClass="skeleton-card">
+          <template #header>
+            <div class="company-header">
+              <div class="skeleton-name"></div>
+              <div class="skeleton-slug"></div>
+            </div>
+          </template>
+          <template #meta>
+            <div class="company-meta">
+              <div class="skeleton-website"></div>
+            </div>
+          </template>
+        </ItemCard>
+      </ItemContainer>
     </div>
 
     <div v-else-if="companiesStore.sortedCompanies.length > 0" class="companies-results">
@@ -79,28 +68,34 @@ const companiesCount = computed(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="company in companiesStore.sortedCompanies" :key="company.id" class="company-row">
-            <td class="company-name-cell">
-              <router-link :to="{ name: 'company-detail', params: { slug: company.slug } }" class="company-name-link">
-                {{ company.name }}
-              </router-link>
-            </td>
-            <td class="company-slug-cell">{{ company.slug }}</td>
-            <td class="company-website-cell">
-              <a v-if="company.website" :href="company.website" target="_blank" rel="noopener noreferrer" class="website-link">
-                {{ company.website }}
-              </a>
-            </td>
-          </tr>
+          <ItemTableRow v-for="company in companiesStore.sortedCompanies" :key="company.id">
+            <template #cells>
+              <td class="company-name-cell">
+                <router-link :to="{ name: 'company-detail', params: { slug: company.slug } }" class="company-name-link">
+                  {{ company.name }}
+                </router-link>
+              </td>
+              <td class="company-slug-cell">{{ company.slug }}</td>
+              <td class="company-website-cell">
+                <a v-if="company.website" :href="company.website" target="_blank" rel="noopener noreferrer" class="website-link">
+                  {{ company.website }}
+                </a>
+              </td>
+            </template>
+          </ItemTableRow>
         </tbody>
       </table>
-      <div class="companies-grid mobile-only">
-        <div v-for="company in companiesStore.sortedCompanies" :key="company.id" class="company-card">
-          <router-link :to="{ name: 'company-detail', params: { slug: company.slug } }" class="company-link">
-            <div class="company-header">
-              <h3 class="company-title">{{ company.name }}</h3>
-              <div class="company-slug">{{ company.slug }}</div>
-            </div>
+      <ItemContainer grid customClass="mobile-only">
+        <ItemCard v-for="company in companiesStore.sortedCompanies" :key="company.id">
+          <template #header>
+            <router-link :to="{ name: 'company-detail', params: { slug: company.slug } }" class="company-link">
+              <div class="company-header">
+                <h3 class="company-title">{{ company.name }}</h3>
+                <div class="company-slug">{{ company.slug }}</div>
+              </div>
+            </router-link>
+          </template>
+          <template #meta>
             <div class="company-meta">
               <div v-if="company.website" class="company-website">
                 <a :href="company.website" target="_blank" rel="noopener noreferrer" class="website-link">
@@ -108,26 +103,28 @@ const companiesCount = computed(() => {
                 </a>
               </div>
             </div>
+          </template>
+          <template #actions>
             <div class="company-actions">
               <span class="view-details">View Details →</span>
             </div>
-          </router-link>
-        </div>
-      </div>
+          </template>
+        </ItemCard>
+      </ItemContainer>
     </div>
 
-    <div v-else class="empty-state">
-      <div class="empty-icon">
+    <ItemEmptyState v-else>
+      <template #icon>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
           <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
           <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
-      </div>
-      <h3>No companies found</h3>
-      <p>Check back later for new companies in the Spokane area.</p>
-    </div>
+      </template>
+      <template #title>No companies found</template>
+      <template #desc>Check back later for new companies in the Spokane area.</template>
+    </ItemEmptyState>
   </Container>
 </template>
 
@@ -188,10 +185,6 @@ td {
   vertical-align: top;
 }
 
-.company-row:hover {
-  background: var(--color-surface-hover);
-}
-
 .company-name-cell { width: 40%; }
 .company-slug-cell { width: 30%; }
 .company-website-cell { width: 30%; }
@@ -220,32 +213,6 @@ td {
 .website-link:hover {
   color: var(--color-link-hover);
   text-decoration: underline;
-}
-
-.companies-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  width: 100%;
-}
-
-.company-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-medium);
-  overflow: hidden;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px var(--color-shadow);
-  margin-bottom: 0;
-  width: 100%;
-  min-height: 120px;
-}
-
-.company-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-shadow-elevated);
-  border-color: var(--color-border-hover);
 }
 
 .company-link {
@@ -292,7 +259,6 @@ td {
   font-weight: 500;
   transition: color 0.2s ease;
 }
-.company-card:hover .view-details { color: var(--color-primary-700); }
 
 .skeleton-card { pointer-events: none; }
 .skeleton-name {
@@ -323,42 +289,9 @@ td {
   50% { opacity: 0.5; }
 }
 
-.empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: var(--color-text-muted);
-}
-.empty-icon {
-  margin-bottom: 1rem;
-  color: var(--color-text-subtle);
-}
-.empty-state h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-heading);
-  margin: 0 0 0.5rem 0;
-}
-.empty-state p {
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.5;
-}
-
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: block !important; }
-  .companies-results .companies-grid.mobile-only {
-    display: grid !important;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    width: 100%;
-  }
-  .companies-results .company-card {
-    margin-bottom: 0;
-    width: 100%;
-    display: block;
-  }
   .company-link { padding: 0.875rem; }
   .company-title { font-size: 0.95rem; }
 }
@@ -369,9 +302,5 @@ td {
 @media (min-width: 769px) and (max-width: 1024px) {
   .companies-table { font-size: 0.9rem; }
   th, td { padding: 0.875rem 1.25rem; }
-  .companies-grid { gap: 1.25rem; }
-}
-@media (min-width: 1025px) {
-  .companies-grid { gap: 1.75rem; }
 }
 </style>

@@ -5,6 +5,7 @@ import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { LocationIcon } from '@/components/icons'
+import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState } from '@/components/common'
 
 const jobsStore = useJobs()
 const companiesStore = useCompanies()
@@ -27,14 +28,6 @@ const companyMap = computed(() => {
 function getCompanyName(slug) {
   return companyMap.value[slug]?.name || 'Unknown Company'
 }
-
-function formatCompanyName(companySlug) {
-  if (!companySlug) return 'Unknown Company'
-  return companySlug
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
 </script>
 
 <template>
@@ -56,17 +49,21 @@ function formatCompanyName(companySlug) {
           <SkeletonTableRow v-for="i in 8" :key="`skeleton-${i}`" :columns="3" :column-widths="['40%', '30%', '30%']" />
         </tbody>
       </table>
-      <div class="jobs-grid mobile-only">
-        <div v-for="i in 6" :key="`skeleton-card-${i}`" class="job-card skeleton-card">
-          <div class="job-header">
-            <div class="skeleton-title"></div>
-            <div class="skeleton-company"></div>
-          </div>
-          <div class="job-meta">
-            <div class="skeleton-location"></div>
-          </div>
-        </div>
-      </div>
+      <ItemContainer grid customClass="mobile-only">
+        <ItemCard v-for="i in 6" :key="`skeleton-card-${i}`" customClass="skeleton-card">
+          <template #header>
+            <div class="job-header">
+              <div class="skeleton-title"></div>
+              <div class="skeleton-company"></div>
+            </div>
+          </template>
+          <template #meta>
+            <div class="job-meta">
+              <div class="skeleton-location"></div>
+            </div>
+          </template>
+        </ItemCard>
+      </ItemContainer>
     </div>
 
     <div v-else-if="jobsStore.sortedJobs.length > 0" class="jobs-results">
@@ -80,37 +77,14 @@ function formatCompanyName(companySlug) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="job in jobsStore.sortedJobs" :key="job.id || job.job_id" class="job-row">
-            <td class="job-title-cell">
-              <router-link :to="{ name: 'job-detail', params: { id: job.id || job.job_id } }" class="job-title-link">
-                {{ job.title }}
-              </router-link>
-            </td>
-            <td class="job-company-cell">
-              <router-link
-                v-if="companyMap[job.company]"
-                :to="{ name: 'company-detail', params: { slug: job.company } }"
-                class="company-name"
-              >
-                {{ getCompanyName(job.company) }}
-              </router-link>
-              <span v-else class="company-name">{{ getCompanyName(job.company) }}</span>
-            </td>
-            <td class="job-location-cell">
-              <span class="location">
-                <LocationIcon class="location-icon" />
-                {{ job.city }}{{ job.state ? ', ' + job.state : '' }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="jobs-grid mobile-only">
-        <div v-for="job in jobsStore.sortedJobs" :key="job.id || job.job_id" class="job-card">
-          <router-link :to="{ name: 'job-detail', params: { id: job.id || job.job_id } }" class="job-link">
-            <div class="job-header">
-              <h3 class="job-title">{{ job.title }}</h3>
-              <div class="job-company">
+          <ItemTableRow v-for="job in jobsStore.sortedJobs" :key="job.id || job.job_id">
+            <template #cells>
+              <td class="job-title-cell">
+                <router-link :to="{ name: 'job-detail', params: { id: job.id || job.job_id } }" class="job-title-link">
+                  {{ job.title }}
+                </router-link>
+              </td>
+              <td class="job-company-cell">
                 <router-link
                   v-if="companyMap[job.company]"
                   :to="{ name: 'company-detail', params: { slug: job.company } }"
@@ -119,31 +93,66 @@ function formatCompanyName(companySlug) {
                   {{ getCompanyName(job.company) }}
                 </router-link>
                 <span v-else class="company-name">{{ getCompanyName(job.company) }}</span>
+              </td>
+              <td class="job-location-cell">
+                <span class="location">
+                  <LocationIcon class="location-icon" />
+                  {{ job.city }}{{ job.state ? ', ' + job.state : '' }}
+                </span>
+              </td>
+            </template>
+          </ItemTableRow>
+        </tbody>
+      </table>
+      <ItemContainer grid customClass="mobile-only">
+        <ItemCard 
+          v-for="job in jobsStore.sortedJobs" 
+          :key="job.id || job.job_id"
+          :onClick="() => $router.push({ name: 'job-detail', params: { id: job.id || job.job_id } })"
+        >
+          <template #header>
+            <div class="job-header">
+              <div class="job-info">
+                <h3 class="job-title">{{ job.title }}</h3>
+                <div class="job-company">
+                  <router-link
+                    v-if="companyMap[job.company]"
+                    :to="{ name: 'company-detail', params: { slug: job.company } }"
+                    class="company-name"
+                  >
+                    {{ getCompanyName(job.company) }}
+                  </router-link>
+                  <span v-else class="company-name">{{ getCompanyName(job.company) }}</span>
+                </div>
               </div>
             </div>
+          </template>
+          <template #meta>
             <div class="job-meta">
               <div class="job-location">
                 <LocationIcon class="location-icon" />
                 {{ job.city }}{{ job.state ? ', ' + job.state : '' }}
               </div>
             </div>
+          </template>
+          <template #actions>
             <div class="job-actions">
               <span class="view-details">View Details →</span>
             </div>
-          </router-link>
-        </div>
-      </div>
+          </template>
+        </ItemCard>
+      </ItemContainer>
     </div>
 
-    <div v-else class="empty-state">
-      <div class="empty-icon">
+    <ItemEmptyState v-else>
+      <template #icon>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
         </svg>
-      </div>
-      <h3>No jobs found</h3>
-      <p>Check back later for new opportunities in the Spokane area.</p>
-    </div>
+      </template>
+      <template #title>No jobs found</template>
+      <template #desc>Check back later for new opportunities in the Spokane area.</template>
+    </ItemEmptyState>
   </Container>
 </template>
 
@@ -204,10 +213,6 @@ td {
   vertical-align: top;
 }
 
-.job-row:hover {
-  background: var(--color-surface-hover);
-}
-
 .job-title-cell { width: 40%; }
 .job-company-cell { width: 30%; }
 .job-location-cell { width: 30%; }
@@ -245,42 +250,15 @@ td {
   color: var(--color-text-muted);
 }
 
-.jobs-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  width: 100%;
+.job-header { 
+  margin-bottom: 0.75rem;
 }
 
-.job-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-medium);
-  overflow: hidden;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 3px var(--color-shadow);
-  margin-bottom: 0;
-  width: 100%;
-  min-height: 120px;
+.job-info {
+  flex: 1;
+  min-width: 0;
 }
 
-.job-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-shadow-elevated);
-  border-color: var(--color-border-hover);
-}
-
-.job-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  padding: 1rem;
-  height: 100%;
-  box-sizing: border-box;
-}
-
-.job-header { margin-bottom: 0.75rem; }
 .job-title {
   font-size: 1rem;
   font-weight: 600;
@@ -313,7 +291,6 @@ td {
   font-weight: 500;
   transition: color 0.2s ease;
 }
-.job-card:hover .view-details { color: var(--color-primary-700); }
 .skeleton-card { pointer-events: none; }
 .skeleton-title {
   height: 1.25rem;
@@ -341,42 +318,13 @@ td {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
-.empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: var(--color-text-muted);
-}
-.empty-icon {
-  margin-bottom: 1rem;
-  color: var(--color-text-subtle);
-}
-.empty-state h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-heading);
-  margin: 0 0 0.5rem 0;
-}
-.empty-state p {
-  font-size: 1rem;
-  margin: 0;
-  line-height: 1.5;
-}
+
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: block !important; }
-  .jobs-results .jobs-grid.mobile-only {
-    display: grid !important;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    width: 100%;
+  .mobile-only .item-card {
+    margin-bottom: 1rem;
   }
-  .jobs-results .job-card {
-    margin-bottom: 0;
-    width: 100%;
-    display: block;
-  }
-  .job-link { padding: 0.875rem; }
   .job-title { font-size: 0.95rem; }
 }
 @media (min-width: 769px) {
@@ -386,9 +334,5 @@ td {
 @media (min-width: 769px) and (max-width: 1024px) {
   .jobs-table { font-size: 0.9rem; }
   th, td { padding: 0.875rem 1.25rem; }
-  .jobs-grid { gap: 1.25rem; }
-}
-@media (min-width: 1025px) {
-  .jobs-grid { gap: 1.75rem; }
 }
 </style>

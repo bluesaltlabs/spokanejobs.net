@@ -4,6 +4,7 @@ const appDescription = import.meta.env.VITE_APP_DESCRIPTION
 
 import { CompaniesIcon, JobsIcon } from '@/components/icons';
 import { Container } from '@/components/ui';
+import { ItemContainer, ItemCard } from '@/components/common';
 </script>
 
 <template>
@@ -15,16 +16,30 @@ import { Container } from '@/components/ui';
       {{ appDescription ?? `${appName} description`}}
     </p>
 
-    <nav class="home-nav">
-      <router-link to="/companies" class="home-card-link">
-        <CompaniesIcon class="home-card-icon" />
-        <span>View Companies</span>
-      </router-link>
-      <router-link to="/jobs" class="home-card-link">
-        <JobsIcon class="home-card-icon" />
-        <span>View Jobs</span>
-      </router-link>
-    </nav>
+    <ItemContainer grid customClass="home-nav">
+      <ItemCard
+        :onClick="() => $router.push('/companies')"
+        customClass="home-card-link"
+      >
+        <template #header>
+          <div class="home-card-content">
+            <CompaniesIcon class="home-card-icon" />
+            <span>View Companies</span>
+          </div>
+        </template>
+      </ItemCard>
+      <ItemCard
+        :onClick="() => $router.push('/jobs')"
+        customClass="home-card-link"
+      >
+        <template #header>
+          <div class="home-card-content">
+            <JobsIcon class="home-card-icon" />
+            <span>View Jobs</span>
+          </div>
+        </template>
+      </ItemCard>
+    </ItemContainer>
   </Container>
 </template>
 
@@ -36,38 +51,28 @@ import { Container } from '@/components/ui';
 }
 
 .home-description {
-  max-width: 500px;
+
   margin-bottom: 2em;
   color: var(--color-text-secondary);
   line-height: 1.6;
 }
 
 .home-nav {
-  display: flex;
-  gap: 2rem;
+  gap: 2rem !important;
 }
 
 .home-card-link {
+  padding: 2rem 2.5rem !important;
+  min-width: 200px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.home-card-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-medium);
-  box-shadow: 0 1px 3px var(--color-shadow);
-  padding: 2rem 2.5rem;
-  min-width: 200px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.home-card-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-shadow-elevated);
-  border-color: var(--color-border-hover);
 }
 
 .home-card-icon {
@@ -78,15 +83,15 @@ import { Container } from '@/components/ui';
 
 @media (max-width: 600px) {
   .home-nav {
-    flex-direction: column;
-    gap: 1.25rem;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
     width: 100%;
   }
-  
+
   .home-card-link {
     width: 100%;
     min-width: unset;
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem !important;
   }
 }
 </style>

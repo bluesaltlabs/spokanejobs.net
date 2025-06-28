@@ -3,6 +3,7 @@ const appName = import.meta.env.VITE_APP_NAME
 
 import { XIcon, FacebookIcon, BlueskyIcon, MastodonIcon } from '@/components/icons';
 import { Container } from '@/components/ui';
+import { ItemContainer, ItemCard } from '@/components/common';
 
 const socialLinks = [
   {
@@ -26,6 +27,10 @@ const socialLinks = [
     icon: MastodonIcon
   }
 ];
+
+const handleSocialClick = (url) => {
+  window.open(url, '_blank', 'noopener,noreferrer');
+};
 </script>
 
 <template>
@@ -37,19 +42,21 @@ const socialLinks = [
       Connect with us on social media!
     </p>
 
-    <div class="social-links">
-      <a
+    <ItemContainer grid customClass="social-links">
+      <ItemCard
         v-for="link in socialLinks"
         :key="link.name"
-        :href="link.url"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link"
+        :onClick="() => handleSocialClick(link.url)"
+        customClass="social-link"
       >
-        <component :is="link.icon" class="social-icon" />
-        <span>{{ link.name }}</span>
-      </a>
-    </div>
+        <template #header>
+          <div class="social-link-content">
+            <component :is="link.icon" class="social-icon" />
+            <span>{{ link.name }}</span>
+          </div>
+        </template>
+      </ItemCard>
+    </ItemContainer>
   </Container>
 </template>
 
@@ -67,32 +74,22 @@ const socialLinks = [
 }
 
 .social-links {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: 1.5rem !important;
   max-width: 800px;
 }
 
 .social-link {
+  padding: 2rem 1.5rem !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.social-link-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-medium);
-  box-shadow: 0 1px 3px var(--color-shadow);
-  padding: 2rem 1.5rem;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s;
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.social-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-shadow-elevated);
-  border-color: var(--color-border-hover);
 }
 
 .social-icon {
@@ -103,12 +100,12 @@ const socialLinks = [
 
 @media (max-width: 600px) {
   .social-links {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
   }
 
   .social-link {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 1rem !important;
   }
 }
 </style>
