@@ -18,7 +18,7 @@ func TrimSpaces(s string) string {
 }
 
 // SaveJobsToJSON saves scraped jobs to a JSON file
-func SaveJobsToJSON(jobs []types.ScrapedJob, scraperName string) error {
+func SaveJobsToJSON(jobs []types.ScrapedJob, slug string) error {
 	// Create companies directory within the output directory
 	companiesDir := filepath.Join("scraper_output/companies")
 	if err := os.MkdirAll(companiesDir, 0755); err != nil {
@@ -26,7 +26,7 @@ func SaveJobsToJSON(jobs []types.ScrapedJob, scraperName string) error {
 	}
 
 	// Create filename without timestamp for consistency
-	filename := fmt.Sprintf("%s.json", scraperName)
+	filename := fmt.Sprintf("%s.json", slug)
 	filepath := filepath.Join(companiesDir, filename)
 
 	// Create the file

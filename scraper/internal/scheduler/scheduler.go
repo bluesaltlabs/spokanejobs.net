@@ -4,43 +4,40 @@ import (
 	"log"
 	"time"
 
-	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/types"
+	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/utils"
 )
 
-// RunScheduledScrapers runs scrapers based on the current hour and their individual schedule settings
-func RunScheduledScrapers() error {
-	// Get current hour
-	now := time.Now()
-	currentHour := now.Hour()
+type Scheduler struct {
+	Scrapers []types.Scraper
+}
 
-	log.Printf("Scheduler mode enabled")
-	log.Printf("Current hour: %d", currentHour)
+func New(scrapers []types.Scraper) *Scheduler {
+	return &Scheduler{Scrapers: scrapers}
+}
 
-	// Get all available scrapers
-	allScrapers := scrapers.GetAllScrapers()
-	log.Printf("Loaded %d scrapers", len(allScrapers))
-
-	// Find scrapers scheduled for current hour
-	var scrapersToRun []string
-	for _, scraper := range allScrapers {
-		if scraper.GetScheduleHour() == currentHour {
-			scrapersToRun = append(scrapersToRun, scraper.GetName())
+func (s *Scheduler) RunDueScrapers(now time.Time) {
+	hour := now.Hour()
+	for _, scraper := range s.Scrapers {
+		if scraper.GetScheduleHour() == hour {
+			log.Printf("Running scheduled scraper: %s", scraper.GetName())
+			jobs := scraper.ScrapedJobs()
+			_ = scraper.SaveOutput(jobs)
 		}
 	}
+}
 
-	if len(scrapersToRun) == 0 {
-		log.Printf("No scrapers scheduled for hour %d", currentHour)
-		return nil
+func (s *Scheduler) RunAllScrapers() {
+	for _, scraper := range s.Scrapers {
+		log.Printf("Running scraper: %s", scraper.GetName())
+		jobs := scraper.ScrapedJobs()
+		_ = scraper.SaveOutput(jobs)
 	}
-
-	log.Printf("Running scrapers scheduled for hour %d: %v", currentHour, scrapersToRun)
-
-	// Run each scheduled scraper
-	for _, scraperSlug := range scrapersToRun {
-		log.Printf("Starting scraper: %s", scraperSlug)
-		scrapers.RunScraper(scraperSlug)
-		log.Printf("Scraper completed: %s", scraperSlug)
+	log.Printf("Consolidating all jobs and syncing to git repo...")
+	err := utils.ConsolidateJobsToJSON()
+	if err != nil {
+		log.Printf("Error during consolidation and git sync: %v", err)
+	} else {
+		log.Printf("Consolidation and git sync complete.")
 	}
-
-	return nil
 }
