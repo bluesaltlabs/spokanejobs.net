@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -11,102 +10,50 @@ import (
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scheduler"
 	"gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers"
 	"github.com/joho/godotenv"
+
+	// Import companies package to ensure scrapers are registered
+	_ "gitea.bluesaltlabs.com/BlueSaltLabs/bedrock/scraper/internal/scrapers/companies"
 )
 
 func main() {
-	fmt.Printf("=== Scraper Init ===\n")
-	now := time.Now()
-	fmt.Printf("Current time: %v\n", now)
-
-	// Load environment variables from .env file if it exists
+	// Load .env file if it exists
 	if err := godotenv.Load(); err != nil {
-		// Try .env.local for local development
-		if err := godotenv.Load(".env.local"); err != nil {
-			log.Printf("No .env or .env.local file found, using system environment variables")
-		} else {
-			log.Printf("Loaded environment variables from .env.local")
-		}
-	} else {
-		log.Printf("Loaded environment variables from .env")
+		log.Printf("Warning: Could not load .env file: %v", err)
 	}
 
-	// Log environment variables for debugging
-	if dataRepoSubdir := os.Getenv("DATA_REPO_SUBDIR"); dataRepoSubdir != "" {
-		log.Printf("DATA_REPO_SUBDIR: %s", dataRepoSubdir)
-	} else {
-		log.Printf("DATA_REPO_SUBDIR not set, will use default 'api'")
-	}
-
-	// Check for SCRAPER_ARGS environment variable
-	if scraperArgs := os.Getenv("SCRAPER_ARGS"); scraperArgs != "" {
-		log.Printf("SCRAPER_ARGS environment variable found: %s", scraperArgs)
-		// Parse the environment variable arguments
-		args := strings.Fields(scraperArgs)
-		processArgs(args)
-		return
-	}
-
-	// Define command line flags
-	runAll := flag.Bool("all", false, "Run all scrapers")
+	// Command line flags
+	runAll := flag.Bool("all", false, "Run all scrapers regardless of schedule")
+	debug := flag.Bool("debug", false, "Enable debug output")
 	flag.Parse()
 
-	// Check for additional arguments (specific scraper)
-	args := flag.Args()
-	processArgsWithAllFlag(args, *runAll)
-}
+	// Check for SCRAPER_ARGS environment variable
+	scraperArgs := os.Getenv("SCRAPER_ARGS")
+	if scraperArgs != "" {
+		log.Printf("Found SCRAPER_ARGS: %s", scraperArgs)
+		// Parse SCRAPER_ARGS as if they were command line arguments
+		args := strings.Fields(scraperArgs)
+		flag.CommandLine.Parse(args)
+	}
 
-// processArgs handles the argument processing logic
-func processArgs(args []string) {
-	if len(args) == 0 {
-		// Default behavior: run scheduler mode
-		if err := scheduler.RunScheduledScrapers(); err != nil {
-			log.Printf("Error running scheduled scrapers: %v", err)
-			os.Exit(1)
+	// Auto-register all scrapers via init() in their packages
+	allScrapers := scrapers.LoadAllScrapers()
+
+	if *debug {
+		log.Printf("Loaded %d scrapers", len(allScrapers))
+		for _, scraper := range allScrapers {
+			log.Printf("  - %s (scheduled for hour: %d)",
+				scraper.GetName(), scraper.GetScheduleHour())
 		}
-		return
 	}
 
-	// Check if first argument is -all
-	if args[0] == "-all" {
-		fmt.Printf("Running all scrapers\n")
-		scrapers.RunAll()
-		return
-	}
+	sched := scheduler.New(allScrapers)
 
-	// Run specific scraper(s)
-	if len(args) == 1 {
-		scraperName := args[0]
-		fmt.Printf("Running specific scraper: %s\n", scraperName)
-		scrapers.RunScraper(scraperName)
+	if *runAll {
+		log.Println("Running all scrapers (--all flag specified)")
+		sched.RunAllScrapers()
 	} else {
-		// Run multiple specific scrapers
-		fmt.Printf("Running multiple scrapers: %v\n", args)
-		for _, scraperName := range args {
-			fmt.Printf("Running scraper: %s\n", scraperName)
-			scrapers.RunScraper(scraperName)
-		}
-	}
-}
-
-// processArgsWithAllFlag handles the argument processing with the -all flag from command line
-func processArgsWithAllFlag(args []string, runAll bool) {
-	if runAll {
-		// run all scrapers
-		fmt.Printf("Running all scrapers\n")
-		scrapers.RunAll()
-	} else if len(args) == 1 {
-		// Run specific scraper
-		scraperName := args[0]
-		fmt.Printf("Running specific scraper: %s\n", scraperName)
-		scrapers.RunScraper(scraperName)
-	} else if len(args) > 1 {
-		log.Printf("Too many arguments provided: %v", args)
-		os.Exit(1)
-	} else {
-		// Default behavior: run scheduler mode
-		if err := scheduler.RunScheduledScrapers(); err != nil {
-			log.Printf("Error running scheduled scrapers: %v", err)
-			os.Exit(1)
-		}
+		now := time.Now()
+		log.Printf("Current time: %s (hour: %d)", now.Format("2006-01-02 15:04:05"), now.Hour())
+		sched.RunDueScrapers(now)
 	}
 }

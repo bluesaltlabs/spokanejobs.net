@@ -15,17 +15,13 @@ type ScrapedJob struct {
 	State       string `json:"state"`
 	Url         string `json:"url"`
 	Company     string `json:"company"`
-	// todo: needs more attributes, need to state which ones are optional, etc.
 }
 
 type Scraper interface {
 	GetName() string
 	GetScheduleHour() int
 	ScrapedJobs() []ScrapedJob
-	ScrapeJobDetails(job *ScrapedJob)
-	SaveOutput() error
-	// SetEngine is optional - scrapers can implement it if they want to use the new engine interface
-	// Default implementation is provided in BaseScraper
+	SaveOutput([]ScrapedJob) error
 }
 
 // ScraperConfig is kept minimal for backward compatibility
@@ -54,7 +50,7 @@ func (b *BaseScraper) SetEngine(engine interface{}) {
 }
 
 // SaveOutput saves the scraped jobs to a JSON file
-func (b *BaseScraper) SaveOutput() error {
+func (b *BaseScraper) SaveOutput(jobs []ScrapedJob) error {
 	// Create companies directory within the output directory
 	companiesDir := filepath.Join("scraper_output/companies")
 	if err := os.MkdirAll(companiesDir, 0755); err != nil {
@@ -77,7 +73,7 @@ func (b *BaseScraper) SaveOutput() error {
 	encoder.SetIndent("", "  ")
 
 	// Encode the jobs
-	if err := encoder.Encode(b.Jobs); err != nil {
+	if err := encoder.Encode(jobs); err != nil {
 		return fmt.Errorf("failed to encode JSON: %w", err)
 	}
 
