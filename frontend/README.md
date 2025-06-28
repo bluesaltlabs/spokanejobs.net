@@ -45,8 +45,9 @@ npm run storybook
 
 ## To Do
 
-- [ ] determine what to add to the home page (just list jobs? )
+
 - [ ] add resources, events, etc (plan out how to add these things)
+  - add Spokane tech, discord, meetup, meeting spaces, and other misc information to the resources page. The library has stuff. Check that out.
 
 
 
