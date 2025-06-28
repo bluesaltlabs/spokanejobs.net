@@ -2,8 +2,7 @@
   {
     "section": "Main",
     "items": [
-      { "route": "about", "label": "About", "icon": "About" },
-      { "route": "resources", "label": "Resources", "icon": "Resources" },
+      { "route": "home", "label": "Home", "icon": "Home" },
       { "route": "contact", "label": "Contact", "icon": "Contact" }
     ]
   },
@@ -14,4 +13,4 @@
       { "route": "jobs-list", "label": "Jobs", "icon": "Jobs" }
     ]
   }
-] 
+]
