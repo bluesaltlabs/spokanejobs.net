@@ -40,7 +40,7 @@ func NewOpenEyeScraper() types.Scraper {
 		BaseScraper: &scrapers.BaseScraper{
 			Name:         "OpenEye",
 			Slug:         "openeye",
-			ScheduleHour: 15,
+			ScheduleHour: 8,
 			Engine:       engine,
 		},
 	}
