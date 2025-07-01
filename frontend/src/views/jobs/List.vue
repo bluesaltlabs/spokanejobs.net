@@ -4,7 +4,7 @@ import { useJobs } from '@/stores/jobs'
 import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
-import { LocationIcon } from '@/components/icons'
+import { LocationIcon, JobsIcon } from '@/components/icons'
 import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState, SearchBar } from '@/components/common'
 import MultiSelect from '@/components/ui/MultiSelect/MultiSelect.vue'
 import Button from '@/components/ui/Button/Button.vue'
@@ -40,18 +40,19 @@ function clearFilters() {
   <Container>
     <h1>Jobs</h1>
     <hr class="divider" />
-    <div class="filters-row">
-      <SearchBar
-        v-model="jobsStore.filters.search"
-        placeholder="Search jobs..."
-      />
-      <MultiSelect
-        v-model="jobsStore.filters.companies"
-        :options="companiesStore.companies.map(c => ({ label: c.name, value: c.slug }))"
-        placeholder="Filter by company..."
-        class="company-multiselect"
-      />
-    </div>
+
+    <SearchBar
+      v-model="jobsStore.filters.search"
+      placeholder="Search jobs..."
+    />
+
+    <MultiSelect
+      v-model="jobsStore.filters.companies"
+      :options="companiesStore.companies.map(c => ({ label: c.name, value: c.slug }))"
+      placeholder="Filter by company..."
+      class="company-multiselect"
+    />
+
 
     <div class="results-row">
       <div class="results-count">{{ jobsStore.sortedJobs.length }} jobs found</div>
@@ -175,9 +176,7 @@ function clearFilters() {
 
     <ItemEmptyState v-else>
       <template #icon>
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-        </svg>
+        <JobsIcon />
       </template>
       <template #title>No jobs found</template>
       <template #desc>Check back later for new opportunities in the Spokane area.</template>

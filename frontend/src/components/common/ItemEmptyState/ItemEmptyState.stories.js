@@ -23,7 +23,7 @@ const Template = (args) => ({
         </svg>
       </template>
       <template #title>No items found</template>
-      <template #desc>Try adding some items to see them here.</template>
+      <template #desc>Try adjusting your search criteria or browse all items.</template>
     </ItemEmptyState>
   `,
 });
@@ -43,7 +43,7 @@ export const CompaniesEmpty = (args) => ({
         </svg>
       </template>
       <template #title>No companies found</template>
-      <template #desc>Companies will appear here once they are added to the system.</template>
+      <template #desc>Try adjusting your search criteria or browse all items.</template>
     </ItemEmptyState>
   `,
 });
@@ -59,7 +59,7 @@ export const JobsEmpty = (args) => ({
         </svg>
       </template>
       <template #title>No jobs found</template>
-      <template #desc>Check back later for new opportunities in the Spokane area.</template>
+      <template #desc>Try adjusting your search criteria or browse all items.</template>
     </ItemEmptyState>
   `,
 });

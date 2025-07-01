@@ -3,7 +3,7 @@ import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompanies } from '@/stores/companies'
 import { SkeletonCard } from '@/components/skeleton'
-import { Container } from '@/components/ui'
+import { Container, Button } from '@/components/ui'
 import { CompaniesIcon } from '@/components/icons'
 import { ItemContainer, ItemCard, ItemEmptyState, SearchBar } from '@/components/common'
 
@@ -30,6 +30,19 @@ const loading = computed(() => companiesStore.loading)
       @update:modelValue="val => companiesStore.updateFilters({ search: val })"
     />
 
+    <div class="results-row">
+      <div class="results-count">{{ companiesStore.sortedCompanies.length }} companies found</div>
+      <Button
+        variant="secondary"
+        class="clear-filters-btn"
+        @click="companiesStore.updateFilters({ search: '' })"
+        aria-label="Clear all filters"
+        type="button"
+      >
+        Clear Filters
+      </Button>
+    </div>
+
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading companies...</div>
       <ItemContainer grid>
@@ -38,10 +51,9 @@ const loading = computed(() => companiesStore.loading)
     </div>
 
     <div v-else-if="companiesStore.sortedCompanies.length > 0" class="companies-results">
-      <div class="results-count">{{ companiesStore.sortedCompanies.length }} companies found</div>
       <ItemContainer grid>
-        <ItemCard 
-          v-for="company in companiesStore.sortedCompanies" 
+        <ItemCard
+          v-for="company in companiesStore.sortedCompanies"
           :key="company.id"
           :onClick="() => router.push({ name: 'company-detail', params: { slug: company.slug }})"
         >
@@ -104,11 +116,20 @@ const loading = computed(() => companiesStore.loading)
   margin-bottom: 1rem;
 }
 
+.results-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .results-count {
   font-weight: 600;
   color: var(--color-heading);
   margin-bottom: 1rem;
 }
+
 
 .company-header {
   display: flex;
