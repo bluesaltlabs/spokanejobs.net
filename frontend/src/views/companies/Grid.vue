@@ -5,7 +5,7 @@ import { useCompanies } from '@/stores/companies'
 import { SkeletonCard } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { CompaniesIcon } from '@/components/icons'
-import { ItemContainer, ItemCard, ItemEmptyState } from '@/components/common'
+import { ItemContainer, ItemCard, ItemEmptyState, SearchBar } from '@/components/common'
 
 // setup
 const router = useRouter()
@@ -23,6 +23,12 @@ const loading = computed(() => companiesStore.loading)
   <Container>
     <h1>Companies</h1>
     <hr class="divider" />
+
+    <SearchBar
+      v-model="companiesStore.filters.search"
+      placeholder="Search companies..."
+      @update:modelValue="val => companiesStore.updateFilters({ search: val })"
+    />
 
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading companies...</div>
