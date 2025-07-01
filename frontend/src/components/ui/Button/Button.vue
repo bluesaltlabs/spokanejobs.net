@@ -1,22 +1,39 @@
 <template>
-  <button
-    :type="type"
+  <component
+    :is="as"
+    v-bind="componentProps"
+    :type="as === 'button' ? type : undefined"
     :class="['ui-btn', variant, { loading, disabled }]"
-    :disabled="disabled || loading"
+    :disabled="as === 'button' ? (disabled || loading) : undefined"
     @click="$emit('click', $event)"
   >
     <span v-if="loading" class="ui-btn__spinner"></span>
     <slot />
-  </button>
+  </component>
 </template>
 
 <script setup>
-defineProps({
+import { computed, useAttrs } from 'vue'
+
+const props = defineProps({
+  as: { type: String, default: 'button' },
   type: { type: String, default: 'button' },
   variant: { type: String, default: 'primary' },
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
-});
+})
+const attrs = useAttrs()
+
+const componentProps = computed(() => {
+  // Only pass anchor-specific props if rendering as 'a'
+  if (props.as === 'a') {
+    const { href, target, rel, ...rest } = attrs
+    return { href, target, rel, ...rest }
+  }
+  // For button, pass all attrs except anchor-specific
+  const { href, target, rel, ...rest } = attrs
+  return rest
+})
 </script>
 
 <style scoped>
