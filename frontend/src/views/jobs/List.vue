@@ -72,7 +72,7 @@ function getCompanyName(slug) {
     </div>
 
     <div v-else-if="jobsStore.sortedJobs.length > 0" class="jobs-results">
-      <div class="results-count">{{ jobsStore.countJobs }} jobs found</div>
+      <div class="results-count">{{ jobsStore.sortedJobs.length }} jobs found</div>
       <table class="jobs-table desktop-only">
         <thead>
           <tr>
