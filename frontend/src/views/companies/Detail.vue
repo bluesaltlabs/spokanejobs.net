@@ -6,6 +6,7 @@ import { SkeletonText, SkeletonImage, SkeletonButton } from '@/components/skelet
 import { Container } from '@/components/ui'
 import { CompaniesIcon, ViewIcon } from '@/components/icons'
 import Button from '@/components/ui/Button/Button.vue'
+import ScrapingStatus from '@/components/common/ScrapingStatus/ScrapingStatus.vue'
 
 // Setup
 const companyStore = useCompany()
@@ -83,7 +84,17 @@ const loading = computed(() => companyStore.loading)
       <div class="spacer"></div>
       <img v-if="company?.logo_url" :src="company.logo_url" :alt="company.name + ' Logo'" class="company-logo" />
 
-      <!-- add a spacer here, or add padding to the paragraphs -->
+      <div class="spacer"></div>
+      <ScrapingStatus
+        v-if="company.scraper_status"
+        :status="company.scraper_status"
+        :last-scraped-at="company.last_scraped_at"
+        :scraper-created-at="company.scraper_created_at"
+        :active-jobs-count="company.active_jobs_count"
+        :scraper-error="company.scraper_error"
+      />
+
+      <div class="spacer"></div>
       <p v-if="company.description">{{ company.description }}</p>
     </div>
 
