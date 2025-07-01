@@ -17,7 +17,6 @@
       type="button"
       aria-label="Clear input"
       @click="$emit('update:modelValue', '')"
-      tabindex="-1"
     >&times;</button>
   </div>
 </template>
@@ -44,18 +43,18 @@ defineProps({
   max-width: 100%;
   box-sizing: border-box;
   padding: 0.5em 0.75em;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   outline: none;
   transition: border 0.2s;
 }
 .ui-input:focus {
-  border-color: #2563eb;
+  border-color: var(--color-border-focus);
 }
 .ui-input:disabled {
-  background: #f3f4f6;
-  color: #9ca3af;
+  background-color: var(--color-background-mute);
+  color: var(--color-text-muted);
 }
 /* Utility class for consistent vertical spacing of form elements */
 .ui-form-element {
@@ -65,15 +64,14 @@ defineProps({
 }
 .clear-btn {
   position: absolute;
-  right: 0.75em;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 0.5em;
+  top: 10%;
   background: none;
   border: none;
-  font-size: 1.25em;
-  color: #9ca3af;
+  font-size: 1.25rem;
+  color: var(--color-primary);
   cursor: pointer;
-  padding: 0;
+  padding: 0.5em 0.75em;
   line-height: 1;
   z-index: 2;
   height: 1.5em;
@@ -83,7 +81,8 @@ defineProps({
   justify-content: center;
 }
 .clear-btn:focus {
-  outline: none;
-  color: #2563eb;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  color: var(--color-border-focus);
 }
-</style> 
+</style>

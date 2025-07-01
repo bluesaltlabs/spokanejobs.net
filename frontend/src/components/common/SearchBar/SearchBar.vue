@@ -4,7 +4,7 @@
       v-model="search"
       :placeholder="placeholder"
       class="search-input"
-      @input="onInput"
+      @update:modelValue="onInput"
       clearable
     />
   </div>
