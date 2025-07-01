@@ -5,7 +5,6 @@ import ContactView from '@/views/static/Contact.vue'
 import ResourcesView from '@/views/static/Resources.vue'
 import SitemapView from '@/views/static/Sitemap.vue'
 import CompaniesGridView from '@/views/companies/Grid.vue'
-import CompaniesListView from '@/views/companies/List.vue'
 import CompanyDetailView from '@/views/companies/Detail.vue'
 import JobsListView from '@/views/jobs/List.vue'
 import JobDetailView from '@/views/jobs/Detail.vue'
@@ -43,13 +42,7 @@ const router = createRouter({
     {
       path: '/companies',
       name: 'companies-grid',
-      //component: CompaniesListView,
       component: CompaniesGridView,
-    },
-    {
-      path: '/companies-list',
-      name: 'companies-list',
-      component: CompaniesListView,
     },
     {
       path: '/companies/:slug',
