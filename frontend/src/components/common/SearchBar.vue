@@ -4,7 +4,7 @@
       v-model="search"
       :placeholder="placeholder"
       class="search-input"
-      @input="onInput"
+      @update:modelValue="onInput"
       clearable
     />
   </div>
@@ -29,8 +29,9 @@ watch(() => props.modelValue, (val) => {
   if (val !== search.value) search.value = val || ''
 })
 
-function onInput() {
-  emit('update:modelValue', search.value)
+function onInput(val) {
+  search.value = val
+  emit('update:modelValue', val)
 }
 </script>
 

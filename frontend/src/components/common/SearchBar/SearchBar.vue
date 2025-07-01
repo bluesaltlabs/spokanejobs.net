@@ -29,7 +29,8 @@ watch(() => props.modelValue, (val) => {
   if (val !== search.value) search.value = val || ''
 })
 
-function onInput() {
-  emit('update:modelValue', search.value)
+function onInput(val) {
+  search.value = val
+  emit('update:modelValue', val)
 }
 </script>
