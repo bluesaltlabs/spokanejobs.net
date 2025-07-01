@@ -3,7 +3,7 @@ import { onMounted, computed } from 'vue'
 import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
-import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState } from '@/components/common'
+import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState, SearchBar } from '@/components/common'
 
 // setup
 const companiesStore = useCompanies()
@@ -20,6 +20,11 @@ const loading = computed(() => companiesStore.loading)
   <Container>
     <h1>Companies</h1>
     <hr class="divider" />
+    <SearchBar
+      v-model="companiesStore.filters.search"
+      placeholder="Search companies..."
+      @update:modelValue="val => companiesStore.updateFilters({ search: val })"
+    />
 
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading companies...</div>
@@ -235,7 +240,7 @@ td {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.company-slug { 
+.company-slug {
   margin-bottom: 0.5rem;
   color: var(--color-text-muted);
   font-size: 0.875rem;
