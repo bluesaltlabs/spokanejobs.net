@@ -47,7 +47,7 @@ function clearFilters() {
       />
       <MultiSelect
         v-model="jobsStore.filters.companies"
-        :options="companiesStore.sortedCompanies.map(c => ({ label: c.name, value: c.slug }))"
+        :options="companiesStore.companies.map(c => ({ label: c.name, value: c.slug }))"
         placeholder="Filter by company..."
         class="company-multiselect"
       />
