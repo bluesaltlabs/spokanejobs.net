@@ -5,7 +5,7 @@ import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { LocationIcon } from '@/components/icons'
-import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState } from '@/components/common'
+import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState, SearchBar } from '@/components/common'
 
 const jobsStore = useJobs()
 const companiesStore = useCompanies()
@@ -34,6 +34,11 @@ function getCompanyName(slug) {
   <Container>
     <h1>Jobs</h1>
     <hr class="divider" />
+    <SearchBar
+      v-model="jobsStore.filters.search"
+      placeholder="Search jobs..."
+      @update:modelValue="val => jobsStore.updateFilters({ search: val })"
+    />
 
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading jobs...</div>
@@ -105,8 +110,8 @@ function getCompanyName(slug) {
         </tbody>
       </table>
       <ItemContainer grid customClass="mobile-only">
-        <ItemCard 
-          v-for="job in jobsStore.sortedJobs" 
+        <ItemCard
+          v-for="job in jobsStore.sortedJobs"
           :key="job.id || job.job_id"
           :onClick="() => $router.push({ name: 'job-detail', params: { id: job.id || job.job_id } })"
         >
@@ -250,7 +255,7 @@ td {
   color: var(--color-text-muted);
 }
 
-.job-header { 
+.job-header {
   margin-bottom: 0.75rem;
 }
 

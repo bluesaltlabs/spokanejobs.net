@@ -13,8 +13,17 @@ export const useCompanies = defineStore('companies', {
       return state.companies?.length ?? 0
     },
     sortedCompanies(state) {
-      // return the companies sorted by name
-      return state.companies?.slice().sort((a, b) => a.name.localeCompare(b.name))
+      // filter by search
+      let filtered = state.companies
+      const search = state.filters.search?.toLowerCase().trim()
+      if (search) {
+        filtered = filtered.filter(c =>
+          c.name?.toLowerCase().includes(search) ||
+          c.slug?.toLowerCase().includes(search)
+        )
+      }
+      // return sorted
+      return filtered?.slice().sort((a, b) => a.name.localeCompare(b.name))
     }
   },
   actions: {

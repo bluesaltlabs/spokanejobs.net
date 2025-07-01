@@ -13,8 +13,17 @@ export const useJobs = defineStore('jobs', {
       return state.jobs?.length ?? 0
     },
     sortedJobs(state) {
+      // filter by search
+      let filtered = state.jobs
+      const search = state.filters.search?.toLowerCase().trim()
+      if (search) {
+        filtered = filtered.filter(j =>
+          j.title?.toLowerCase().includes(search) ||
+          j.company?.toLowerCase().includes(search)
+        )
+      }
       // Defensive: sort by title if present, fallback to job_id
-      return [...(state.jobs ?? [])].sort((a, b) => {
+      return [...(filtered ?? [])].sort((a, b) => {
         if (a.title && b.title) {
           return a.title.localeCompare(b.title)
         }

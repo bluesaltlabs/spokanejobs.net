@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import { DarkModeToggle } from '@/components/common'
 import { ProfileIcon } from '@/components/icons'
 import { useProfileStore } from '@/stores/profile'
 
