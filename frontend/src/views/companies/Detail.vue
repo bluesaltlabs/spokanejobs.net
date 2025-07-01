@@ -5,6 +5,7 @@ import { useCompany } from '@/stores/company'
 import { SkeletonText, SkeletonImage, SkeletonButton } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { CompaniesIcon, ViewIcon } from '@/components/icons'
+import Button from '@/components/ui/Button/Button.vue'
 
 // Setup
 const companyStore = useCompany()
@@ -52,16 +53,30 @@ const loading = computed(() => companyStore.loading)
       <h1 class="company-name">{{ company.name }}</h1>
       <div class="company-links-container">
         <span v-if="company.website">
-          <a :href="company.website" target="_blank" :alt="company.website">
+          <Button
+            variant="info"
+            class="company-link-btn"
+            as="a"
+            :href="company.website"
+            target="_blank"
+            :aria-label="company.website"
+          >
             <ViewIcon class="link-icon" />
             Website
-          </a>
+          </Button>
         </span>
         <span v-if="company.job_board_url">
-          <a :href="company.job_board_url" target="_blank" :alt="company.job_board_url">
+          <Button
+            variant="info"
+            class="company-link-btn"
+            as="a"
+            :href="company.job_board_url"
+            target="_blank"
+            :aria-label="company.job_board_url"
+          >
             <ViewIcon class="link-icon" />
             Jobs
-          </a>
+          </Button>
         </span>
       </div>
 
@@ -156,6 +171,17 @@ img.company-logo {
 .company-links-container a:hover {
   background: var(--color-primary-500);
   color: var(--color-white);
+}
+
+.company-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--border-radius-small);
+  padding: 5px 10px;
+  margin: 5px 8px;
+  font-size: 1.2rem;
+  text-decoration: none;
 }
 
 .link-icon {

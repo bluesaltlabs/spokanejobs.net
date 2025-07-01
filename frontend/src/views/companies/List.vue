@@ -4,6 +4,7 @@ import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState, SearchBar } from '@/components/common'
+import Button from '@/components/ui/Button/Button.vue'
 
 // setup
 const companiesStore = useCompanies()
@@ -14,6 +15,10 @@ onMounted(() => {
 })
 
 const loading = computed(() => companiesStore.loading)
+
+function clearFilters() {
+  companiesStore.updateFilters({ search: '' })
+}
 </script>
 
 <template>
@@ -26,6 +31,18 @@ const loading = computed(() => companiesStore.loading)
       @update:modelValue="val => companiesStore.updateFilters({ search: val })"
     />
 
+    <div class="results-row">
+      <div class="results-count">{{ companiesStore.sortedCompanies.length }} companies found</div>
+      <Button
+        variant="secondary"
+        class="clear-filters-btn"
+        @click="clearFilters"
+        aria-label="Clear all filters"
+        type="button"
+      >
+        Clear Filters
+      </Button>
+    </div>
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading companies...</div>
       <table class="companies-table desktop-only">
@@ -63,7 +80,6 @@ const loading = computed(() => companiesStore.loading)
     </div>
 
     <div v-else-if="companiesStore.sortedCompanies.length > 0" class="companies-results">
-      <div class="results-count">{{ companiesStore.sortedCompanies.length }} companies found</div>
       <table class="companies-table desktop-only">
         <thead>
           <tr>
@@ -152,6 +168,14 @@ const loading = computed(() => companiesStore.loading)
 }
 
 .companies-results {
+  margin-bottom: 1rem;
+}
+
+.results-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 

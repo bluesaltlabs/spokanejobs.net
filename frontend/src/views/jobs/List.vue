@@ -6,6 +6,8 @@ import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
 import { LocationIcon } from '@/components/icons'
 import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState, SearchBar } from '@/components/common'
+import MultiSelect from '@/components/ui/MultiSelect/MultiSelect.vue'
+import Button from '@/components/ui/Button/Button.vue'
 
 const jobsStore = useJobs()
 const companiesStore = useCompanies()
@@ -28,18 +30,41 @@ const companyMap = computed(() => {
 function getCompanyName(slug) {
   return companyMap.value[slug]?.name || 'Unknown Company'
 }
+
+function clearFilters() {
+  jobsStore.updateFilters({ search: '', companies: [] })
+}
 </script>
 
 <template>
   <Container>
     <h1>Jobs</h1>
     <hr class="divider" />
-    <SearchBar
-      v-model="jobsStore.filters.search"
-      placeholder="Search jobs..."
-      @update:modelValue="val => jobsStore.updateFilters({ search: val })"
-    />
+    <div class="filters-row">
+      <SearchBar
+        v-model="jobsStore.filters.search"
+        placeholder="Search jobs..."
+      />
+      <MultiSelect
+        v-model="jobsStore.filters.companies"
+        :options="companiesStore.sortedCompanies.map(c => ({ label: c.name, value: c.slug }))"
+        placeholder="Filter by company..."
+        class="company-multiselect"
+      />
+    </div>
 
+    <div class="results-row">
+      <div class="results-count">{{ jobsStore.sortedJobs.length }} jobs found</div>
+      <Button
+        variant="secondary"
+        class="clear-filters-btn"
+        @click="clearFilters"
+        aria-label="Clear all filters"
+        type="button"
+      >
+        Clear Filters
+      </Button>
+    </div>
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading jobs...</div>
       <table class="jobs-table desktop-only">
@@ -72,7 +97,6 @@ function getCompanyName(slug) {
     </div>
 
     <div v-else-if="jobsStore.sortedJobs.length > 0" class="jobs-results">
-      <div class="results-count">{{ jobsStore.sortedJobs.length }} jobs found</div>
       <table class="jobs-table desktop-only">
         <thead>
           <tr>
@@ -180,6 +204,14 @@ function getCompanyName(slug) {
 }
 
 .jobs-results {
+  margin-bottom: 1rem;
+}
+
+.results-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -340,4 +372,9 @@ td {
   .jobs-table { font-size: 0.9rem; }
   th, td { padding: 0.875rem 1.25rem; }
 }
+
+.company-multiselect {
+  margin-bottom: 1.5rem;
+}
+
 </style>
