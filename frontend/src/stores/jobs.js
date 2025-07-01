@@ -5,7 +5,7 @@ export const useJobs = defineStore('jobs', {
   // state
   state: () => ({
     jobs: [],
-    filters: { search: '' },
+    filters: { search: '', companies: [] },
     loading: false,
   }),
   getters: {
@@ -21,6 +21,10 @@ export const useJobs = defineStore('jobs', {
           j.title?.toLowerCase().includes(search) ||
           j.company?.toLowerCase().includes(search)
         )
+      }
+      // filter by selected companies
+      if (state.filters.companies && state.filters.companies.length > 0) {
+        filtered = filtered.filter(j => state.filters.companies.includes(j.company))
       }
       // Defensive: sort by title if present, fallback to job_id
       return [...(filtered ?? [])].sort((a, b) => {
@@ -54,8 +58,10 @@ export const useJobs = defineStore('jobs', {
     },
 
     updateFilters(newFilters) {
-      const { search, ...rest } = newFilters
-      this.filters = { search: search ?? '', ...rest }
+      this.filters = {
+        ...this.filters,
+        ...newFilters
+      }
       // fetchJobs()
     },
   },

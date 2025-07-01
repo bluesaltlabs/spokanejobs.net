@@ -4,8 +4,10 @@ import { useJobs } from '@/stores/jobs'
 import { useCompanies } from '@/stores/companies'
 import { SkeletonTableRow } from '@/components/skeleton'
 import { Container } from '@/components/ui'
-import { LocationIcon } from '@/components/icons'
+import { LocationIcon, JobsIcon } from '@/components/icons'
 import { ItemContainer, ItemCard, ItemTableRow, ItemEmptyState, SearchBar } from '@/components/common'
+import MultiSelect from '@/components/ui/MultiSelect/MultiSelect.vue'
+import Button from '@/components/ui/Button/Button.vue'
 
 const jobsStore = useJobs()
 const companiesStore = useCompanies()
@@ -28,18 +30,42 @@ const companyMap = computed(() => {
 function getCompanyName(slug) {
   return companyMap.value[slug]?.name || 'Unknown Company'
 }
+
+function clearFilters() {
+  jobsStore.updateFilters({ search: '', companies: [] })
+}
 </script>
 
 <template>
   <Container>
     <h1>Jobs</h1>
     <hr class="divider" />
+
     <SearchBar
       v-model="jobsStore.filters.search"
       placeholder="Search jobs..."
-      @update:modelValue="val => jobsStore.updateFilters({ search: val })"
     />
 
+    <MultiSelect
+      v-model="jobsStore.filters.companies"
+      :options="companiesStore.companies.map(c => ({ label: c.name, value: c.slug }))"
+      placeholder="Filter by company..."
+      class="company-multiselect"
+    />
+
+
+    <div class="results-row">
+      <div class="results-count">{{ jobsStore.sortedJobs.length }} jobs found</div>
+      <Button
+        variant="secondary"
+        class="clear-filters-btn"
+        @click="clearFilters"
+        aria-label="Clear all filters"
+        type="button"
+      >
+        Clear Filters
+      </Button>
+    </div>
     <div v-if="loading" class="loading-state">
       <div class="loading-message">Loading jobs...</div>
       <table class="jobs-table desktop-only">
@@ -72,7 +98,6 @@ function getCompanyName(slug) {
     </div>
 
     <div v-else-if="jobsStore.sortedJobs.length > 0" class="jobs-results">
-      <div class="results-count">{{ jobsStore.countJobs }} jobs found</div>
       <table class="jobs-table desktop-only">
         <thead>
           <tr>
@@ -151,9 +176,7 @@ function getCompanyName(slug) {
 
     <ItemEmptyState v-else>
       <template #icon>
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-        </svg>
+        <JobsIcon />
       </template>
       <template #title>No jobs found</template>
       <template #desc>Check back later for new opportunities in the Spokane area.</template>
@@ -180,6 +203,14 @@ function getCompanyName(slug) {
 }
 
 .jobs-results {
+  margin-bottom: 1rem;
+}
+
+.results-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -340,4 +371,9 @@ td {
   .jobs-table { font-size: 0.9rem; }
   th, td { padding: 0.875rem 1.25rem; }
 }
+
+.company-multiselect {
+  margin-bottom: 1.5rem;
+}
+
 </style>

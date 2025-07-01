@@ -29,13 +29,13 @@ defineProps({
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  background: #2563eb;
-  color: #fff;
+  background: var(--color-button-primary);
+  color: var(--color-button-primary-text);
   transition: background 0.2s;
 }
 .ui-btn.secondary {
-  background: #e5e7eb;
-  color: #111;
+  background: var(--color-button-secondary);
+  color: var(--color-button-secondary-text);
 }
 .ui-btn:disabled,
 .ui-btn.disabled {
@@ -45,8 +45,8 @@ defineProps({
 .ui-btn__spinner {
   width: 1em;
   height: 1em;
-  border: 2px solid #fff;
-  border-top: 2px solid #2563eb;
+  border: 2px solid var(--color-border);
+  border-top: 2px solid var(--color-primary-600);
   border-radius: 50%;
   margin-right: 0.5em;
   animation: spin 1s linear infinite;
@@ -55,11 +55,11 @@ defineProps({
   to { transform: rotate(360deg); }
 }
 .ui-btn.success {
-  background: #22c55e;
-  color: #fff;
+  background: var(--color-success-500);
+  color: var(--color-button-success-text);
 }
 .ui-btn.info {
-  background: #0ea5e9;
-  color: #fff;
+  background: var(--color-accent-500);
+  color: var(--color-button-info-text);
 }
-</style> 
+</style>

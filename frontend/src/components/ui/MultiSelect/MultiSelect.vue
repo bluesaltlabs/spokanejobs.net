@@ -53,7 +53,7 @@
         :aria-selected="modelValue.includes(option.value || option).toString()"
         tabindex="-1"
         @mouseenter="highlightedIndex = idx"
-        @mousedown.prevent="toggle(option.value || option)"
+        @click="toggle(option.value || option)"
       >
         <input
           type="checkbox"
@@ -200,18 +200,18 @@ watch(() => props.modelValue, () => {
   align-items: center;
   gap: 0.25em;
   min-height: 2.5em;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 0.25em 0.5em;
-  background: #fff;
+  background: var(--color-surface, #fff);
   cursor: text;
 }
 .ui-multiselect__chip {
   display: inline-flex;
   align-items: center;
-  background: #2563eb;
-  color: #fff;
-  border-radius: 16px;
+  background: var(--color-primary-600);
+  color: var(--color-primary);
+  border-radius: var(--border-radius-lg);
   padding: 0.15em 0.6em 0.15em 0.6em;
   font-size: 0.95em;
   margin-right: 0.15em;
@@ -219,7 +219,7 @@ watch(() => props.modelValue, () => {
 .ui-multiselect__chip-remove {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--color-primary);
   margin-left: 0.4em;
   cursor: pointer;
   font-size: 1em;
@@ -233,18 +233,18 @@ watch(() => props.modelValue, () => {
   font-size: 1rem;
   padding: 0.4em 0.2em;
   background: transparent;
-  color: #111;
+  color: var(--color-text);
 }
 .ui-multiselect__search-inline:disabled {
-  background: #f3f4f6;
-  color: #9ca3af;
+  background: var(--color-background-disabled);
+  color: var(--color-text-disabled);
 }
 .ui-multiselect__options {
   max-height: 160px;
   overflow-y: auto;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface);
   position: absolute;
   width: 100%;
   z-index: 10;
@@ -259,13 +259,14 @@ watch(() => props.modelValue, () => {
   cursor: pointer;
 }
 .ui-multiselect__option.is-active {
-  background: #e0e7ff;
+  background: var(--color-primary-600);
+  color: var(--color-primary);
 }
 .ui-multiselect__option input[type='checkbox'] {
   margin-right: 0.5em;
 }
 .ui-multiselect__no-options {
   padding: 0.5em 0.75em;
-  color: #888;
+  color: var(--color-text-muted);
 }
-</style> 
+</style>
