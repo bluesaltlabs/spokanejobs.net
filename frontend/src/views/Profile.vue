@@ -1,18 +1,36 @@
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import { Container, Button } from '@/components/ui'
 import { SkeletonImage, SkeletonText } from '@/components/skeleton'
 import { EditIcon } from '@/components/icons'
 
+const route = useRoute()
+const router = useRouter()
 const profile = useProfileStore()
+
+const is_editing = computed(() => route.query.edit === '1')
+
 
 onMounted(() => {
   profile.loadProfile()
 })
 
-function toggleEdit() {
-  // todo: toggle edit mode.
+
+async function updateEditQueryParam(value) {
+  const newQuery = { ...route.query }
+  if (value) {
+    newQuery.edit = '1'
+  } else {
+    delete newQuery.edit
+  }
+  await router.replace({ query: newQuery })
+}
+
+async function onEditButtonClick() {
+  const newValue = !is_editing.value
+  await updateEditQueryParam(newValue)
 }
 
 </script>
@@ -24,7 +42,7 @@ function toggleEdit() {
 
 
     <div class="profile-actions">
-      <Button @click="toggleEdit" variant="primary">
+      <Button @click="onEditButtonClick" variant="primary">
         <EditIcon />
       </Button>
     </div>
