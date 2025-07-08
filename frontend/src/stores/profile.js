@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { openDB } from 'idb'
 
+// import {
+//   PersonalInformation, WorkExperience, EducationExperience, LicenseCertification,
+//   Membership, Skill, Interest, Project, Reference
+// } from '@/models'
+
 const DB_NAME = 'userProfileDB'
 const STORE_NAME = 'profile'
 
