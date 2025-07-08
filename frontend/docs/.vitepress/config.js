@@ -21,6 +21,15 @@ export default defineConfig({
         text: 'Profile',
         items: [
           { text: 'Overview', link: '/profile/overview' },
+          { text: 'Personal Information', link: '/profile/personal-information' },
+          { text: 'Work Experience', link: '/profile/work-experience' },
+          { text: 'Education Experience', link: '/profile/education-experience' },
+          { text: 'Licenses & Certifications', link: '/profile/licenses-certifications' },
+          { text: 'Memberships', link: '/profile/memberships' },
+          { text: 'Skills', link: '/profile/skills' },
+          { text: 'Interests', link: '/profile/interests' },
+          { text: 'Projects', link: '/profile/projects' },
+          { text: 'References', link: '/profile/references' },
         ]
       },
       {
