@@ -16,21 +16,6 @@ function toggleEdit() {
 
 </script>
 
-<style scoped>
-  .page-header {
-    display: flex;
-    justify-content: space-between;
-    flex-grow: 1;
-    margin-bottom: 1rem;
-  }
-
-  .profile-actions {
-    display: flex;
-    justify-content: end;
-    padding: 0.5em 0;
-  }
-</style>
-
 <template>
 <Container>
   <div class="page-header">
@@ -54,3 +39,18 @@ function toggleEdit() {
   </p>
 </Container>
 </template>
+
+<style scoped>
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-bottom: 1rem;
+  }
+
+  .profile-actions {
+    display: flex;
+    justify-content: end;
+    padding: 0.5em 0;
+  }
+</style>
