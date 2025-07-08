@@ -18,7 +18,8 @@ title: References
       "email_type": "",
       "phone_type": "",
       "description": "",
-      "company": "",
+      "employer": "",
+      "company_slug": "",
       "job_title": "",
       "created_at": "",
       "updated_at": ""

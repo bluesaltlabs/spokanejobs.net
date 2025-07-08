@@ -1,0 +1,9 @@
+export { default as EducationExperience } from './EducationExperience';
+export { default as Interest } from './Interest';
+export { default as LicenseCertification } from './LicenseCertification';
+export { default as Membership } from './Membership';
+export { default as PersonalInformation } from './PersonalInformation';
+export { default as Project } from './Project';
+export { default as Reference } from './Reference';
+export { default as Skill }  from './Skill';
+export { default as WorkExperience }  from './WorkExperience';
