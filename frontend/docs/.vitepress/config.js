@@ -26,8 +26,8 @@ export default defineConfig({
       {
         text: 'Misc',
         items: [
-          { text: 'Markdown Examples', link: '/misc/markdown-examples' }
-          { text: 'Runtime API Examples', link: '/misc/api-examples' },
+          { text: 'Markdown Examples', link: '/misc/markdown-examples' },
+          { text: 'Runtime API Examples', link: '/misc/api-examples' }
         ]
       }
     ],
