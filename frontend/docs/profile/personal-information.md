@@ -9,7 +9,7 @@ title: Profile Personal Information
 {
   "personal_information": {
     "avatar_url": "",
-    "gravatar_username": "lukerz8",
+    "gravatar_username": "",
     "first_name": "",
     "middle_name": "",
     "last_name": "",

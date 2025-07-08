@@ -9,6 +9,7 @@ title: Work Experience
 {
   "work_experience": [
     {
+      "id": 0,
       "employer": "",
       "company_slug": "",
       "job_title_start": "",

@@ -9,6 +9,7 @@ title: Memberships
 {
   "memberships": [
     {
+      "id": 0,
       "name": "",
       "organization": "",
       "description": "",

@@ -9,6 +9,7 @@ title: Skills
 {
   "skills": [
     {
+      "id": 0,
       "name": "",
       "description": "",
       "skill_level": "",

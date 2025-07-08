@@ -9,6 +9,7 @@ title: Licenses & Certifications
 {
   "licenses_certifications": [
     {
+      "id": 0,
       "name": "",
       "description": "",
       "organization": "",

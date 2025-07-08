@@ -9,6 +9,7 @@ title: Education Experience
 {
   "education_experience": [
     {
+      "id": 0,
       "degree": "",
       "institution": "",
       "location": "",

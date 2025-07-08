@@ -9,6 +9,7 @@ title: Interests
 {
   "interests": [
     {
+      "id": 0,
       "name": "",
       "description": "",
       "years_of_experience": "",
