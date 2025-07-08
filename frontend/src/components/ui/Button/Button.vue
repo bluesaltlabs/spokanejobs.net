@@ -49,6 +49,11 @@ const componentProps = computed(() => {
   background: var(--color-button-primary);
   color: var(--color-button-primary-text);
   transition: background 0.2s;
+
+  &:hover,active {
+    background: var(--color-button-primary-hover);
+    border-color: var(--color-button-primary-hover);
+  }
 }
 .ui-btn.secondary {
   background: var(--color-button-secondary);
