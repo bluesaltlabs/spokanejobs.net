@@ -4,22 +4,21 @@ layout: home
 
 hero:
   name: "Bedrock"
-  text: "Bedrock Job Search Tools"
-  tagline: My great project tagline
+  text: "Documentation"
+  tagline: "Bedrock powers SpokaneJobs.Net and empowers local job seekers."
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Overview
+      link: /overview
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Profile
+      link: /profile/overview
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Companies
+    details: Search and view information about local companies.
+  - title: Jobs
+    details: Find jobs from companies in the area.
+  - title: Profile
+    details: The Profile page allows users to save their information for use in their job search.
 ---
-
