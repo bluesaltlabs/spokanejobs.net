@@ -195,8 +195,15 @@ async function onEditButtonClick() {
 
 
     <!-- Work Experience -->
-  <WorkHistory :is-editing="is_editing" />
+  <!-- <WorkHistory :is-editing="is_editing" /> -->
 
+  <!-- Work Experience -->
+  <div class="profile-section">
+    <h2>Work Experience</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
 
   <!-- Education Experience -->
   <div class="profile-section">
