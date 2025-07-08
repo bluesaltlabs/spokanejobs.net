@@ -6,6 +6,7 @@ class PersonalInformation {
     this.preferred_name = data?.preferred_name || '';
     this.email          = data?.email || '';
     this.phone          = data?.phone || '';
+    this.avatar_url     = data?.avatar_url || '';
     this.created_at     = data?.created_at || null;
     this.updated_at     = data?.updated_at || null;
     this.urls           = data.urls || [];

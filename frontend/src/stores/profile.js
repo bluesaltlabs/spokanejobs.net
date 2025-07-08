@@ -36,7 +36,7 @@ export const useProfileStore = defineStore('profile', {
       if (data) {
         this.dark_mode = data?.dark_mode || false
         // Personal Information
-        this.personal_information = new PersonalInformation(data?.personal_information ?? [])
+        this.personal_information = new PersonalInformation(data?.personal_information ?? {})
         // Work Experience
         this.work_experiences = (data?.work_experiences ?? []).map(e => new WorkExperience(e))
         // Education Experience

@@ -349,60 +349,59 @@ function goToEdit() {
 
         <div class="profile-avatar">
           <div class="avatar">
-            <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar" />
-            <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
+            <img v-if="profile.personal_information.avatar_url" :src="profile.personal_information.avatar_url" alt="Avatar" />
+            <span v-else>{{ profile.personal_information.first_name?.charAt(0) || 'U' }}</span>
           </div>
         </div>
 
         <div class="profile-field">
           <label>First Name</label>
-          <div class="value">{{ profile.first_name || 'Not provided' }}</div>
+          <div class="value">{{ profile.personal_information.first_name || 'Not provided' }}</div>
         </div>
 
         <div class="profile-field">
           <label>Last Name</label>
-          <div class="value">{{ profile.last_name || 'Not provided' }}</div>
+          <div class="value">{{ profile.personal_information.last_name || 'Not provided' }}</div>
         </div>
 
         <div class="profile-field">
           <label>Email</label>
-          <div class="value">{{ profile.email || 'Not provided' }}</div>
+          <div class="value">{{ profile.personal_information.email || 'Not provided' }}</div>
         </div>
       </div>
 
       <!-- Right Column - Resume and Education Entries -->
       <div class="entries-section">
-        <!-- Resume Entries -->
+
         <div class="resume-section">
           <div class="resume-header">
-            <h2>Resume Entries</h2>
+            <h2>Work Experience</h2>
           </div>
 
           <div v-for="entry in profile.work_experiences" :key="entry.id" class="resume-entry">
-            <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
-            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+            <strong>{{ entry.job_title_start }}</strong> at <em>{{ entry.company }}</em>
+            <span>{{ entry.start_date }} - {{ entry.end_date }}</span>
             <p>{{ entry.description }}</p>
           </div>
 
           <div v-if="profile.work_experiences.length === 0" class="empty-resume">
-            <p>No resume entries yet. <Button @click="goToEdit" variant="primary" size="small">Add your first entry</Button></p>
+            <p>No work experience. </p>
           </div>
         </div>
 
-        <!-- Education History Section -->
         <div class="education-section">
           <div class="education-header">
-            <h2>Education History</h2>
+            <h2>Education Experience</h2>
           </div>
 
           <div v-for="entry in profile.education_experiences" :key="entry.id" class="education-entry">
             <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
-            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+            <span>{{ entry.start_date }} - {{ entry.end_date }}</span>
             <p>{{ entry.description }}</p>
           </div>
 
           <div v-if="profile.education_experiences.length === 0" class="empty-education">
-            <p>No education entries yet. <Button @click="goToEdit" variant="primary" size="small">Add your first entry</Button></p>
+            <p>No education experience. </p>
           </div>
         </div>
       </div>

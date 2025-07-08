@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import { Button, TextInput, TextareaInput, DateInput, Form, FormGroup } from '@/components/ui'
 import { ExportIcon, ImportIcon, ViewIcon } from '@/components/icons'
+import { PersonalInformation, WorkExperience, EducationExperience } from '@/models'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -19,9 +20,14 @@ const autoSave = async () => {
 
 // Watch for changes in profile fields and auto-save
 watch(
-  () => [profile.first_name, profile.last_name, profile.email, profile.avatar],
+  () => [
+    profile.personal_information.first_name,
+    profile.personal_information.last_name,
+    profile.personal_information.email,
+    profile.personal_information.avatar_url
+  ],
   () => {
-    autoSave()
+    autoSave() // todo: debounce this.
   },
   { deep: true }
 )
@@ -33,11 +39,8 @@ onMounted(() => {
 // Import/Export functionality
 const exportProfile = () => {
   const profileData = {
-    first_name: profile.first_name,
-    last_name: profile.last_name,
-    email: profile.email,
-    avatar: profile.avatar,
     dark_mode: profile.dark_mode,
+    personal_information: profile.personal_information,
     work_experiences: profile.work_experiences,
     education_experiences: profile.education_experiences,
     exportedAt: new Date().toISOString()
@@ -67,12 +70,11 @@ const importProfile = (event) => {
         throw new Error('Invalid JSON structure')
       }
 
-      // Update profile with imported data
-      if (importedData.first_name !== undefined) profile.first_name = importedData.first_name
-      if (importedData.last_name !== undefined) profile.last_name = importedData.last_name
-      if (importedData.email !== undefined) profile.email = importedData.email
-      if (importedData.avatar !== undefined) profile.avatar = importedData.avatar
-      if (importedData.dark_mode !== undefined) profile.dark_mode = importedData.dark_mode
+      if (typeof importedData?.personal_information === 'object' && importedData.personal_information !== null) {
+        profile.personal_information = importedData.personal_information
+      } else {
+        profile.personal_information = new PersonalInformation()
+      }
       if (Array.isArray(importedData.work_experiences)) profile.work_experiences = importedData.work_experiences
       if (Array.isArray(importedData.education_experiences)) profile.education_experiences = importedData.education_experiences
 
@@ -96,37 +98,23 @@ const importProfile = (event) => {
 }
 
 // Resume Entry Management
-const newEntry = ref({
-  id: '',
-  jobTitle: '',
-  company: '',
-  startDate: '',
-  endDate: '',
-  description: ''
-})
+const newEntry = ref(new WorkExperience())
 const editingId = ref(null)
 const showEntryForm = ref(false)
 
 // Education Entry Management
-const newEducationEntry = ref({
-  id: '',
-  degree: '',
-  institution: '',
-  startDate: '',
-  endDate: '',
-  description: ''
-})
+const newEducationEntry = ref(new EducationExperience())
 const editingEducationId = ref(null)
 const showEducationForm = ref(false)
 
 function resetNewEntry() {
   newEntry.value = {
     id: '',
-    jobTitle: '',
-    company: '',
-    startDate: '',
-    endDate: '',
-    description: ''
+    job_title_start: '',
+    employer: '',
+    start_date: '',
+    end_date: '',
+    responsibilities: ''
   }
 }
 
@@ -135,8 +123,8 @@ function resetNewEducationEntry() {
     id: '',
     degree: '',
     institution: '',
-    startDate: '',
-    endDate: '',
+    start_date: '',
+    end_date: '',
     description: ''
   }
 }
@@ -166,7 +154,7 @@ function startEditEducationEntry(entry) {
 }
 
 async function saveEntry() {
-  if (!newEntry.value.jobTitle || !newEntry.value.company) return
+  if (!newEntry.value.job_title_start || !newEntry.value.employer) return
   if (editingId.value) {
     profile.editWorkExperience(editingId.value, { ...newEntry.value })
   } else {
@@ -585,22 +573,22 @@ function goToView() {
         <h2>Personal Information</h2>
         <div class="avatar-preview">
           <div class="avatar">
-            <img v-if="profile.avatar" :src="profile.avatar" alt="Avatar preview" />
-            <span v-else>{{ profile.first_name?.charAt(0) || 'U' }}</span>
+            <img v-if="profile.personal_information.avatar_url" :src="profile.personal_information.avatar_url" alt="Avatar preview" />
+            <span v-else>{{ profile.personal_information.first_name?.charAt(0) || 'U' }}</span>
           </div>
         </div>
         <Form>
           <FormGroup label="First Name">
-            <TextInput v-model="profile.first_name" placeholder="Enter your first name" />
+            <TextInput v-model="profile.personal_information.first_name" placeholder="Enter your first name" />
           </FormGroup>
           <FormGroup label="Last Name">
-            <TextInput v-model="profile.last_name" placeholder="Enter your last name" />
+            <TextInput v-model="profile.personal_information.last_name" placeholder="Enter your last name" />
           </FormGroup>
           <FormGroup label="Email">
-            <TextInput v-model="profile.email" type="email" placeholder="Enter your email address" />
+            <TextInput v-model="profile.personal_information.email" type="email" placeholder="Enter your email address" />
           </FormGroup>
           <FormGroup label="Avatar URL">
-            <TextInput v-model="profile.avatar" placeholder="Enter avatar image URL" />
+            <TextInput v-model="profile.personal_information.avatar_url" placeholder="Enter avatar image URL" />
           </FormGroup>
           <div v-if="saved" class="save-indicator saved">✓ Changes saved automatically</div>
           <div v-if="importSuccess" class="save-indicator saved">✓ Profile imported successfully</div>
@@ -613,20 +601,20 @@ function goToView() {
             <Button @click="startAddEntry" variant="primary">Add Entry</Button>
           </div>
           <div v-if="showEntryForm" class="resume-form">
-            <TextInput v-model="newEntry.jobTitle" placeholder="Job Title" />
-            <TextInput v-model="newEntry.company" placeholder="Company" />
-            <DateInput v-model="newEntry.startDate" placeholder="Start Date" />
-            <DateInput v-model="newEntry.endDate" placeholder="End Date" />
-            <TextareaInput v-model="newEntry.description" placeholder="Description" />
+            <TextInput v-model="newEntry.job_title_start" placeholder="Job Title" />
+            <TextInput v-model="newEntry.employer" placeholder="Employer" />
+            <DateInput v-model="newEntry.start_date" placeholder="Start Date" />
+            <DateInput v-model="newEntry.end_date" placeholder="End Date" />
+            <TextareaInput v-model="newEntry.responsibilities" placeholder="Description" />
             <div class="form-action-row">
               <Button @click="saveEntry" variant="primary" class="form-action-btn">{{ editingId ? 'Update' : 'Add' }} Entry</Button>
               <Button @click="cancelEntry" variant="secondary" class="form-action-btn">Cancel</Button>
             </div>
           </div>
           <div v-for="entry in profile.work_experiences" :key="entry.id" class="resume-entry">
-            <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
-            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
-            <p>{{ entry.description }}</p>
+            <strong>{{ entry.job_title_start }}</strong> at <em>{{ entry.employer }}</em>
+            <span>{{ entry.start_date }} - {{ entry.end_date }}</span>
+            <p>{{ entry.responsibilities }}</p>
             <div class="resume-entry-actions">
               <Button @click="startEditEntry(entry)" variant="primary" size="small">Edit</Button>
               <Button @click="removeEntry(entry.id)" variant="danger" size="small">Delete</Button>
@@ -644,8 +632,8 @@ function goToView() {
           <div v-if="showEducationForm" class="education-form">
             <TextInput v-model="newEducationEntry.degree" placeholder="Degree" />
             <TextInput v-model="newEducationEntry.institution" placeholder="Institution" />
-            <DateInput v-model="newEducationEntry.startDate" placeholder="Start Date" />
-            <DateInput v-model="newEducationEntry.endDate" placeholder="End Date" />
+            <DateInput v-model="newEducationEntry.start_date" placeholder="Start Date" />
+            <DateInput v-model="newEducationEntry.end_date" placeholder="End Date" />
             <TextareaInput v-model="newEducationEntry.description" placeholder="Description" />
             <div class="form-action-row">
               <Button @click="saveEducationEntry" variant="primary" class="form-action-btn">{{ editingEducationId ? 'Update' : 'Add' }} Education</Button>
@@ -654,7 +642,7 @@ function goToView() {
           </div>
           <div v-for="entry in profile.education_experiences" :key="entry.id" class="education-entry">
             <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
-            <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
+            <span>{{ entry.start_date }} - {{ entry.end_date }}</span>
             <p>{{ entry.description }}</p>
             <div class="education-entry-actions">
               <Button @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</Button>

@@ -34,13 +34,13 @@ const profile = useProfileStore()
         <div class="user-menu">
           <RouterLink to="/profile" class="btn btn-ghost user-menu-button" aria-label="User menu">
             <div class="user-avatar">
-              <div v-if="profile.avatar">
-                <img :src="profile.avatar" alt="Avatar" />
+              <div v-if="profile.personal_information.avatar_url">
+                <img :src="profile.personal_information.avatar_url" alt="Avatar" />
               </div>
-              <ProfileIcon v-if="!profile.avatar" />
+              <ProfileIcon v-if="!profile.personal_information.avatar_url" />
             </div>
             <span class="user-name">
-              {{ profile.first_name || profile.last_name ? `${profile.first_name} ${profile.last_name}`.trim() : profile.email ? `${profile.email}` : 'User' }}
+              {{ profile.personal_information.first_name || profile.personal_information.last_name ? `${profile.personal_information.first_name} ${profile.personal_information.last_name}`.trim() : profile.personal_information.email ? `${profile.personal_information.email}` : 'User' }}
             </span>
           </RouterLink>
         </div>
