@@ -38,8 +38,8 @@ const exportProfile = () => {
     email: profile.email,
     avatar: profile.avatar,
     dark_mode: profile.dark_mode,
-    resumeEntries: profile.resumeEntries,
-    educationEntries: profile.educationEntries,
+    work_experiences: profile.work_experiences,
+    education_experiences: profile.education_experiences,
     exportedAt: new Date().toISOString()
   }
 
@@ -73,8 +73,8 @@ const importProfile = (event) => {
       if (importedData.email !== undefined) profile.email = importedData.email
       if (importedData.avatar !== undefined) profile.avatar = importedData.avatar
       if (importedData.dark_mode !== undefined) profile.dark_mode = importedData.dark_mode
-      if (Array.isArray(importedData.resumeEntries)) profile.resumeEntries = importedData.resumeEntries
-      if (Array.isArray(importedData.educationEntries)) profile.educationEntries = importedData.educationEntries
+      if (Array.isArray(importedData.work_experiences)) profile.work_experiences = importedData.work_experiences
+      if (Array.isArray(importedData.education_experiences)) profile.education_experiences = importedData.education_experiences
 
       // Save the imported profile
       await profile.saveProfile()
@@ -168,9 +168,9 @@ function startEditEducationEntry(entry) {
 async function saveEntry() {
   if (!newEntry.value.jobTitle || !newEntry.value.company) return
   if (editingId.value) {
-    profile.editResumeEntry(editingId.value, { ...newEntry.value })
+    profile.editWorkExperience(editingId.value, { ...newEntry.value })
   } else {
-   profile.addResumeEntry({ ...newEntry.value, id: Date.now().toString() })
+   profile.addWorkExperience({ ...newEntry.value, id: Date.now().toString() })
   }
   await profile.loadProfile()
   editingId.value = null
@@ -181,9 +181,9 @@ async function saveEntry() {
 async function saveEducationEntry() {
   if (!newEducationEntry.value.degree || !newEducationEntry.value.institution) return
   if (editingEducationId.value) {
-    profile.editEducationEntry(editingEducationId.value, { ...newEducationEntry.value })
+    profile.editEducationExperience(editingEducationId.value, { ...newEducationEntry.value })
   } else {
-   profile.addEducationEntry({ ...newEducationEntry.value, id: Date.now().toString() })
+   profile.addEducationExperience({ ...newEducationEntry.value, id: Date.now().toString() })
   }
   await profile.loadProfile()
   editingEducationId.value = null
@@ -204,12 +204,12 @@ function cancelEducationEntry() {
 }
 
 async function removeEntry(id) {
-  profile.removeResumeEntry(id)
+  profile.removeWorkExperience(id)
   await profile.loadProfile()
 }
 
 async function removeEducationEntry(id) {
-  profile.removeEducationEntry(id)
+  profile.removeEducationExperience(id)
   await profile.loadProfile()
 }
 
@@ -623,7 +623,7 @@ function goToView() {
               <Button @click="cancelEntry" variant="secondary" class="form-action-btn">Cancel</Button>
             </div>
           </div>
-          <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
+          <div v-for="entry in profile.work_experiences" :key="entry.id" class="resume-entry">
             <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
@@ -632,7 +632,7 @@ function goToView() {
               <Button @click="removeEntry(entry.id)" variant="danger" size="small">Delete</Button>
             </div>
           </div>
-          <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
+          <div v-if="profile.work_experiences.length === 0" class="empty-resume">
             <p>No resume entries yet. Click "Add Entry" to get started.</p>
           </div>
         </div>
@@ -652,7 +652,7 @@ function goToView() {
               <Button @click="cancelEducationEntry" variant="secondary" class="form-action-btn">Cancel</Button>
             </div>
           </div>
-          <div v-for="entry in profile.educationEntries" :key="entry.id" class="education-entry">
+          <div v-for="entry in profile.education_experiences" :key="entry.id" class="education-entry">
             <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
@@ -661,7 +661,7 @@ function goToView() {
               <Button @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</Button>
             </div>
           </div>
-          <div v-if="profile.educationEntries.length === 0" class="empty-education">
+          <div v-if="profile.education_experiences.length === 0" class="empty-education">
             <p>No education entries yet. Click "Add Education" to get started.</p>
           </div>
         </div>

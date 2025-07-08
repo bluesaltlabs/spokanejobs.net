@@ -24,78 +24,75 @@ async function getDb() {
 
 export const useProfileStore = defineStore('profile', {
   state: () => ({
-    personalInformation: new PersonalInformation(),
     dark_mode: false, // add dark_mode to state
-    resumeEntries: [], // array of WorkExperience
-    educationEntries: [], // array of EducationExperience
+    personal_information: new PersonalInformation(),
+    work_experiences: [],
+    education_experiences: [],
   }),
   actions: {
     async loadProfile() {
       const db = await getDb()
       const data = await db.get(STORE_NAME, 'user')
       if (data) {
-        this.dark_mode = data.dark_mode || false
-        this.personalInformation = new PersonalInformation(data.personalInformation)
-        this.resumeEntries = Array.isArray(data.resumeEntries)
-          ? data.resumeEntries.map(e => new WorkExperience(e))
-          : []
-        this.educationEntries = Array.isArray(data.educationEntries)
-          ? data.educationEntries.map(e => new EducationExperience(e))
-          : []
+        this.dark_mode = data?.dark_mode || false
+        // Personal Information
+        this.personal_information = new PersonalInformation(data?.personal_information ?? [])
+        // Work Experience
+        this.work_experiences = (data?.work_experiences ?? []).map(e => new WorkExperience(e))
+        // Education Experience
+        this.education_experiences = (data?.education_experiences ?? []).map(e => new EducationExperience(e))
+        // todo:
       }
     },
     async saveProfile() {
       const db = await getDb()
-      // De-proxy and deeply clone the data before saving
+
+      // Prep data for saving.
       const dataToSave = JSON.parse(JSON.stringify({
         dark_mode: this.dark_mode,
-        personalInformation: this.personalInformation,
-        resumeEntries: this.resumeEntries,
-        educationEntries: this.educationEntries,
+        personal_information: this.personal_information,
+        work_experiences: this.work_experiences,
+        education_experiences: this.education_experiences,
       }))
       await db.put(STORE_NAME, dataToSave, 'user')
     },
-    updatePersonalInformationField(field, value) {
-      if (field in this.personalInformation) {
-        this.personalInformation[field] = value
-      }
-    },
+
     setDarkMode(value) {
       this.dark_mode = value
       this.saveProfile()
     },
-    // Resume Entries Actions
-    addResumeEntry(entry) {
-      // entry: WorkExperience or plain object
-      this.resumeEntries.push(entry instanceof WorkExperience ? entry : new WorkExperience(entry))
+
+    // Work Experience Actions
+    addWorkExperience(entry) {
+      this.work_experiences.push(entry instanceof WorkExperience ? entry : new WorkExperience(entry))
       this.saveProfile()
     },
-    editResumeEntry(id, updatedEntry) {
-      const idx = this.resumeEntries.findIndex(e => e.id === id)
+    editWorkExperience(id, updatedEntry) {
+      const idx = this.work_experiences.findIndex(e => e.id === id)
       if (idx !== -1) {
-        this.resumeEntries[idx] = new WorkExperience({ ...this.resumeEntries[idx], ...updatedEntry })
+        this.work_experiences[idx] = new WorkExperience({ ...this.work_experiences[idx], ...updatedEntry })
         this.saveProfile()
       }
     },
-    removeResumeEntry(id) {
-      this.resumeEntries = this.resumeEntries.filter(e => e.id !== id)
+    removeWorkExperience(id) {
+      this.work_experiences = this.work_experiences.filter(e => e.id !== id)
       this.saveProfile()
     },
-    // Education Entries Actions
-    addEducationEntry(entry) {
-      // entry: EducationExperience or plain object
-      this.educationEntries.push(entry instanceof EducationExperience ? entry : new EducationExperience(entry))
+
+    // Education Experience Actions
+    addEducationExperience(entry) {
+      this.education_experiences.push(entry instanceof EducationExperience ? entry : new EducationExperience(entry))
       this.saveProfile()
     },
-    editEducationEntry(id, updatedEntry) {
-      const idx = this.educationEntries.findIndex(e => e.id === id)
+    editEducationExperience(id, updatedEntry) {
+      const idx = this.education_experiences.findIndex(e => e.id === id)
       if (idx !== -1) {
-        this.educationEntries[idx] = new EducationExperience({ ...this.educationEntries[idx], ...updatedEntry })
+        this.education_experiences[idx] = new EducationExperience({ ...this.education_experiences[idx], ...updatedEntry })
         this.saveProfile()
       }
     },
-    removeEducationEntry(id) {
-      this.educationEntries = this.educationEntries.filter(e => e.id !== id)
+    removeEducationExperience(id) {
+      this.education_experiences = this.education_experiences.filter(e => e.id !== id)
       this.saveProfile()
     },
   },

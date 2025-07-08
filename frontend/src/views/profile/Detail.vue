@@ -378,13 +378,13 @@ function goToEdit() {
             <h2>Resume Entries</h2>
           </div>
 
-          <div v-for="entry in profile.resumeEntries" :key="entry.id" class="resume-entry">
+          <div v-for="entry in profile.work_experiences" :key="entry.id" class="resume-entry">
             <strong>{{ entry.jobTitle }}</strong> at <em>{{ entry.company }}</em>
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
           </div>
 
-          <div v-if="profile.resumeEntries.length === 0" class="empty-resume">
+          <div v-if="profile.work_experiences.length === 0" class="empty-resume">
             <p>No resume entries yet. <Button @click="goToEdit" variant="primary" size="small">Add your first entry</Button></p>
           </div>
         </div>
@@ -395,13 +395,13 @@ function goToEdit() {
             <h2>Education History</h2>
           </div>
 
-          <div v-for="entry in profile.educationEntries" :key="entry.id" class="education-entry">
+          <div v-for="entry in profile.education_experiences" :key="entry.id" class="education-entry">
             <strong>{{ entry.degree }}</strong> from <em>{{ entry.institution }}</em>
             <span>{{ entry.startDate }} - {{ entry.endDate }}</span>
             <p>{{ entry.description }}</p>
           </div>
 
-          <div v-if="profile.educationEntries.length === 0" class="empty-education">
+          <div v-if="profile.education_experiences.length === 0" class="empty-education">
             <p>No education entries yet. <Button @click="goToEdit" variant="primary" size="small">Add your first entry</Button></p>
           </div>
         </div>
