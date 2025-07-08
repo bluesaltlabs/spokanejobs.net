@@ -33,7 +33,7 @@ defineProps({
   placeholder: String,
   type: { type: String, default: 'text' },
   disabled: Boolean,
-  editable: Boolean,
+  editable: {type: Boolean, default: true },
   clearable: Boolean,
 });
 </script>
