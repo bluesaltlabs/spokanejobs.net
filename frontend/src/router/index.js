@@ -9,6 +9,7 @@ import CompanyDetailView from '@/views/companies/Detail.vue'
 import JobsListView from '@/views/jobs/List.vue'
 import JobDetailView from '@/views/jobs/Detail.vue'
 import ProfileView from '@/views/profile/Detail.vue'
+import ProfileNewView from '@/views/profile/DetailNew.vue'
 import ProfileEditView from '@/views/profile/Edit.vue'
 
 const router = createRouter({
@@ -58,6 +59,11 @@ const router = createRouter({
       path: '/jobs/:id',
       name: 'job-detail',
       component: JobDetailView,
+    },
+    {
+      path: '/profile/new',
+      name: 'profile-new',
+      component: ProfileNewView,
     },
     {
       path: '/profile',
