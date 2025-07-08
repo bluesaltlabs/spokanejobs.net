@@ -44,8 +44,20 @@ The Profile page allows users to save information about themselves and their wor
 
 [Education Experience](/profile/education-experience)
 
-
-* todo
+* Degree
+* Institution
+* Location
+* Major
+* Minor
+* Area Of Study
+* Credits Earned
+* Credit Type
+* gpa
+* start Date
+* end Date
+* Completion Date
+* Description
+* Honors & Recognition
 
 
 ## Licenses & Certifications
