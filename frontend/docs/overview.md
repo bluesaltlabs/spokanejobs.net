@@ -36,3 +36,14 @@ please contact the site administrator via one of the channels on the [contact](h
 
 Lists jobs retrieved from local job boards. This page allows the user to search for jobs and view the associated details.
 This page is still a work in progress.
+
+
+
+## Profile
+
+> [SpokaneJobs.Net/profile](https://spokanejobs.net/profile)
+
+The user profile page allows job seekers to store information pertaining to their job search and resume locally.
+This data is not transmitted, but can be imported and exported. In the future, external services for saving data
+(i.e. cloud services or a git repository) will likely be used to back up this data. Additionally, tools for generating a
+resume from a template and other tools are planned.
