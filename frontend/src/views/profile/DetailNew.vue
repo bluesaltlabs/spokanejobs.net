@@ -32,6 +32,10 @@ function toggleEdit() {
 
   <hr class="divider" />
 
+  <!-- todo: add some kind of sidebar to scroll more quickly to each section as they grow? -->
+
+
+  <!-- Personal Information -->
   <div class="profile-section">
     <h2>Personal Information</h2>
     <hr class="divider" />
@@ -75,6 +79,77 @@ function toggleEdit() {
   </div>
 
 
+  <!-- Work Experience -->
+  <div class="profile-section">
+    <h2>Work Experience</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
+
+  <!-- Education Experience -->
+  <div class="profile-section">
+    <h2>Education Experience</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
+
+  <!-- Licenses & Certifications -->
+  <div class="profile-section">
+    <h2>Licenses & Certifications</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
+
+  <!-- Memberships -->
+  <div class="profile-section">
+    <h2>Memberships</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
+
+  <!-- Skills -->
+  <div class="profile-section">
+    <h2>Skills</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
+
+  <!-- Interests -->
+  <div class="profile-section">
+    <h2>Interests</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
+
+  <!-- Projects -->
+  <div class="profile-section">
+    <h2>Projects</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
+
+  <!-- References -->
+  <div class="profile-section">
+    <h2>References</h2>
+    <hr class="divider" />
+
+    <SkeletonText style="margin-bottom: 1rem;" />
+  </div>
+
 </Container>
 </template>
 
@@ -94,7 +169,7 @@ function toggleEdit() {
 
   .profile-section {
     max-width: 960px;
-    margin: 0 auto;
+    margin-bottom: 1.5rem;
     padding: 1rem;
     background: var(--color-background-elevated);
     border-radius: var(--border-radius-medium);
