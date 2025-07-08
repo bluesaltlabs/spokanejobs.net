@@ -7,7 +7,7 @@
 <style scoped>
 .ui-form {
   width: 100%;
-  max-width: 600px;
+  max-width: 960px;
   margin: 0 auto;
 }
-</style> 
+</style>

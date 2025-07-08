@@ -41,14 +41,11 @@ npm run storybook
 ```
 
 
----
+### Vitepress (docs)
 
-## To Do
-
-
-- [ ] add resources, events, etc (plan out how to add these things)
-  - add Spokane tech, discord, meetup, meeting spaces, and other misc information to the resources page. The library has stuff. Check that out.
-
+```sh
+npm run docs:dev
+```
 
 
 ---

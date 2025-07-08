@@ -95,11 +95,6 @@ const loading = computed(() => companiesStore.loading)
 </template>
 
 <style scoped>
-.divider {
-  margin: 1.5rem 0 2rem 0;
-  border: none;
-  border-top: 1px solid var(--color-border);
-}
 
 .loading-state {
   margin-bottom: 1rem;

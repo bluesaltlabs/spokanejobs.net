@@ -8,8 +8,7 @@ import CompaniesGridView from '@/views/companies/Grid.vue'
 import CompanyDetailView from '@/views/companies/Detail.vue'
 import JobsListView from '@/views/jobs/List.vue'
 import JobDetailView from '@/views/jobs/Detail.vue'
-import ProfileView from '@/views/profile/Detail.vue'
-import ProfileEditView from '@/views/profile/Edit.vue'
+import ProfileView from '@/views/Profile.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,11 +62,6 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView,
-    },
-    {
-      path: '/profile/edit',
-      name: 'profile-edit',
-      component: ProfileEditView,
     }
   ],
 })
