@@ -12,7 +12,7 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Overview',
+        text: 'Frontend',
         items: [
           { text: 'Overview', link: '/overview' },
         ]
@@ -20,7 +20,7 @@ export default defineConfig({
       {
         text: 'Profile',
         items: [
-          { text: 'Overview', link: '/profile/overview' },
+          { text: 'Profile Overview', link: '/profile/overview' },
           { text: 'Personal Information', link: '/profile/personal-information' },
           { text: 'Work Experience', link: '/profile/work-experience' },
           { text: 'Education Experience', link: '/profile/education-experience' },
@@ -42,7 +42,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/bluesaltlabs/spokanejobs.net' }
     ]
   }
 })

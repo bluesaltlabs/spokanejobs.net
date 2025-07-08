@@ -1,14 +1,8 @@
 ---
 title: Profile Overview
-prev:
-  text: 'Overview'
-  link: '/overview'
-next:
-  text: 'Personal Information'
-  link: '/profile/personal-information'
 ---
 
-# Profile Overview
+# Profile
 
 The Profile page allows users to save information about themselves and their work-related experiences.
 
