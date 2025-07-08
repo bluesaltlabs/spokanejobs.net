@@ -3,11 +3,11 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import {
-  Container, Button, Form, FormGroup, FormRow, TextInput
-} from '@/components/ui'
-import { SkeletonText } from '@/components/skeleton'
-import { EditIcon } from '@/components/icons'
-import WorkHistory from '@/components/profile/WorkHistory.vue'
+  EditIcon,
+  Container, Button, Form, FormGroup, FormRow, TextInput,
+  WorkExperience, EducationExperience, LicensesCertifications, Memberships,
+  Skills, Interests, Projects, References
+} from '@/components'
 
 const route = useRoute()
 const router = useRouter()
@@ -15,10 +15,6 @@ const profile = useProfileStore()
 const saved = ref(false)
 
 const is_editing = computed(() => route.query.edit === '1')
-
-
-
-
 
 // Auto-save functionality
 const autoSave = async () => {
@@ -62,15 +58,12 @@ async function onEditButtonClick() {
   await updateEditQueryParam(newValue)
 }
 
-
-
 </script>
 
 <template>
 <Container>
   <div class="page-header">
     <h1>Profile</h1>
-
 
     <div class="profile-actions">
       <Button @click="onEditButtonClick" variant="primary">
@@ -191,81 +184,38 @@ async function onEditButtonClick() {
         </FormRow>
       </Form>
 
-</div>
+    </div>
 
 
     <!-- Work Experience -->
-  <!-- <WorkHistory :is-editing="is_editing" /> -->
+    <WorkExperience :is-editing="is_editing" />
 
-  <!-- Work Experience -->
-  <div class="profile-section">
-    <h2>Work Experience</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
-
-  <!-- Education Experience -->
-  <div class="profile-section">
-    <h2>Education Experience</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Education Experience -->
+    <EducationExperience />
 
 
-  <!-- Licenses & Certifications -->
-  <div class="profile-section">
-    <h2>Licenses & Certifications</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Licenses & Certifications -->
+    <LicensesCertifications />
 
 
-  <!-- Memberships -->
-  <div class="profile-section">
-    <h2>Memberships</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Memberships -->
+    <Memberships />
 
 
-  <!-- Skills -->
-  <div class="profile-section">
-    <h2>Skills</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Skills -->
+    <Skills />
 
 
-  <!-- Interests -->
-  <div class="profile-section">
-    <h2>Interests</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Interests -->
+    <Interests />
 
 
-  <!-- Projects -->
-  <div class="profile-section">
-    <h2>Projects</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Projects -->
+    <Projects />
 
 
-  <!-- References -->
-  <div class="profile-section">
-    <h2>References</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- References -->
+    <References />
 
 </Container>
 </template>
