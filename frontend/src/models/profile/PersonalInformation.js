@@ -7,7 +7,7 @@ class PersonalInformation {
     this.email          = data?.email || '';
     this.phone          = data?.phone || '';
     this.avatar_url     = data?.avatar_url || '';
-    this.created_at     = data?.created_at || null;
+    this.created_at     = data?.created_at || (new Date()).toISOString();
     this.updated_at     = data?.updated_at || null;
     this.urls           = data.urls || [];
   }

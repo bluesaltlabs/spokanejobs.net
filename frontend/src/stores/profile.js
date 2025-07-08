@@ -50,7 +50,10 @@ export const useProfileStore = defineStore('profile', {
       // Prep data for saving.
       const dataToSave = JSON.parse(JSON.stringify({
         dark_mode: this.dark_mode,
-        personal_information: this.personal_information,
+        personal_information: {
+          ...this.personal_information,
+          updated_at: (new Date()).toISOString()
+        },
         work_experiences: this.work_experiences,
         education_experiences: this.education_experiences,
       }))
