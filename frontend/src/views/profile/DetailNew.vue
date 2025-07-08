@@ -10,6 +10,10 @@ onMounted(() => {
   profile.loadProfile()
 })
 
+function toggleEdit() {
+  // todo: toggle edit mode.
+}
+
 </script>
 
 <style scoped>
@@ -26,9 +30,8 @@ onMounted(() => {
   <hr class="divider" />
 
   <div class="profile-actions">
-    <Button @click="goToEdit" variant="primary">
-      <ProfileIcon style="margin-right: 0.5em; vertical-align: middle;" />
-      Edit Profile
+    <Button @click="toggleEdit" variant="primary">
+      <EditIcon />
     </Button>
   </div>
   <!-- todo: User Avatar -->
