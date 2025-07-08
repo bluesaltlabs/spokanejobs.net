@@ -1,10 +1,12 @@
 <template>
   <div class="ui-input-wrapper">
     <input
+      v-if="editable"
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"
       :disabled="disabled"
+      :editable="editable"
       class="ui-input ui-form-element"
       @input="$emit('update:modelValue', $event.target.value)"
       @focus="$emit('focus', $event)"
@@ -12,12 +14,16 @@
       :style="clearable && modelValue ? 'padding-right:2em' : ''"
     />
     <button
-      v-if="clearable && modelValue"
+      v-if="editable && clearable && modelValue"
       class="clear-btn"
       type="button"
       aria-label="Clear input"
       @click="$emit('update:modelValue', '')"
     >&times;</button>
+    <span
+      v-if="!editable"
+      class="ui-input ui-form-element"
+    >{{ modelValue }}</span>
   </div>
 </template>
 
@@ -27,6 +33,7 @@ defineProps({
   placeholder: String,
   type: { type: String, default: 'text' },
   disabled: Boolean,
+  editable: Boolean,
   clearable: Boolean,
 });
 </script>
