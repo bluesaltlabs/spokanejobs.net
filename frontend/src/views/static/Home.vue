@@ -44,14 +44,7 @@ import { ItemContainer, ItemCard } from '@/components/common';
 </template>
 
 <style scoped>
-.divider {
-  margin: 1.5rem 0 2rem 0;
-  border: none;
-  border-top: 1px solid var(--color-border);
-}
-
 .home-description {
-
   margin-bottom: 2em;
   color: var(--color-text-secondary);
   line-height: 1.6;
