@@ -53,9 +53,8 @@ async function updateEditQueryParam(value) {
   await router.replace({ query: newQuery })
 }
 
-async function onEditButtonClick() {
-  const newValue = !is_editing.value
-  await updateEditQueryParam(newValue)
+async function onEditToggle(value) {
+  await updateEditQueryParam(value)
 }
 
 </script>
@@ -66,7 +65,7 @@ async function onEditButtonClick() {
     <h1>Profile</h1>
 
     <div class="profile-actions">
-      <Switch @click="onEditButtonClick" label="Edit">
+      <Switch v-model="is_editing" @update:modelValue="onEditToggle" label="Edit">
         <EditIcon />
       </Switch>
     </div>
