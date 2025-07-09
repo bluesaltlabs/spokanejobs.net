@@ -33,8 +33,3 @@ coverage
 # Storybook
 *storybook.log
 storybook-static
-
-# Vitepress
-docs/.vitepress/cache
-docs/.vitepress/dist
-docs/.vitepress/temp
