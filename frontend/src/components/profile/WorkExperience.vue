@@ -4,6 +4,7 @@ import { useProfileStore } from '@/stores/profile'
 import {
   Button, Form, FormGroup, FormRow, TextInput, TextareaInput, DateInput, Modal
 } from '@/components/ui'
+import { ProfileEntryCard } from '@/components/common'
 import { WorkExperience } from '@/models'
 
 const props = defineProps({
@@ -78,17 +79,29 @@ async function removeWorkEntry(id) {
         <Button @click="startAddWorkEntry" variant="primary">Add Work Experience</Button>
       </div>
 
-      <div v-for="entry in profile.work_experiences" :key="entry.id" class="work-entry">
-        <div class="work-entry-content">
+      <ProfileEntryCard v-for="entry in profile.work_experiences" :key="entry.id">
+        <template #title>
           <strong>{{ entry.job_title_start }}</strong>
           <span v-if="entry.job_title_end && entry.job_title_end !== entry.job_title_start"> - {{ entry.job_title_end }}</span>
+        </template>
+        
+        <template #subtitle>
           <span v-if="entry.employer"> at <em>{{ entry.employer }}</em></span>
           <span v-if="entry.company_slug"> ({{ entry.company_slug }})</span>
+        </template>
+        
+        <template #metadata>
           <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.is_current ? 'Present' : '') }}</span>
+        </template>
+        
+        <template #description>
           <p v-if="entry.responsibilities">{{ entry.responsibilities }}</p>
           <p v-if="entry.comments">{{ entry.comments }}</p>
           <p v-if="entry.reason_for_leaving"><strong>Reason for leaving:</strong> {{ entry.reason_for_leaving }}</p>
-          <div v-if="entry.supervisor_name || entry.supervisor_email || entry.supervisor_phone || entry.supervisor_title" class="supervisor-info">
+        </template>
+        
+        <template #details>
+          <div v-if="entry.supervisor_name || entry.supervisor_email || entry.supervisor_phone || entry.supervisor_title" class="info-box">
             <strong>Supervisor:</strong>
             <span v-if="entry.supervisor_name">{{ entry.supervisor_name }}</span>
             <span v-if="entry.supervisor_title"> ({{ entry.supervisor_title }})</span>
@@ -96,12 +109,13 @@ async function removeWorkEntry(id) {
             <span v-if="entry.supervisor_phone"> - {{ entry.supervisor_phone }}</span>
           </div>
           <p v-if="entry.can_contact"><strong>Can contact:</strong> Yes</p>
-        </div>
-        <div class="work-entry-actions">
+        </template>
+        
+        <template #actions>
           <Button @click="startEditWorkEntry(entry)" variant="primary" size="small">Edit</Button>
           <Button @click="removeWorkEntry(entry.id)" variant="danger" size="small">Delete</Button>
-        </div>
-      </div>
+        </template>
+      </ProfileEntryCard>
 
       <div v-if="profile.work_experiences.length === 0" class="empty-work-experience">
         <p>No work experience entries yet. Click "Add Work Experience" to get started.</p>
@@ -109,17 +123,29 @@ async function removeWorkEntry(id) {
     </div>
 
     <div v-else>
-      <div v-for="entry in profile.work_experiences" :key="entry.id" class="work-entry">
-        <div class="work-entry-content">
+      <ProfileEntryCard v-for="entry in profile.work_experiences" :key="entry.id">
+        <template #title>
           <strong>{{ entry.job_title_start }}</strong>
           <span v-if="entry.job_title_end && entry.job_title_end !== entry.job_title_start"> - {{ entry.job_title_end }}</span>
+        </template>
+        
+        <template #subtitle>
           <span v-if="entry.employer"> at <em>{{ entry.employer }}</em></span>
           <span v-if="entry.company_slug"> ({{ entry.company_slug }})</span>
+        </template>
+        
+        <template #metadata>
           <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.is_current ? 'Present' : '') }}</span>
+        </template>
+        
+        <template #description>
           <p v-if="entry.responsibilities">{{ entry.responsibilities }}</p>
           <p v-if="entry.comments">{{ entry.comments }}</p>
           <p v-if="entry.reason_for_leaving"><strong>Reason for leaving:</strong> {{ entry.reason_for_leaving }}</p>
-          <div v-if="entry.supervisor_name || entry.supervisor_email || entry.supervisor_phone || entry.supervisor_title" class="supervisor-info">
+        </template>
+        
+        <template #details>
+          <div v-if="entry.supervisor_name || entry.supervisor_email || entry.supervisor_phone || entry.supervisor_title" class="info-box">
             <strong>Supervisor:</strong>
             <span v-if="entry.supervisor_name">{{ entry.supervisor_name }}</span>
             <span v-if="entry.supervisor_title"> ({{ entry.supervisor_title }})</span>
@@ -127,8 +153,8 @@ async function removeWorkEntry(id) {
             <span v-if="entry.supervisor_phone"> - {{ entry.supervisor_phone }}</span>
           </div>
           <p v-if="entry.can_contact"><strong>Can contact:</strong> Yes</p>
-        </div>
-      </div>
+        </template>
+      </ProfileEntryCard>
     </div>
 
     <!-- Work Experience Modal -->
@@ -236,46 +262,7 @@ async function removeWorkEntry(id) {
 
 
 
-  .work-entry {
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--border-radius-medium);
-    padding: 1.25rem 1rem 1rem 1rem;
-    margin-bottom: 1.25rem;
-    background: var(--color-surface);
-    box-shadow: 0 1px 4px var(--color-shadow);
-    transition: background 0.2s, border 0.2s;
-  }
 
-  .work-entry strong {
-    color: var(--color-primary-600);
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-
-  .work-entry em {
-    color: var(--color-primary-500);
-    font-style: normal;
-    font-weight: 600;
-  }
-
-  .work-entry span {
-    color: var(--color-text-muted);
-    font-size: 0.95rem;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  .work-entry p {
-    color: var(--color-text);
-    margin: 0.5rem 0 0 0;
-    font-size: 1rem;
-  }
-
-  .work-entry-actions {
-    margin-top: 0.75rem;
-    display: flex;
-    gap: 0.5rem;
-  }
 
   .empty-work-experience {
     text-align: center;
@@ -293,16 +280,5 @@ async function removeWorkEntry(id) {
 
 
 
-  .supervisor-info {
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background: var(--color-surface-hover);
-    border-radius: var(--border-radius-small);
-    border-left: 3px solid var(--color-primary-500);
-  }
 
-  .supervisor-info strong {
-    color: var(--color-text);
-    font-weight: 600;
-  }
 </style>

@@ -4,6 +4,7 @@ import { useProfileStore } from '@/stores/profile'
 import {
   Button, Form, FormGroup, FormRow, TextInput, TextareaInput, DateInput, Modal
 } from '@/components/ui'
+import { ProfileEntryCard } from '@/components/common'
 import { EducationExperience } from '@/models'
 
 const props = defineProps({
@@ -46,7 +47,7 @@ async function saveEducationEntry() {
     profile.addEducationExperience({ ...newEducationEntry.value, id: Date.now().toString() })
   }
 
-  await profile.loadProfile()
+  // Removed await profile.loadProfile() to prevent duplicate entries
   editingEducationId.value = null
   resetNewEducationEntry()
   showEducationModal.value = false
@@ -78,32 +79,45 @@ async function removeEducationEntry(id) {
         <Button @click="startAddEducationEntry" variant="primary">Add Education Experience</Button>
       </div>
 
-      <div v-for="entry in profile.education_experiences" :key="entry.id" class="education-entry">
-        <div class="education-entry-content">
+      <ProfileEntryCard v-for="entry in profile.education_experiences" :key="entry.id">
+        <template #title>
           <strong>{{ entry.institution }}</strong>
           <span v-if="entry.major"> - {{ entry.major }}</span>
           <span v-if="entry.minor"> (Minor: {{ entry.minor }})</span>
           <span v-if="entry.area_of_study"> - {{ entry.area_of_study }}</span>
-          <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.completion_date ? entry.completion_date : '') }}</span>
+        </template>
+        
+        <template #subtitle>
           <span v-if="entry.location"> at {{ entry.location }}</span>
+        </template>
+        
+        <template #metadata>
+          <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.completion_date ? entry.completion_date : '') }}</span>
+        </template>
+        
+        <template #description>
           <p v-if="entry.description">{{ entry.description }}</p>
-          <div v-if="entry.gpa || entry.credits_earned" class="education-details">
+        </template>
+        
+        <template #details>
+          <div v-if="entry.gpa || entry.credits_earned" class="info-box">
             <span v-if="entry.gpa"><strong>GPA:</strong> {{ entry.gpa }}</span>
             <span v-if="entry.credits_earned"><strong>Credits Earned:</strong> {{ entry.credits_earned }}</span>
             <span v-if="entry.credit_type"><strong>Credit Type:</strong> {{ entry.credit_type }}</span>
           </div>
-          <div v-if="entry.honors_recognition && entry.honors_recognition.length > 0" class="honors-recognition">
+          <div v-if="entry.honors_recognition && entry.honors_recognition.length > 0" class="success-info-box">
             <strong>Honors & Recognition:</strong>
             <ul>
               <li v-for="honor in entry.honors_recognition" :key="honor">{{ honor }}</li>
             </ul>
           </div>
-        </div>
-        <div class="education-entry-actions">
+        </template>
+        
+        <template #actions>
           <Button @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</Button>
           <Button @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</Button>
-        </div>
-      </div>
+        </template>
+      </ProfileEntryCard>
 
       <div v-if="profile.education_experiences.length === 0" class="empty-education-experience">
         <p>No education experience entries yet. Click "Add Education Experience" to get started.</p>
@@ -111,28 +125,40 @@ async function removeEducationEntry(id) {
     </div>
 
     <div v-else>
-      <div v-for="entry in profile.education_experiences" :key="entry.id" class="education-entry">
-        <div class="education-entry-content">
+      <ProfileEntryCard v-for="entry in profile.education_experiences" :key="entry.id">
+        <template #title>
           <strong>{{ entry.institution }}</strong>
           <span v-if="entry.major"> - {{ entry.major }}</span>
           <span v-if="entry.minor"> (Minor: {{ entry.minor }})</span>
           <span v-if="entry.area_of_study"> - {{ entry.area_of_study }}</span>
-          <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.completion_date ? entry.completion_date : '') }}</span>
+        </template>
+        
+        <template #subtitle>
           <span v-if="entry.location"> at {{ entry.location }}</span>
+        </template>
+        
+        <template #metadata>
+          <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.completion_date ? entry.completion_date : '') }}</span>
+        </template>
+        
+        <template #description>
           <p v-if="entry.description">{{ entry.description }}</p>
-          <div v-if="entry.gpa || entry.credits_earned" class="education-details">
+        </template>
+        
+        <template #details>
+          <div v-if="entry.gpa || entry.credits_earned" class="info-box">
             <span v-if="entry.gpa"><strong>GPA:</strong> {{ entry.gpa }}</span>
             <span v-if="entry.credits_earned"><strong>Credits Earned:</strong> {{ entry.credits_earned }}</span>
             <span v-if="entry.credit_type"><strong>Credit Type:</strong> {{ entry.credit_type }}</span>
           </div>
-          <div v-if="entry.honors_recognition && entry.honors_recognition.length > 0" class="honors-recognition">
+          <div v-if="entry.honors_recognition && entry.honors_recognition.length > 0" class="success-info-box">
             <strong>Honors & Recognition:</strong>
             <ul>
               <li v-for="honor in entry.honors_recognition" :key="honor">{{ honor }}</li>
             </ul>
           </div>
-        </div>
-      </div>
+        </template>
+      </ProfileEntryCard>
     </div>
 
     <!-- Education Experience Modal -->
@@ -234,46 +260,7 @@ async function removeEducationEntry(id) {
     margin-bottom: 1rem;
   }
 
-  .education-entry {
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--border-radius-medium);
-    padding: 1.25rem 1rem 1rem 1rem;
-    margin-bottom: 1.25rem;
-    background: var(--color-surface);
-    box-shadow: 0 1px 4px var(--color-shadow);
-    transition: background 0.2s, border 0.2s;
-  }
 
-  .education-entry strong {
-    color: var(--color-primary-600);
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-
-  .education-entry em {
-    color: var(--color-primary-500);
-    font-style: normal;
-    font-weight: 600;
-  }
-
-  .education-entry span {
-    color: var(--color-text-muted);
-    font-size: 0.95rem;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  .education-entry p {
-    color: var(--color-text);
-    margin: 0.5rem 0 0 0;
-    font-size: 1rem;
-  }
-
-  .education-entry-actions {
-    margin-top: 0.75rem;
-    display: flex;
-    gap: 0.5rem;
-  }
 
   .empty-education-experience {
     text-align: center;
@@ -289,34 +276,5 @@ async function removeEducationEntry(id) {
     font-size: 1rem;
   }
 
-  .education-details {
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background: var(--color-surface-hover);
-    border-radius: var(--border-radius-small);
-    border-left: 3px solid var(--color-primary-500);
-  }
 
-  .education-details span {
-    display: inline-block;
-    margin-right: 1rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .honors-recognition {
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    background: var(--color-surface-hover);
-    border-radius: var(--border-radius-small);
-    border-left: 3px solid var(--color-success-500);
-  }
-
-  .honors-recognition ul {
-    margin: 0.5rem 0 0 0;
-    padding-left: 1.5rem;
-  }
-
-  .honors-recognition li {
-    margin-bottom: 0.25rem;
-  }
 </style>

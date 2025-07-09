@@ -1,0 +1,1 @@
+export { default as ProfileEntryCard } from './ProfileEntryCard.vue' 

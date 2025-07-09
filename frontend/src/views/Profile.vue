@@ -5,8 +5,8 @@ import { useProfileStore } from '@/stores/profile'
 import {
   EditIcon,
   Container, Button, Form, FormGroup, FormRow, TextInput, Switch,
-  WorkExperience, EducationExperience, LicensesCertifications, Memberships,
-  Skills, Interests, Projects, References
+   WorkExperience, EducationExperience, LicensesCertifications,
+  Memberships, Skills, Interests, Projects, References
 } from '@/components'
 
 const route = useRoute()
@@ -16,14 +16,15 @@ const saved = ref(false)
 
 const is_editing = computed(() => route.query.edit === '1')
 
-// Auto-save functionality
+// Auto-save functionality with debounce
+let autoSaveTimeout = null
 const autoSave = async () => {
   await profile.saveProfile()
   saved.value = true
   setTimeout(() => (saved.value = false), 1500)
 }
 
-// Watch for changes in profile fields and auto-save
+// Debounced watcher for profile fields
 watch(
   () => [
     profile.personal_information.first_name,
@@ -34,7 +35,10 @@ watch(
     profile.personal_information.avatar_url
   ],
   () => {
-    autoSave() // todo: debounce this.
+    if (autoSaveTimeout) clearTimeout(autoSaveTimeout)
+    autoSaveTimeout = setTimeout(() => {
+      autoSave()
+    }, 500)
   },
   { deep: true }
 )
