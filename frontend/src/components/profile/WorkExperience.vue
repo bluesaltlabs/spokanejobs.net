@@ -2,12 +2,12 @@
 import { ref, computed } from 'vue'
 import { useProfileStore } from '@/stores/profile'
 import {
-  Button, Form, FormGroup, FormRow, TextInput, TextareaInput, DateInput
+  Button, Form, FormGroup, FormRow, TextInput, TextareaInput, DateInput, Modal
 } from '@/components/ui'
 import { WorkExperience } from '@/models'
 
 const props = defineProps({
-  isEditing: {
+  editable: {
     type: Boolean,
     default: false
   }
@@ -18,7 +18,7 @@ const profile = useProfileStore()
 // Work Experience Entry Management
 const newWorkEntry = ref(new WorkExperience())
 const editingWorkId = ref(null)
-const showWorkForm = ref(false)
+const showWorkModal = ref(false)
 
 // Work Experience Functions
 function resetNewWorkEntry() {
@@ -28,34 +28,34 @@ function resetNewWorkEntry() {
 function startAddWorkEntry() {
   editingWorkId.value = null
   resetNewWorkEntry()
-  showWorkForm.value = true
+  showWorkModal.value = true
 }
 
 function startEditWorkEntry(entry) {
   editingWorkId.value = entry.id
   newWorkEntry.value = { ...entry }
-  showWorkForm.value = true
+  showWorkModal.value = true
 }
 
 async function saveWorkEntry() {
   if (!newWorkEntry.value.job_title_start || !newWorkEntry.value.employer) return
-  
+
   if (editingWorkId.value) {
     profile.editWorkExperience(editingWorkId.value, { ...newWorkEntry.value })
   } else {
     profile.addWorkExperience({ ...newWorkEntry.value, id: Date.now().toString() })
   }
-  
+
   await profile.loadProfile()
   editingWorkId.value = null
   resetNewWorkEntry()
-  showWorkForm.value = false
+  showWorkModal.value = false
 }
 
 function cancelWorkEntry() {
   resetNewWorkEntry()
   editingWorkId.value = null
-  showWorkForm.value = false
+  showWorkModal.value = false
 }
 
 async function removeWorkEntry(id) {
@@ -69,91 +69,15 @@ async function removeWorkEntry(id) {
     <h2>Work Experience</h2>
     <hr class="divider" />
 
-    <div v-if="!isEditing && profile.work_experiences.length === 0">
+    <div v-if="!editable && profile.work_experiences.length === 0">
       <p>No work experience entries yet.</p>
     </div>
-    
-    <div v-if="isEditing" class="work-experience-edit">
+
+    <div v-if="editable" class="work-experience-edit">
       <div class="work-experience-header">
         <Button @click="startAddWorkEntry" variant="primary">Add Work Experience</Button>
       </div>
-      
-      <div v-if="showWorkForm" class="work-form">
-        <Form>
-          <FormRow>
-            <FormGroup style="flex-grow: 1;" label="Job Title (Start)">
-              <TextInput v-model="newWorkEntry.job_title_start" placeholder="e.g., Software Engineer" />
-            </FormGroup>
-            <FormGroup style="flex-grow: 1;" label="Job Title (End)">
-              <TextInput v-model="newWorkEntry.job_title_end" placeholder="e.g., Senior Software Engineer" />
-            </FormGroup>
-          </FormRow>
-          
-          <FormRow>
-            <FormGroup style="flex-grow: 1;" label="Employer">
-              <TextInput v-model="newWorkEntry.employer" placeholder="e.g., Tech Corp" />
-            </FormGroup>
-            <FormGroup style="flex-grow: 1;" label="Company Slug">
-              <TextInput v-model="newWorkEntry.company_slug" placeholder="e.g., tech-corp" />
-            </FormGroup>
-          </FormRow>
-          
-          <FormRow>
-            <FormGroup style="flex-grow: 1;" label="Start Date">
-              <DateInput v-model="newWorkEntry.start_date" placeholder="Start Date" />
-            </FormGroup>
-            <FormGroup style="flex-grow: 1;" label="End Date">
-              <DateInput v-model="newWorkEntry.end_date" placeholder="End Date" />
-            </FormGroup>
-          </FormRow>
-          
-          <FormGroup label="Is Current Position">
-            <input type="checkbox" v-model="newWorkEntry.is_current" />
-          </FormGroup>
-          
-          <FormGroup label="Responsibilities">
-            <TextareaInput v-model="newWorkEntry.responsibilities" placeholder="Describe your responsibilities and achievements" />
-          </FormGroup>
-          
-          <FormGroup label="Comments">
-            <TextareaInput v-model="newWorkEntry.comments" placeholder="Additional comments" />
-          </FormGroup>
-          
-          <FormGroup label="Reason for Leaving">
-            <TextInput v-model="newWorkEntry.reason_for_leaving" placeholder="e.g., Career advancement, company restructuring" />
-          </FormGroup>
-          
-          <FormGroup label="Can Contact">
-            <input type="checkbox" v-model="newWorkEntry.can_contact" />
-          </FormGroup>
-          
-          <FormRow>
-            <FormGroup style="flex-grow: 1;" label="Supervisor Name">
-              <TextInput v-model="newWorkEntry.supervisor_name" placeholder="e.g., John Smith" />
-            </FormGroup>
-            <FormGroup style="flex-grow: 1;" label="Supervisor Title">
-              <TextInput v-model="newWorkEntry.supervisor_title" placeholder="e.g., Engineering Manager" />
-            </FormGroup>
-          </FormRow>
-          
-          <FormRow>
-            <FormGroup style="flex-grow: 1;" label="Supervisor Email">
-              <TextInput v-model="newWorkEntry.supervisor_email" placeholder="e.g., john.smith@company.com" />
-            </FormGroup>
-            <FormGroup style="flex-grow: 1;" label="Supervisor Phone">
-              <TextInput v-model="newWorkEntry.supervisor_phone" placeholder="e.g., +1-555-123-4567" />
-            </FormGroup>
-          </FormRow>
-          
-          <div class="form-action-row">
-            <Button @click="saveWorkEntry" variant="primary" class="form-action-btn">
-              {{ editingWorkId ? 'Update' : 'Add' }} Work Experience
-            </Button>
-            <Button @click="cancelWorkEntry" variant="secondary" class="form-action-btn">Cancel</Button>
-          </div>
-        </Form>
-      </div>
-      
+
       <div v-for="entry in profile.work_experiences" :key="entry.id" class="work-entry">
         <div class="work-entry-content">
           <strong>{{ entry.job_title_start }}</strong>
@@ -178,12 +102,12 @@ async function removeWorkEntry(id) {
           <Button @click="removeWorkEntry(entry.id)" variant="danger" size="small">Delete</Button>
         </div>
       </div>
-      
+
       <div v-if="profile.work_experiences.length === 0" class="empty-work-experience">
         <p>No work experience entries yet. Click "Add Work Experience" to get started.</p>
       </div>
     </div>
-    
+
     <div v-else>
       <div v-for="entry in profile.work_experiences" :key="entry.id" class="work-entry">
         <div class="work-entry-content">
@@ -206,6 +130,87 @@ async function removeWorkEntry(id) {
         </div>
       </div>
     </div>
+
+    <!-- Work Experience Modal -->
+    <Modal v-model="showWorkModal">
+      <template #title>
+        {{ editingWorkId ? 'Edit' : 'Add' }} Work Experience
+      </template>
+
+      <Form>
+        <FormRow>
+          <FormGroup style="flex-grow: 1;" label="Job Title (Start)" required>
+            <TextInput v-model="newWorkEntry.job_title_start" placeholder="e.g., Software Engineer" />
+          </FormGroup>
+          <FormGroup style="flex-grow: 1;" label="Job Title (End)">
+            <TextInput v-model="newWorkEntry.job_title_end" placeholder="e.g., Senior Software Engineer" />
+          </FormGroup>
+        </FormRow>
+
+        <FormRow>
+          <FormGroup style="flex-grow: 1;" label="Employer" required>
+            <TextInput v-model="newWorkEntry.employer" placeholder="e.g., Tech Corp" />
+          </FormGroup>
+          <FormGroup style="flex-grow: 1;" label="Company Slug">
+            <TextInput v-model="newWorkEntry.company_slug" placeholder="e.g., tech-corp" />
+          </FormGroup>
+        </FormRow>
+
+        <FormRow>
+          <FormGroup style="flex-grow: 1;" label="Start Date">
+            <DateInput v-model="newWorkEntry.start_date" placeholder="Start Date" />
+          </FormGroup>
+          <FormGroup style="flex-grow: 1;" label="End Date">
+            <DateInput v-model="newWorkEntry.end_date" placeholder="End Date" />
+          </FormGroup>
+        </FormRow>
+
+        <FormGroup label="Is Current Position">
+          <input type="checkbox" v-model="newWorkEntry.is_current" />
+        </FormGroup>
+
+        <FormGroup label="Responsibilities">
+          <TextareaInput v-model="newWorkEntry.responsibilities" placeholder="Describe your responsibilities and achievements" />
+        </FormGroup>
+
+        <FormGroup label="Comments">
+          <TextareaInput v-model="newWorkEntry.comments" placeholder="Additional comments" />
+        </FormGroup>
+
+        <FormGroup label="Reason for Leaving">
+          <TextInput v-model="newWorkEntry.reason_for_leaving" placeholder="e.g., Career advancement, company restructuring" />
+        </FormGroup>
+
+        <FormGroup label="Can Contact">
+          <input type="checkbox" v-model="newWorkEntry.can_contact" />
+        </FormGroup>
+
+        <FormRow>
+          <FormGroup style="flex-grow: 1;" label="Supervisor Name">
+            <TextInput v-model="newWorkEntry.supervisor_name" placeholder="e.g., John Smith" />
+          </FormGroup>
+          <FormGroup style="flex-grow: 1;" label="Supervisor Title">
+            <TextInput v-model="newWorkEntry.supervisor_title" placeholder="e.g., Engineering Manager" />
+          </FormGroup>
+        </FormRow>
+
+        <FormRow>
+          <FormGroup style="flex-grow: 1;" label="Supervisor Email">
+            <TextInput v-model="newWorkEntry.supervisor_email" placeholder="e.g., john.smith@company.com" />
+          </FormGroup>
+          <FormGroup style="flex-grow: 1;" label="Supervisor Phone">
+            <TextInput v-model="newWorkEntry.supervisor_phone" placeholder="e.g., +1-555-123-4567" />
+          </FormGroup>
+        </FormRow>
+      </Form>
+
+      <template #footer>
+        <Button @click="saveWorkEntry" variant="primary">
+          {{ editingWorkId ? 'Update' : 'Add' }} Work Experience
+        </Button>
+        <Button @click="cancelWorkEntry" variant="secondary">Cancel</Button>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -229,13 +234,7 @@ async function removeWorkEntry(id) {
     margin-bottom: 1rem;
   }
 
-  .work-form {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: var(--color-surface-hover);
-    border-radius: var(--border-radius-small);
-    border: 1px solid var(--color-border);
-  }
+
 
   .work-entry {
     border: 1.5px solid var(--color-border);
@@ -292,17 +291,7 @@ async function removeWorkEntry(id) {
     font-size: 1rem;
   }
 
-  .form-action-row {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    margin-top: 1.25rem;
-  }
 
-  .form-action-btn {
-    flex: 1 1 0;
-    min-width: 0;
-  }
 
   .supervisor-info {
     margin-top: 0.5rem;
@@ -316,4 +305,4 @@ async function removeWorkEntry(id) {
     color: var(--color-text);
     font-weight: 600;
   }
-</style> 
+</style>

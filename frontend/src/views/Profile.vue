@@ -187,34 +187,34 @@ async function onEditToggle(value) {
 
 
     <!-- Work Experience -->
-    <WorkExperience :is-editing="is_editing" />
+    <WorkExperience :editable="is_editing" />
 
     <!-- Education Experience -->
-    <EducationExperience :is-editing="is_editing" />
+    <EducationExperience :editable="is_editing" />
 
 
     <!-- Licenses & Certifications -->
-    <LicensesCertifications :is-editing="is_editing" />
+    <LicensesCertifications />
 
 
     <!-- Memberships -->
-    <Memberships :is-editing="is_editing" />
+    <Memberships />
 
 
     <!-- Skills -->
-    <Skills :is-editing="is_editing" />
+    <Skills />
 
 
     <!-- Interests -->
-    <Interests :is-editing="is_editing" />
+    <Interests />
 
 
     <!-- Projects -->
-    <Projects :is-editing="is_editing" />
+    <Projects />
 
 
     <!-- References -->
-    <References :is-editing="is_editing" />
+    <References />
 
 </Container>
 </template>
