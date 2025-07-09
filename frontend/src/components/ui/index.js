@@ -13,3 +13,4 @@ export { default as FormGroup } from './FormGroup/FormGroup.vue';
 export { default as FormRow } from './FormRow/FormRow.vue';
 export { default as FormColumn } from './FormColumn/FormColumn.vue';
 export { default as Form } from './Form/Form.vue';
+export { default as Modal } from './Modal/Modal.vue';

@@ -4,7 +4,8 @@ import { useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import { Button, TextInput, TextareaInput, DateInput, Form, FormGroup } from '@/components/ui'
 import { ExportIcon, ImportIcon, ViewIcon } from '@/components/icons'
-import { PersonalInformation, WorkExperience, EducationExperience } from '@/models'
+import { PersonalInformation, WorkExperience as WorkExperienceModel, EducationExperience } from '@/models'
+import WorkExperience from '@/components/profile/WorkExperience.vue'
 
 const router = useRouter()
 const profile = useProfileStore()
@@ -97,26 +98,10 @@ const importProfile = (event) => {
   event.target.value = ''
 }
 
-// Resume Entry Management
-const newEntry = ref(new WorkExperience())
-const editingId = ref(null)
-const showEntryForm = ref(false)
-
 // Education Entry Management
 const newEducationEntry = ref(new EducationExperience())
 const editingEducationId = ref(null)
 const showEducationForm = ref(false)
-
-function resetNewEntry() {
-  newEntry.value = {
-    id: '',
-    job_title_start: '',
-    employer: '',
-    start_date: '',
-    end_date: '',
-    responsibilities: ''
-  }
-}
 
 function resetNewEducationEntry() {
   newEducationEntry.value = {
@@ -129,41 +114,16 @@ function resetNewEducationEntry() {
   }
 }
 
-function startAddEntry() {
-  editingId.value = null
-  resetNewEntry()
-  showEntryForm.value = true
-}
-
 function startAddEducationEntry() {
   editingEducationId.value = null
   resetNewEducationEntry()
   showEducationForm.value = true
 }
 
-function startEditEntry(entry) {
-  editingId.value = entry.id
-  newEntry.value = { ...entry }
-  showEntryForm.value = true
-}
-
 function startEditEducationEntry(entry) {
   editingEducationId.value = entry.id
   newEducationEntry.value = { ...entry }
   showEducationForm.value = true
-}
-
-async function saveEntry() {
-  if (!newEntry.value.job_title_start || !newEntry.value.employer) return
-  if (editingId.value) {
-    profile.editWorkExperience(editingId.value, { ...newEntry.value })
-  } else {
-   profile.addWorkExperience({ ...newEntry.value, id: Date.now().toString() })
-  }
-  await profile.loadProfile()
-  editingId.value = null
-  resetNewEntry()
-  showEntryForm.value = false
 }
 
 async function saveEducationEntry() {
@@ -179,21 +139,10 @@ async function saveEducationEntry() {
   showEducationForm.value = false
 }
 
-function cancelEntry() {
-  resetNewEntry()
-  editingId.value = null
-  showEntryForm.value = false
-}
-
 function cancelEducationEntry() {
   resetNewEducationEntry()
   editingEducationId.value = null
   showEducationForm.value = false
-}
-
-async function removeEntry(id) {
-  profile.removeWorkExperience(id)
-  await profile.loadProfile()
 }
 
 async function removeEducationEntry(id) {
@@ -551,23 +500,22 @@ function goToView() {
   <div class="profile-edit-view">
     <div class="profile-header">
       <h1>Edit Profile</h1>
+      <div class="header-actions">
+        <Button @click="goToView" variant="secondary">
+          <ViewIcon style="margin-right: 0.5em; vertical-align: middle;" />
+          View Profile
+        </Button>
+        <Button @click="exportProfile" variant="primary">
+          <ExportIcon style="margin-right: 0.5em; vertical-align: middle;" />
+          Export
+        </Button>
+        <label class="import-label">
+          <ImportIcon style="margin-right: 0.5em; vertical-align: middle;" />
+          Import
+          <input type="file" accept="application/json" @change="importProfile" style="display: none;" />
+        </label>
+      </div>
     </div>
-    <div class="header-actions">
-      <Button @click="exportProfile" variant="success" aria-label="Export Profile">
-          <ExportIcon  />
-          <span class="button-tooltip">Export Profile</span>
-        </Button>
-        <Button @click="$refs.fileInput.click()" variant="info" aria-label="Import Profile">
-          <ImportIcon  />
-          <span class="button-tooltip">Import Profile</span>
-        </Button>
-        <Button @click="goToView" variant="primary" aria-label="View Profile">
-          <ViewIcon  />
-          <span class="button-tooltip">View Profile</span>
-        </Button>
-
-    </div>
-    <input ref="fileInput" type="file" accept=".json" style="display: none" @change="importProfile" />
     <div class="profile-edit-content">
       <div class="user-info-section">
         <h2>Personal Information</h2>
@@ -595,35 +543,9 @@ function goToView() {
         </Form>
       </div>
       <div class="entries-section">
-        <div class="resume-section">
-          <div class="resume-header">
-            <h2>Resume Entries</h2>
-            <Button @click="startAddEntry" variant="primary">Add Entry</Button>
-          </div>
-          <div v-if="showEntryForm" class="resume-form">
-            <TextInput v-model="newEntry.job_title_start" placeholder="Job Title" />
-            <TextInput v-model="newEntry.employer" placeholder="Employer" />
-            <DateInput v-model="newEntry.start_date" placeholder="Start Date" />
-            <DateInput v-model="newEntry.end_date" placeholder="End Date" />
-            <TextareaInput v-model="newEntry.responsibilities" placeholder="Description" />
-            <div class="form-action-row">
-              <Button @click="saveEntry" variant="primary" class="form-action-btn">{{ editingId ? 'Update' : 'Add' }} Entry</Button>
-              <Button @click="cancelEntry" variant="secondary" class="form-action-btn">Cancel</Button>
-            </div>
-          </div>
-          <div v-for="entry in profile.work_experiences" :key="entry.id" class="resume-entry">
-            <strong>{{ entry.job_title_start }}</strong> at <em>{{ entry.employer }}</em>
-            <span>{{ entry.start_date }} - {{ entry.end_date }}</span>
-            <p>{{ entry.responsibilities }}</p>
-            <div class="resume-entry-actions">
-              <Button @click="startEditEntry(entry)" variant="primary" size="small">Edit</Button>
-              <Button @click="removeEntry(entry.id)" variant="danger" size="small">Delete</Button>
-            </div>
-          </div>
-          <div v-if="profile.work_experiences.length === 0" class="empty-resume">
-            <p>No resume entries yet. Click "Add Entry" to get started.</p>
-          </div>
-        </div>
+        <!-- Replace Resume Entries section with WorkExperience component -->
+        <WorkExperience :editable="true" />
+        <!-- Education section remains unchanged -->
         <div class="education-section">
           <div class="education-header">
             <h2>Education History</h2>

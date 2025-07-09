@@ -1,5 +1,6 @@
 export { default as AboutIcon } from './About/About.vue';
 export { default as BlueskyIcon } from './Bluesky/Bluesky.vue';
+export { default as CalendarIcon } from './Calendar/Calendar.vue';
 export { default as CompaniesIcon } from './Companies/Companies.vue';
 export { default as ContactIcon } from './Contact/Contact.vue';
 export { default as EditIcon } from './Edit/Edit.vue';

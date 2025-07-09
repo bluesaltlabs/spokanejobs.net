@@ -3,11 +3,11 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import {
-  Container, Button, Form, FormGroup, FormRow, TextInput
-} from '@/components/ui'
-import { SkeletonText } from '@/components/skeleton'
-import { EditIcon } from '@/components/icons'
-import WorkHistory from '@/components/profile/WorkHistory.vue'
+  EditIcon,
+  Container, Button, Form, FormGroup, FormRow, TextInput, Switch,
+   WorkExperience, EducationExperience, LicensesCertifications,
+  Memberships, Skills, Interests, Projects, References
+} from '@/components'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,18 +16,15 @@ const saved = ref(false)
 
 const is_editing = computed(() => route.query.edit === '1')
 
-
-
-
-
-// Auto-save functionality
+// Auto-save functionality with debounce
+let autoSaveTimeout = null
 const autoSave = async () => {
   await profile.saveProfile()
   saved.value = true
   setTimeout(() => (saved.value = false), 1500)
 }
 
-// Watch for changes in profile fields and auto-save
+// Debounced watcher for profile fields
 watch(
   () => [
     profile.personal_information.first_name,
@@ -38,7 +35,10 @@ watch(
     profile.personal_information.avatar_url
   ],
   () => {
-    autoSave() // todo: debounce this.
+    if (autoSaveTimeout) clearTimeout(autoSaveTimeout)
+    autoSaveTimeout = setTimeout(() => {
+      autoSave()
+    }, 500)
   },
   { deep: true }
 )
@@ -57,12 +57,9 @@ async function updateEditQueryParam(value) {
   await router.replace({ query: newQuery })
 }
 
-async function onEditButtonClick() {
-  const newValue = !is_editing.value
-  await updateEditQueryParam(newValue)
+async function onEditToggle(value) {
+  await updateEditQueryParam(value)
 }
-
-
 
 </script>
 
@@ -71,11 +68,10 @@ async function onEditButtonClick() {
   <div class="page-header">
     <h1>Profile</h1>
 
-
     <div class="profile-actions">
-      <Button @click="onEditButtonClick" variant="primary">
+      <Switch v-model="is_editing" @update:modelValue="onEditToggle" label="Edit">
         <EditIcon />
-      </Button>
+      </Switch>
     </div>
   </div>
 
@@ -191,81 +187,38 @@ async function onEditButtonClick() {
         </FormRow>
       </Form>
 
-</div>
+    </div>
 
 
     <!-- Work Experience -->
-  <!-- <WorkHistory :is-editing="is_editing" /> -->
+    <WorkExperience :editable="is_editing" />
 
-  <!-- Work Experience -->
-  <div class="profile-section">
-    <h2>Work Experience</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
-
-  <!-- Education Experience -->
-  <div class="profile-section">
-    <h2>Education Experience</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Education Experience -->
+    <EducationExperience :editable="is_editing" />
 
 
-  <!-- Licenses & Certifications -->
-  <div class="profile-section">
-    <h2>Licenses & Certifications</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Licenses & Certifications -->
+    <LicensesCertifications />
 
 
-  <!-- Memberships -->
-  <div class="profile-section">
-    <h2>Memberships</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Memberships -->
+    <Memberships />
 
 
-  <!-- Skills -->
-  <div class="profile-section">
-    <h2>Skills</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Skills -->
+    <Skills />
 
 
-  <!-- Interests -->
-  <div class="profile-section">
-    <h2>Interests</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Interests -->
+    <Interests />
 
 
-  <!-- Projects -->
-  <div class="profile-section">
-    <h2>Projects</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- Projects -->
+    <Projects />
 
 
-  <!-- References -->
-  <div class="profile-section">
-    <h2>References</h2>
-    <hr class="divider" />
-
-    <SkeletonText style="margin-bottom: 1rem;" />
-  </div>
+    <!-- References -->
+    <References />
 
 </Container>
 </template>
