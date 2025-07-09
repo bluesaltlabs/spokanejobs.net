@@ -4,3 +4,8 @@ node_modules/
 .env.backup
 .env.production
 auth.json
+
+# Vitepress
+docs/.vitepress/cache
+docs/.vitepress/dist
+docs/.vitepress/temp
