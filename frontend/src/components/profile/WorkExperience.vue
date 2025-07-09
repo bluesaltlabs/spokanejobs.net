@@ -39,8 +39,6 @@ function startEditWorkEntry(entry) {
 }
 
 async function saveWorkEntry() {
-  if (!newWorkEntry.value.job_title_start || !newWorkEntry.value.employer) return
-
   if (editingWorkId.value) {
     profile.editWorkExperience(editingWorkId.value, { ...newWorkEntry.value })
   } else {
@@ -165,7 +163,7 @@ async function removeWorkEntry(id) {
 
       <Form>
         <FormRow>
-          <FormGroup style="flex-grow: 1;" label="Job Title (Start)" required>
+          <FormGroup style="flex-grow: 1;" label="Job Title (Start)">
             <TextInput v-model="newWorkEntry.job_title_start" placeholder="e.g., Software Engineer" />
           </FormGroup>
           <FormGroup style="flex-grow: 1;" label="Job Title (End)">
@@ -174,7 +172,7 @@ async function removeWorkEntry(id) {
         </FormRow>
 
         <FormRow>
-          <FormGroup style="flex-grow: 1;" label="Employer" required>
+          <FormGroup style="flex-grow: 1;" label="Employer">
             <TextInput v-model="newWorkEntry.employer" placeholder="e.g., Tech Corp" />
           </FormGroup>
           <FormGroup style="flex-grow: 1;" label="Company Slug">
@@ -277,8 +275,5 @@ async function removeWorkEntry(id) {
     margin: 0;
     font-size: 1rem;
   }
-
-
-
 
 </style>

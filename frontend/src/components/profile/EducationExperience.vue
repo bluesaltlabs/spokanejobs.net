@@ -86,19 +86,19 @@ async function removeEducationEntry(id) {
           <span v-if="entry.minor"> (Minor: {{ entry.minor }})</span>
           <span v-if="entry.area_of_study"> - {{ entry.area_of_study }}</span>
         </template>
-        
+
         <template #subtitle>
           <span v-if="entry.location"> at {{ entry.location }}</span>
         </template>
-        
+
         <template #metadata>
           <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.completion_date ? entry.completion_date : '') }}</span>
         </template>
-        
+
         <template #description>
           <p v-if="entry.description">{{ entry.description }}</p>
         </template>
-        
+
         <template #details>
           <div v-if="entry.gpa || entry.credits_earned" class="info-box">
             <span v-if="entry.gpa"><strong>GPA:</strong> {{ entry.gpa }}</span>
@@ -112,7 +112,7 @@ async function removeEducationEntry(id) {
             </ul>
           </div>
         </template>
-        
+
         <template #actions>
           <Button @click="startEditEducationEntry(entry)" variant="primary" size="small">Edit</Button>
           <Button @click="removeEducationEntry(entry.id)" variant="danger" size="small">Delete</Button>
@@ -132,19 +132,19 @@ async function removeEducationEntry(id) {
           <span v-if="entry.minor"> (Minor: {{ entry.minor }})</span>
           <span v-if="entry.area_of_study"> - {{ entry.area_of_study }}</span>
         </template>
-        
+
         <template #subtitle>
           <span v-if="entry.location"> at {{ entry.location }}</span>
         </template>
-        
+
         <template #metadata>
           <span v-if="entry.start_date || entry.end_date">{{ entry.start_date }} - {{ entry.end_date || (entry.completion_date ? entry.completion_date : '') }}</span>
         </template>
-        
+
         <template #description>
           <p v-if="entry.description">{{ entry.description }}</p>
         </template>
-        
+
         <template #details>
           <div v-if="entry.gpa || entry.credits_earned" class="info-box">
             <span v-if="entry.gpa"><strong>GPA:</strong> {{ entry.gpa }}</span>
