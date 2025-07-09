@@ -37,7 +37,7 @@ const iconColor = computed(() => getComputedStyle(document.documentElement).getP
 }
 .ui-dateinput__input {
   width: 100%;
-  padding: 0.5em 2.5em 0.5em 0.75em; /* right padding for icon */
+  padding: 0.5em 0.75em;
   border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
@@ -53,11 +53,14 @@ const iconColor = computed(() => getComputedStyle(document.documentElement).getP
   background-color: var(--color-background-mute);
   color: var(--color-text-muted);
 }
-/* Hide native calendar icon */
+
+/* Style the native calendar picker */
 .ui-dateinput__input::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  display: none;
+  cursor: pointer;
+  opacity: 1;
+  filter: var(--calendar-picker-filter, none);
 }
+
 .calendar-icon {
   position: absolute;
   right: 0.75em;
@@ -66,16 +69,8 @@ const iconColor = computed(() => getComputedStyle(document.documentElement).getP
   pointer-events: none;
   display: flex;
   align-items: center;
+  opacity: 0.3; /* Make it subtle since native picker is visible */
 }
-
-input::-webkit-calendar-picker-indicator,
-::-webkit-input-placeholder,
-::-ms-input-placeholder,
-::-o-input-placeholder {
-  filter: invert(1) brightness(1.5);
-    color: var(--color-text);
-}
-
 
 /* Utility class for consistent vertical spacing of form elements */
 .ui-form-element {
