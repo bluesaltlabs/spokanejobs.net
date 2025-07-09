@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useProfileStore } from '@/stores/profile'
 import {
   EditIcon,
-  Container, Button, Form, FormGroup, FormRow, TextInput,
+  Container, Button, Form, FormGroup, FormRow, TextInput, Switch,
   WorkExperience, EducationExperience, LicensesCertifications, Memberships,
   Skills, Interests, Projects, References
 } from '@/components'
@@ -66,9 +66,9 @@ async function onEditButtonClick() {
     <h1>Profile</h1>
 
     <div class="profile-actions">
-      <Button @click="onEditButtonClick" variant="primary">
+      <Switch @click="onEditButtonClick" label="Edit">
         <EditIcon />
-      </Button>
+      </Switch>
     </div>
   </div>
 
@@ -191,31 +191,31 @@ async function onEditButtonClick() {
     <WorkExperience :is-editing="is_editing" />
 
     <!-- Education Experience -->
-    <EducationExperience />
+    <EducationExperience :is-editing="is_editing" />
 
 
     <!-- Licenses & Certifications -->
-    <LicensesCertifications />
+    <LicensesCertifications :is-editing="is_editing" />
 
 
     <!-- Memberships -->
-    <Memberships />
+    <Memberships :is-editing="is_editing" />
 
 
     <!-- Skills -->
-    <Skills />
+    <Skills :is-editing="is_editing" />
 
 
     <!-- Interests -->
-    <Interests />
+    <Interests :is-editing="is_editing" />
 
 
     <!-- Projects -->
-    <Projects />
+    <Projects :is-editing="is_editing" />
 
 
     <!-- References -->
-    <References />
+    <References :is-editing="is_editing" />
 
 </Container>
 </template>
